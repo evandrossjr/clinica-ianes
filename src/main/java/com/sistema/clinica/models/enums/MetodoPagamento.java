@@ -1,4 +1,4 @@
-package com.sistema.clinica.models;
+package com.sistema.clinica.models.enums;
 
 
 public enum MetodoPagamento {

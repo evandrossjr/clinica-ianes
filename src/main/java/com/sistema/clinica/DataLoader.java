@@ -3,7 +3,7 @@ package com.sistema.clinica;
 import com.sistema.clinica.models.Cliente;
 import com.sistema.clinica.models.Consulta;
 import com.sistema.clinica.models.Medico;
-import com.sistema.clinica.models.MetodoPagamento;
+import com.sistema.clinica.models.enums.MetodoPagamento;
 import com.sistema.clinica.repositories.ClienteRepository;
 import com.sistema.clinica.repositories.ConsultaRepository;
 import com.sistema.clinica.repositories.MedicoRepository;

@@ -1,5 +1,6 @@
 package com.sistema.clinica.models;
 
+import com.sistema.clinica.models.enums.MetodoPagamento;
 import jakarta.persistence.*;
 
 @Entity
