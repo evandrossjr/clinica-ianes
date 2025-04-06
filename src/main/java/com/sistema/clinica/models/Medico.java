@@ -1,9 +1,11 @@
 package com.sistema.clinica.models;
 
+import com.sistema.clinica.models.enums.DiaDaSemana;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Medico{
@@ -17,21 +19,26 @@ public class Medico{
     private Integer telefone;
     private int crm;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private Set<DiaDaSemana> diasDisponiveis;
+
 	
     @OneToOne(cascade = CascadeType.ALL)
     private Endereco endereco;
 
 
-
-    public Medico (int crm, Long id, String nome, String cpf, String email, Integer telefone, Endereco endereco) {
+    public Medico(Long id, String nome, String cpf, String email, Integer telefone, int crm, Set<DiaDaSemana> diasDisponiveis, Endereco endereco) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
-        this.crm = crm;
         this.email = email;
         this.telefone = telefone;
+        this.crm = crm;
+        this.diasDisponiveis = diasDisponiveis;
         this.endereco = endereco;
     }
+
     public Medico() {
         
     }
@@ -77,10 +84,15 @@ public class Medico{
     }
     public void setCrm(int crm) {
         this.crm = crm;
-
-
     }
 
+    public Set<DiaDaSemana> getDiasDisponiveis() {
+        return diasDisponiveis;
+    }
+
+    public void setDiasDisponiveis(Set<DiaDaSemana> diasDisponiveis) {
+        this.diasDisponiveis = diasDisponiveis;
+    }
 }
 
 

@@ -13,6 +13,12 @@ public class Consulta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    private Cliente cliente; //um cliente pode ter varias consultas
+
+    @ManyToOne
+    private Medico medico; //um médico pode ter varias consultas
+
     private LocalDate data;
     private LocalTime hora;
     private boolean pagamentoRealizado;
@@ -23,8 +29,11 @@ public class Consulta {
     public Consulta() {
     }
 
-    public Consulta(Long id, LocalDate data, LocalTime hora, boolean pagamentoRealizado, MetodoPagamento metodoPagamento) {
+
+    public Consulta(Long id, Cliente cliente, Medico medico, LocalDate data, LocalTime hora, boolean pagamentoRealizado, MetodoPagamento metodoPagamento) {
         this.id = id;
+        this.cliente = cliente;
+        this.medico = medico;
         this.data = data;
         this.hora = hora;
         this.pagamentoRealizado = pagamentoRealizado;
@@ -69,5 +78,21 @@ public class Consulta {
 
     public void setMetodoPagamento(MetodoPagamento metodoPagamento) {
         this.metodoPagamento = metodoPagamento;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public Medico getMedico() {
+        return medico;
+    }
+
+    public void setMedico(Medico medico) {
+        this.medico = medico;
     }
 }
