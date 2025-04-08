@@ -2,7 +2,9 @@ package com.sistema.clinica.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
+import com.sistema.clinica.models.enums.DiaDaSemana;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
@@ -50,8 +52,8 @@ public class MedicoService {
         entity.setCpf(obj.getCpf());
         entity.setEmail(obj.getEmail());
         entity.setTelefone(obj.getTelefone());
-        entity.setEndereco(obj.getEndereco());
-
+        entity.setEspecialidade(obj.getEspecialidade());
+        entity.setDiasDisponiveis(obj.getDiasDisponiveis());
     }
 
 

@@ -1,6 +1,5 @@
 package com.sistema.clinica.services;
 
-import com.sistema.clinica.models.Cliente;
 import com.sistema.clinica.models.Consulta;
 import com.sistema.clinica.repositories.ConsultaRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -47,7 +46,11 @@ public class ConsultaService {
 
     private void updateData(Consulta entity, Consulta obj) {
         entity.setMetodoPagamento(obj.getMetodoPagamento());
-
+        entity.setMedico(obj.getMedico());
+        entity.setData(obj.getData());
+        entity.setPaciente(obj.getPaciente());
+        entity.setHora(obj.getHora());
+        entity.setModalidade(obj.getModalidade());
     }
 
 

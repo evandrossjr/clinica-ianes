@@ -1,6 +1,6 @@
 package com.sistema.clinica.repositories;
 
-import com.sistema.clinica.models.Cliente;
+import com.sistema.clinica.models.Paciente;
 import com.sistema.clinica.models.Consulta;
 import com.sistema.clinica.models.Medico;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,5 +15,5 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Long> {
 
     List<Consulta> findByMedico(Medico medico);
 
-    List<Consulta> findByCliente(Cliente cliente);
+    List<Consulta> findByPaciente(Paciente paciente);
 }

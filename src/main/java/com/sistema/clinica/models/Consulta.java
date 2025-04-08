@@ -15,7 +15,7 @@ public class Consulta {
     private Long id;
 
     @ManyToOne
-    private Cliente cliente; //um cliente pode ter varias consultas
+    private Paciente paciente; //um paciente pode ter varias consultas
 
     @ManyToOne
     private Medico medico; //um médico pode ter varias consultas
@@ -35,9 +35,9 @@ public class Consulta {
     }
 
 
-    public Consulta(Long id, Cliente cliente, Medico medico, LocalDate data, LocalTime hora, boolean pagamentoRealizado, MetodoPagamento metodoPagamento, Modalidade modalidade) {
+    public Consulta(Long id, Paciente paciente, Medico medico, LocalDate data, LocalTime hora, boolean pagamentoRealizado, MetodoPagamento metodoPagamento, Modalidade modalidade) {
         this.id = id;
-        this.cliente = cliente;
+        this.paciente = paciente;
         this.medico = medico;
         this.data = data;
         this.hora = hora;
@@ -86,12 +86,12 @@ public class Consulta {
         this.metodoPagamento = metodoPagamento;
     }
 
-    public Cliente getCliente() {
-        return cliente;
+    public Paciente getPaciente() {
+        return paciente;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
     }
 
     public Medico getMedico() {
@@ -100,5 +100,13 @@ public class Consulta {
 
     public void setMedico(Medico medico) {
         this.medico = medico;
+    }
+
+    public Modalidade getModalidade() {
+        return modalidade;
+    }
+
+    public void setModalidade(Modalidade modalidade) {
+        this.modalidade = modalidade;
     }
 }
