@@ -1,6 +1,7 @@
 package com.sistema.clinica.models;
 
 import com.sistema.clinica.models.enums.MetodoPagamento;
+import com.sistema.clinica.models.enums.Modalidade;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -21,6 +22,10 @@ public class Consulta {
 
     private LocalDate data;
     private LocalTime hora;
+
+    @Enumerated(EnumType.STRING)
+    private Modalidade modalidade;
+
     private boolean pagamentoRealizado;
 
     @Enumerated(EnumType.STRING)
@@ -30,7 +35,7 @@ public class Consulta {
     }
 
 
-    public Consulta(Long id, Cliente cliente, Medico medico, LocalDate data, LocalTime hora, boolean pagamentoRealizado, MetodoPagamento metodoPagamento) {
+    public Consulta(Long id, Cliente cliente, Medico medico, LocalDate data, LocalTime hora, boolean pagamentoRealizado, MetodoPagamento metodoPagamento, Modalidade modalidade) {
         this.id = id;
         this.cliente = cliente;
         this.medico = medico;
@@ -38,6 +43,7 @@ public class Consulta {
         this.hora = hora;
         this.pagamentoRealizado = pagamentoRealizado;
         this.metodoPagamento = metodoPagamento;
+        this.modalidade = modalidade;
     }
 
     public Long getId() {
