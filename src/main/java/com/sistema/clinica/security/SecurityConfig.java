@@ -18,10 +18,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+                .headers(headers -> headers.frameOptions(frame -> frame.disable()))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/h2-console/**").authenticated()
                         .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults()); // habilita autenticação Basic Auth
+                .httpBasic(Customizer.withDefaults());
 
         return http.build();
     }
