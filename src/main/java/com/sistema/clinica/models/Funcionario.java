@@ -13,15 +13,17 @@ public class Funcionario extends Pessoa{
     private Long id;
     private String setor;
     private int matricula;
+    private String password;
 
     public Funcionario() {
     }
 
-    public Funcionario(String nome, String cpf, String email, Integer telefone, Long id, String setor, int matricula) {
+    public Funcionario(String nome, String cpf, String email, Integer telefone, Long id, String setor, int matricula,String password) {
         super(nome, cpf, email, telefone);
         this.id = id;
         this.setor = setor;
         this.matricula = matricula;
+        this.password = password;
     }
 
     public Long getId() {
@@ -46,5 +48,13 @@ public class Funcionario extends Pessoa{
 
     public void setMatricula(int matricula) {
         this.matricula = matricula;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

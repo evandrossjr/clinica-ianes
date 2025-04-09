@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -26,15 +27,17 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
         UserDetails user = User
                 .withUsername("admin")
-                .password("{noop}1234") // {noop} indica que a senha não será codificada
+                .password(encoder.encode("1234"))  // {noop} indica que a senha não será codificada
                 .roles("USER")
                 .build();
 
         return new InMemoryUserDetailsManager(user);
     }
+
+
 }
 
 

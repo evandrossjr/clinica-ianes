@@ -98,6 +98,7 @@ public class DataLoader implements CommandLineRunner {
         f1.setTelefone(970000000);
         f1.setMatricula(1005);
         f1.setSetor("Recepão");
+        f1.setPassword("Testando");
 
         Funcionario f2 = new Funcionario();
         f2.setNome("Carlos André");
@@ -106,6 +107,7 @@ public class DataLoader implements CommandLineRunner {
         f2.setTelefone(960000000);
         f2.setMatricula(1006);
         f2.setSetor("Administrativo");
+        f2.setPassword("1234");
 
         funcionarioRepository.saveAll(List.of(f1, f2));
 
