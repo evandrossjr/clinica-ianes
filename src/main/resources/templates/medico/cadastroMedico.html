@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Médicos</title>
+    <link rel="stylesheet" href="webjars/bootstrap/4.0.0/css/bootstrap.min.css">
+
+</head>
+<body>
+<div class="container">
+    <h1>Cadastro de Médicos</h1>
+
+    <div th:if="${mensagem}" class="alert alert-success" role="alert">
+        <span th:text="${mensagem}"></span>
+    </div>
+
+    <form method="post" action="/medico">
+        <div class="form-group">
+            <label for="nome">Nome</label>
+            <input type="text" class="form-control" id="nome" name="nome" required>
+        </div>
+
+        <div class="form-group">
+            <label for="cpf">CPF</label>
+            <input type="text" class="form-control" id="cpf" name="cpf" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">E-mail</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="telefone">Telefone</label>
+            <input type="text" class="form-control" id="telefone" name="telefone" required>
+        </div>
+
+        <div class="form-group">
+            <label for="crm">CRM</label>
+            <input type="text" class="form-control" id="crm" name="crm" required>
+        </div>
+
+        <div class="form-group">
+            <label for="especialidade">Especialidade</label>
+            <input type="text" class="form-control" id="especialidade" name="especialidade" required>
+        </div>
+
+        <div class="form-group">
+            <label for="diasDisponiveis">Dias Disponíveis</label>
+            <select multiple class="form-control" id="diasDisponiveis" name="diasDisponiveis">
+                <option value="SEGUNDA">Segunda</option>
+                <option value="TERÇA">Terça</option>
+                <option value="QUARTA">Quarta</option>
+                <option value="QUINTA">Quinta</option>
+                <option value="SEXTA">Sexta</option>
+            </select>
+            <small class="form-text text-muted">Segure Ctrl (ou Cmd no Mac) para selecionar múltiplos dias</small>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Salvar</button>
+    </form>
+</div>
+
+</body>
+</html>

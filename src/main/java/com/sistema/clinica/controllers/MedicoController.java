@@ -47,8 +47,9 @@ public class MedicoController {
                 .buildAndExpand(obj.getId())
                 .toUri();
         return ResponseEntity.created(uri).body(obj);
-
     }
+
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
@@ -61,7 +62,6 @@ public class MedicoController {
         obj = medicoService.update(id, obj);
         return ResponseEntity.ok().body(obj);
     }
-
 }
 
 
