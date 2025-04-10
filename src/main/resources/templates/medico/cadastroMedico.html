@@ -3,62 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <title>Cadastro de Médicos</title>
-    <link rel="stylesheet" href="webjars/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 </head>
 <body>
 <div class="container">
     <h1>Cadastro de Médicos</h1>
 
-    <div th:if="${mensagem}" class="alert alert-success" role="alert">
+    <div th:if="${mensagem}" class="alert alert-success text-white bg-success d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" fill="white" viewBox="0 0 16 16" role="img" aria-label="Success:">
+            <path d="M16 8a8 8 0 1 1-16 0 8 8 0 0 1 16 0zM6.93 10.588l-2.47-2.47 1.06-1.06L6.93 8.47l4.95-4.95 1.06 1.06-6.01 6.01z"/>
+        </svg>
         <span th:text="${mensagem}"></span>
     </div>
 
-    <form method="post" action="/medico">
-        <div class="form-group">
-            <label for="nome">Nome</label>
-            <input type="text" class="form-control" id="nome" name="nome" required>
-        </div>
 
-        <div class="form-group">
-            <label for="cpf">CPF</label>
-            <input type="text" class="form-control" id="cpf" name="cpf" required>
-        </div>
+    <div class="card mt-4">
+        <div class="card-body">
+            <form method="post" action="/medico">
+                <div class="form-group">
+                    <label for="nome">Nome</label>
+                    <input type="text" class="form-control" id="nome" name="nome" required>
+                </div>
 
-        <div class="form-group">
-            <label for="email">E-mail</label>
-            <input type="email" class="form-control" id="email" name="email" required>
-        </div>
+                <div class="form-group">
+                    <label for="cpf">CPF</label>
+                    <input type="text" class="form-control" id="cpf" name="cpf" required>
+                </div>
 
-        <div class="form-group">
-            <label for="telefone">Telefone</label>
-            <input type="text" class="form-control" id="telefone" name="telefone" required>
-        </div>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
 
-        <div class="form-group">
-            <label for="crm">CRM</label>
-            <input type="text" class="form-control" id="crm" name="crm" required>
-        </div>
+                <div class="form-group">
+                    <label for="telefone">Telefone</label>
+                    <input type="text" class="form-control" id="telefone" name="telefone" required>
+                </div>
 
-        <div class="form-group">
-            <label for="especialidade">Especialidade</label>
-            <input type="text" class="form-control" id="especialidade" name="especialidade" required>
-        </div>
+                <div class="form-group">
+                    <label for="crm">CRM</label>
+                    <input type="text" class="form-control" id="crm" name="crm" required>
+                </div>
 
-        <div class="form-group">
-            <label for="diasDisponiveis">Dias Disponíveis</label>
-            <select multiple class="form-control" id="diasDisponiveis" name="diasDisponiveis">
-                <option value="SEGUNDA">Segunda</option>
-                <option value="TERÇA">Terça</option>
-                <option value="QUARTA">Quarta</option>
-                <option value="QUINTA">Quinta</option>
-                <option value="SEXTA">Sexta</option>
-            </select>
-            <small class="form-text text-muted">Segure Ctrl (ou Cmd no Mac) para selecionar múltiplos dias</small>
-        </div>
+                <div class="form-group">
+                    <label for="especialidade">Especialidade</label>
+                    <input type="text" class="form-control" id="especialidade" name="especialidade" required>
+                </div>
 
-        <button type="submit" class="btn btn-primary">Salvar</button>
-    </form>
+                <div class="form-group">
+                    <label for="diasDisponiveis">Dias Disponíveis</label>
+                    <select multiple class="form-control" id="diasDisponiveis" name="diasDisponiveis">
+                        <option value="SEGUNDA">Segunda</option>
+                        <option value="TERCA">Terça</option>
+                        <option value="QUARTA">Quarta</option>
+                        <option value="QUINTA">Quinta</option>
+                        <option value="SEXTA">Sexta</option>
+                    </select>
+                    <small class="form-text text-muted">Segure Ctrl (ou Cmd no Mac) para selecionar múltiplos dias</small>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Salvar</button>
+            </form>
+        </div>
+    </div>
+
 </div>
 
 </body>
