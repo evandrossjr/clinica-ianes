@@ -4,9 +4,11 @@ package com.sistema.clinica.services;
 import com.sistema.clinica.models.Consulta;
 import com.sistema.clinica.models.Medico;
 import com.sistema.clinica.models.dtos.AgendaDisponivelDTO;
+import com.sistema.clinica.models.dtos.EspacoVagoDTO;
 import com.sistema.clinica.models.enums.DiaDaSemana;
 import com.sistema.clinica.repositories.ConsultaRepository;
 import com.sistema.clinica.repositories.MedicoRepository;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -77,5 +79,59 @@ public class AgendaService {
         DiaDaSemana dia = DiaDaSemana.fromDayOfWeek(data.getDayOfWeek());
         return dia == DiaDaSemana.SABADO || dia == DiaDaSemana.DOMINGO;
     }
+
+    public List<Medico> medicosDoDia() {
+        DiaDaSemana hoje = DiaDaSemana.fromDayOfWeek(LocalDate.now().getDayOfWeek());
+        return medicoRepository.findByDiasDisponiveisContaining(hoje);
+    }
+
+    public List<Consulta> consultasDoDia() {
+        LocalDate hoje = LocalDate.now();
+        return consultaRepository.findByData(hoje);
+    }
+
+    public List<EspacoVagoDTO> espacosVagosDoDia() {
+        LocalDate hoje = LocalDate.now();
+        DayOfWeek diaSemana = hoje.getDayOfWeek();
+
+        if (diaSemana == DayOfWeek.SATURDAY || diaSemana == DayOfWeek.SUNDAY) {
+            return List.of(); // retorna vazio se for fim de semana
+        }
+
+        DiaDaSemana dia = DiaDaSemana.fromDayOfWeek(diaSemana);
+        List<Medico> medicos = medicoRepository.findByDiasDisponiveisContaining(dia);
+
+        List<EspacoVagoDTO> espacos = new ArrayList<>();
+
+        for (Medico medico : medicos) {
+            List<LocalTime> horariosDisponiveis = new ArrayList<>(HORARIOS_FIXOS);
+
+            List<Consulta> consultas = consultaRepository.findByMedicoAndData(medico, hoje);
+            for (Consulta consulta : consultas) {
+                horariosDisponiveis.remove(consulta.getHora());
+            }
+
+            for (LocalTime horario : horariosDisponiveis) {
+                espacos.add(new EspacoVagoDTO(medico.getNome(), horario));
+            }
+        }
+
+        return espacos;
+    }
+
+    public List<Consulta> proximasConsultas() {
+        LocalDate hoje = LocalDate.now();
+        LocalDate fim = hoje.plusDays(7);
+        return consultaRepository.findByDataBetweenOrderByDataAscHoraAsc(hoje, fim);
+    }
+
+    @PostConstruct
+    public void testarMetodo() {
+        List<Consulta> consultas = proximasConsultas();
+        System.out.println("CONSULTAS FUTURAS:");
+        consultas.forEach(c -> System.out.println(c.getData() + " " + c.getHora()));
+    }
+
+
 
 }
