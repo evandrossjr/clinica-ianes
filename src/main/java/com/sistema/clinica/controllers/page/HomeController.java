@@ -2,8 +2,10 @@ package com.sistema.clinica.controllers.page;
 
 
 import com.sistema.clinica.models.Consulta;
+import com.sistema.clinica.models.Funcionario;
 import com.sistema.clinica.models.Medico;
 import com.sistema.clinica.models.dtos.EspacoVagoDTO;
+import com.sistema.clinica.repositories.FuncionarioRepository;
 import com.sistema.clinica.repositories.MedicoRepository;
 import com.sistema.clinica.services.AgendaService;
 import com.sistema.clinica.services.ConsultaService;
@@ -27,6 +29,9 @@ public class HomeController {
     @Autowired
     private MedicoRepository medicoRepository;
 
+    @Autowired
+    private FuncionarioRepository funcionarioRepository;
+
 
 
     public HomeController(AgendaService agendaService) {
@@ -39,7 +44,9 @@ public class HomeController {
         List<Consulta> proximasConsultas = agendaService.proximasConsultas();
         model.addAttribute("consultas", proximasConsultas);
         List<Medico> medicos = medicoRepository.findAll();
+        List<Funcionario> funcionarios = funcionarioRepository.findAll();
         model.addAttribute("medicos", medicos);
+        model.addAttribute("funcinarios", funcionarios);
 
         return "home";
     }

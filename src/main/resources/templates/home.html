@@ -86,8 +86,13 @@
         <div class="col-md-6 col-lg-4">
             <div class="card shadow-sm mb-3">
                 <div class="card-body">
-                    <h5 class="card-title">Card Extra 1</h5>
-                    <p class="card-text">Conteúdo ou informações adicionais aqui.</p>
+                    <h5 class="card-title">Funcionários</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" th:each="f : ${funcionarios}">
+                            <span th:text="${f.nome} + ' - ' + ${f.setor}"></span>
+                        </li>
+                        <li class="list-group-item" th:if="${#lists.isEmpty(funcionarios)}">Nenhum funcionário cadastrado.</li>
+                    </ul>
                 </div>
             </div>
         </div>

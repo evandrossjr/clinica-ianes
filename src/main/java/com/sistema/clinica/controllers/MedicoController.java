@@ -4,6 +4,7 @@ import java.net.URI;
 import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.sistema.clinica.models.dtos.MedicoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,7 +72,7 @@ public class MedicoController {
         List<Medico> medicos = medicoService.buscarPorEspecialidade(especialidade);
         List<MedicoDTO> dtos = medicos.stream()
                 .map(m -> new MedicoDTO(m.getId(), m.getNome()))
-                .toList();
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok(dtos);
     }

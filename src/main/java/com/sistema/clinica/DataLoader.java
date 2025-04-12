@@ -113,6 +113,180 @@ public class DataLoader implements CommandLineRunner {
 
 
 
+        Medico m1 = new Medico();
+        m1.setNome("Carlos Mendes");
+        m1.setCpf("11111111111");
+        m1.setEmail("carlos.mendes@clinica.com");
+        m1.setTelefone(950000001);
+        m1.setCrm(1001);
+        m1.setEspecialidade("Cardiologista");
+        m1.setDiasDisponiveis(Set.of(DiaDaSemana.SEGUNDA, DiaDaSemana.TERCA));
+
+        Medico m2 = new Medico();
+        m2.setNome("Ana Paula");
+        m2.setCpf("22222222222");
+        m2.setEmail("ana.paula@clinica.com");
+        m2.setTelefone(950000002);
+        m2.setCrm(1002);
+        m2.setEspecialidade("Dermatologista");
+        m2.setDiasDisponiveis(Set.of(DiaDaSemana.QUARTA, DiaDaSemana.QUINTA));
+
+        Medico m3 = new Medico();
+        m3.setNome("Roberto Lima");
+        m3.setCpf("33333333333");
+        m3.setEmail("roberto.lima@clinica.com");
+        m3.setTelefone(950000003);
+        m3.setCrm(1003);
+        m3.setEspecialidade("Ginecologista");
+        m3.setDiasDisponiveis(Set.of(DiaDaSemana.SEXTA));
+
+        Medico m4 = new Medico();
+        m4.setNome("Juliana Rocha");
+        m4.setCpf("44444444444");
+        m4.setEmail("juliana.rocha@clinica.com");
+        m4.setTelefone(950000004);
+        m4.setCrm(1004);
+        m4.setEspecialidade("Neurologista");
+        m4.setDiasDisponiveis(Set.of(DiaDaSemana.TERCA, DiaDaSemana.QUINTA));
+
+        Medico m5 = new Medico();
+        m5.setNome("Fernanda Alves");
+        m5.setCpf("55555555555");
+        m5.setEmail("fernanda.alves@clinica.com");
+        m5.setTelefone(950000005);
+        m5.setCrm(1005);
+        m5.setEspecialidade("Pediatra");
+        m5.setDiasDisponiveis(Set.of(DiaDaSemana.SEGUNDA, DiaDaSemana.QUARTA));
+
+        medicoRepository.saveAll(List.of(m1, m2, m3, m4, m5));
+
+        Paciente p1 = new Paciente();
+        p1.setNome("João Oliveira");
+        p1.setCpf("88888888801");
+        p1.setEmail("joao.oliveira@email.com");
+        p1.setTelefone(941111111);
+
+        Paciente p2 = new Paciente();
+        p2.setNome("Larissa Gomes");
+        p2.setCpf("88888888802");
+        p2.setEmail("larissa.gomes@email.com");
+        p2.setTelefone(942222222);
+
+        Paciente p3 = new Paciente();
+        p3.setNome("Lucas Martins");
+        p3.setCpf("88888888803");
+        p3.setEmail("lucas.martins@email.com");
+        p3.setTelefone(943333333);
+
+        Paciente p4 = new Paciente();
+        p4.setNome("Mariana Lopes");
+        p4.setCpf("88888888804");
+        p4.setEmail("mariana.lopes@email.com");
+        p4.setTelefone(944444444);
+
+        Paciente p5 = new Paciente();
+        p5.setNome("Ricardo Silva");
+        p5.setCpf("88888888805");
+        p5.setEmail("ricardo.silva@email.com");
+        p5.setTelefone(945555555);
+
+        pacienteRepository.saveAll(List.of(p1, p2, p3, p4, p5));
+
+
+        Funcionario func1 = new Funcionario();
+        func1.setNome("Pedro Rocha");
+        func1.setCpf("77777777701");
+        func1.setEmail("pedro.rocha@clinica.com");
+        func1.setTelefone(951111111);
+        func1.setMatricula(2001);
+        func1.setSetor("Recepção");
+        func1.setPassword("senha123");
+
+        Funcionario func2 = new Funcionario();
+        func2.setNome("Beatriz Ramos");
+        func2.setCpf("77777777702");
+        func2.setEmail("beatriz.ramos@clinica.com");
+        func2.setTelefone(952222222);
+        func2.setMatricula(2002);
+        func2.setSetor("Financeiro");
+        func2.setPassword("senha123");
+
+        Funcionario func3 = new Funcionario();
+        func3.setNome("Thiago Souza");
+        func3.setCpf("77777777703");
+        func3.setEmail("thiago.souza@clinica.com");
+        func3.setTelefone(953333333);
+        func3.setMatricula(2003);
+        func3.setSetor("TI");
+        func3.setPassword("senha123");
+
+        Funcionario func4 = new Funcionario();
+        func4.setNome("Amanda Costa");
+        func4.setCpf("77777777704");
+        func4.setEmail("amanda.costa@clinica.com");
+        func4.setTelefone(954444444);
+        func4.setMatricula(2004);
+        func4.setSetor("RH");
+        func4.setPassword("senha123");
+
+        Funcionario func5 = new Funcionario();
+        func5.setNome("Rodrigo Pires");
+        func5.setCpf("77777777705");
+        func5.setEmail("rodrigo.pires@clinica.com");
+        func5.setTelefone(955555555);
+        func5.setMatricula(2005);
+        func5.setSetor("Atendimento");
+        func5.setPassword("senha123");
+
+        funcionarioRepository.saveAll(List.of(func1, func2, func3, func4, func5));
+        Consulta nova1 = new Consulta();
+        nova1.setPaciente(p1);
+        nova1.setMedico(m1);
+        nova1.setData(LocalDate.now().plusDays(2));
+        nova1.setHora(LocalTime.of(9, 0));
+        nova1.setMetodoPagamento(MetodoPagamento.DEBITO);
+        nova1.setPagamentoRealizado(true);
+        nova1.setModalidade(Modalidade.SUS);
+
+        Consulta nova2 = new Consulta();
+        nova2.setPaciente(p2);
+        nova2.setMedico(m2);
+        nova2.setData(LocalDate.now().plusDays(3));
+        nova2.setHora(LocalTime.of(10, 30));
+        nova2.setMetodoPagamento(MetodoPagamento.DINHEIRO);
+        nova2.setPagamentoRealizado(false);
+        nova2.setModalidade(Modalidade.PARTICULAR);
+
+        Consulta nova3 = new Consulta();
+        nova3.setPaciente(p3);
+        nova3.setMedico(m3);
+        nova3.setData(LocalDate.now().plusDays(4));
+        nova3.setHora(LocalTime.of(14, 0));
+        nova3.setMetodoPagamento(MetodoPagamento.CREDITO);
+        nova3.setPagamentoRealizado(true);
+        nova3.setModalidade(Modalidade.PLANO_DE_SAUDE);
+
+        Consulta nova4 = new Consulta();
+        nova4.setPaciente(p4);
+        nova4.setMedico(m4);
+        nova4.setData(LocalDate.now().plusDays(5));
+        nova4.setHora(LocalTime.of(15, 30));
+        nova4.setMetodoPagamento(MetodoPagamento.DEBITO);
+        nova4.setPagamentoRealizado(true);
+        nova4.setModalidade(Modalidade.SUS);
+
+        Consulta nova5 = new Consulta();
+        nova5.setPaciente(p5);
+        nova5.setMedico(m5);
+        nova5.setData(LocalDate.now().plusDays(6));
+        nova5.setHora(LocalTime.of(9, 30));
+        nova5.setMetodoPagamento(MetodoPagamento.DINHEIRO);
+        nova5.setPagamentoRealizado(false);
+        nova5.setModalidade(Modalidade.PARTICULAR);
+
+        consultaRepository.saveAll(List.of(nova1, nova2, nova3, nova4, nova5));
+
+
         System.out.println("Dados de teste salvos com sucesso!");
     };
 
