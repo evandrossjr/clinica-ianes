@@ -5,18 +5,15 @@ import com.sistema.clinica.models.Consulta;
 import com.sistema.clinica.models.Funcionario;
 import com.sistema.clinica.models.Medico;
 import com.sistema.clinica.models.dtos.EspacoVagoDTO;
-import com.sistema.clinica.repositories.FuncionarioRepository;
-import com.sistema.clinica.repositories.MedicoRepository;
+import com.sistema.clinica.security.repositories.FuncionarioRepository;
+import com.sistema.clinica.security.repositories.MedicoRepository;
 import com.sistema.clinica.services.AgendaService;
-import com.sistema.clinica.services.ConsultaService;
-import com.sistema.clinica.services.MedicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.thymeleaf.spring6.processor.SpringValueTagProcessor;
 
 import java.util.List;
 

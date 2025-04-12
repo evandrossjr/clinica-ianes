@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 
 import com.sistema.clinica.models.Paciente;
-import com.sistema.clinica.repositories.PacienteRepository;
+import com.sistema.clinica.security.repositories.PacienteRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 

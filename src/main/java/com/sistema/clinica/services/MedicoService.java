@@ -2,14 +2,12 @@ package com.sistema.clinica.services;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
-import com.sistema.clinica.models.enums.DiaDaSemana;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import com.sistema.clinica.models.Medico;
-import com.sistema.clinica.repositories.MedicoRepository;
+import com.sistema.clinica.security.repositories.MedicoRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 @Service

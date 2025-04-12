@@ -1,4 +1,4 @@
-package com.sistema.clinica.repositories;
+package com.sistema.clinica.security.repositories;
 
 import com.sistema.clinica.models.Paciente;
 import com.sistema.clinica.models.Consulta;

@@ -1,7 +1,7 @@
 package com.sistema.clinica.services;
 
 import com.sistema.clinica.models.Funcionario;
-import com.sistema.clinica.repositories.FuncionarioRepository;
+import com.sistema.clinica.security.repositories.FuncionarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;

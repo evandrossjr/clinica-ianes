@@ -7,10 +7,10 @@ import com.sistema.clinica.models.Medico;
 import com.sistema.clinica.models.enums.DiaDaSemana;
 import com.sistema.clinica.models.enums.MetodoPagamento;
 import com.sistema.clinica.models.enums.Modalidade;
-import com.sistema.clinica.repositories.FuncionarioRepository;
-import com.sistema.clinica.repositories.PacienteRepository;
-import com.sistema.clinica.repositories.ConsultaRepository;
-import com.sistema.clinica.repositories.MedicoRepository;
+import com.sistema.clinica.security.repositories.FuncionarioRepository;
+import com.sistema.clinica.security.repositories.PacienteRepository;
+import com.sistema.clinica.security.repositories.ConsultaRepository;
+import com.sistema.clinica.security.repositories.MedicoRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
