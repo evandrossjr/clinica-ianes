@@ -46,7 +46,7 @@ public class HomeController {
         List<Medico> medicos = medicoRepository.findAll();
         List<Funcionario> funcionarios = funcionarioRepository.findAll();
         model.addAttribute("medicos", medicos);
-        model.addAttribute("funcinarios", funcionarios);
+        model.addAttribute("funcionarios", funcionarios);
 
         return "home";
     }
