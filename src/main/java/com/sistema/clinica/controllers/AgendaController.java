@@ -1,5 +1,6 @@
 package com.sistema.clinica.controllers;
 
+import com.sistema.clinica.models.Consulta;
 import com.sistema.clinica.models.dtos.AgendaDisponivelDTO;
 import com.sistema.clinica.models.dtos.HorarioDisponivelDTO;
 import com.sistema.clinica.services.AgendaService;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/agenda")
 public class AgendaController {
     private final AgendaService agendaService;
+
 
     @Autowired
     public AgendaController(AgendaService agendaService) {
@@ -48,7 +50,7 @@ public class AgendaController {
         List<LocalTime> horarios = agendaService.getHorariosDisponiveis(idMedico, data);
         return ResponseEntity.ok(horarios);
     }
-    @GetMapping("/agenda/{idMedico}/disponibilidades")
+    @GetMapping("/{idMedico}/disponibilidades")
     public ResponseEntity<List<HorarioDisponivelDTO>> listarDisponibilidades(@PathVariable Long idMedico) {
         List<AgendaDisponivelDTO> agenda = agendaService.listarAgenda(idMedico);
 
@@ -59,6 +61,9 @@ public class AgendaController {
 
         return ResponseEntity.ok(disponibilidades);
     }
+
+
+
 
 
 }

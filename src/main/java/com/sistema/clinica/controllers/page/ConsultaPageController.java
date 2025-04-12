@@ -1,6 +1,8 @@
 package com.sistema.clinica.controllers.page;
 
 import com.sistema.clinica.models.Consulta;
+import com.sistema.clinica.models.Medico;
+import com.sistema.clinica.models.Paciente;
 import com.sistema.clinica.repositories.MedicoRepository;
 import com.sistema.clinica.repositories.PacienteRepository;
 import com.sistema.clinica.services.ConsultaService;
@@ -35,10 +37,24 @@ public class ConsultaPageController {
     }
 
 
+
+
+
     @PostMapping
     public String salvarViaFormulario(@ModelAttribute Consulta consulta, RedirectAttributes redirectAttributes) {
+        // Recupera os dados completos do banco
+        Medico medico = medicoRepository.findById(consulta.getMedico().getId()).orElse(null);
+        Paciente paciente = pacienteRepository.findById(consulta.getPaciente().getId()).orElse(null);
+
+        // Atribui os objetos completos à consulta
+        consulta.setMedico(medico);
+        consulta.setPaciente(paciente);
+
         consultaService.insert(consulta);
-        redirectAttributes.addFlashAttribute("mensagem", "Consulta com o médico(a) Dr(a) \"" + consulta.getMedico().getNome() + "\" agendada com sucesso!");
+
+        String nomeMedico = (medico != null) ? medico.getNome() : "desconhecido";
+        redirectAttributes.addFlashAttribute("mensagem", "Consulta com o médico(a) Dr(a) \"" + nomeMedico + "\" agendada com sucesso!");
+
         return "redirect:/consulta/cadastro";
     }
 

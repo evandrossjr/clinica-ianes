@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +36,7 @@ public class ConsultaService {
     }
 
     public Consulta insert(Consulta obj){
+
 
         if (!HORARIOS_FIXOS.contains(obj.getHora())){
             throw new IllegalArgumentException("Horário Inválido");
