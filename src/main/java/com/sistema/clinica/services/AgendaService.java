@@ -125,6 +125,32 @@ public class AgendaService {
         return consultaRepository.findByDataBetweenOrderByDataAscHoraAsc(hoje, fim);
     }
 
+    // Método que retorna os horários disponíveis para um médico em uma data específica
+    public List<LocalTime> getHorariosDisponiveis(Long idMedico, LocalDate data) {
+        Optional<Medico> optMedico = medicoRepository.findById(idMedico);
+
+        if (optMedico.isEmpty()) {
+            throw new RuntimeException("Médico não encontrado com ID: " + idMedico);
+        }
+
+        Medico medico = optMedico.get();
+        List<LocalTime> horariosDisponiveis = new ArrayList<>(HORARIOS_FIXOS);
+
+        // Verifica se o médico trabalha naquele dia
+        DayOfWeek diaSemana = data.getDayOfWeek();
+        if (!medico.getDiasDisponiveis().contains(DiaDaSemana.fromDayOfWeek(diaSemana))) {
+            return List.of(); // Retorna uma lista vazia se o médico não trabalha naquele dia
+        }
+
+        // Remove horários já agendados
+        List<Consulta> consultas = consultaRepository.findByMedicoAndData(medico, data);
+        for (Consulta consulta : consultas) {
+            horariosDisponiveis.remove(consulta.getHora());
+        }
+
+        return horariosDisponiveis;
+    }
+
     @PostConstruct
     public void testarMetodo() {
         List<Consulta> consultas = proximasConsultas();

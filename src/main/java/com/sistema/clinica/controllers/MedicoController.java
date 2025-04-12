@@ -1,8 +1,11 @@
 package com.sistema.clinica.controllers;
 
 import java.net.URI;
+import java.time.DayOfWeek;
 import java.util.List;
+import java.util.Set;
 
+import com.sistema.clinica.models.dtos.MedicoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -62,6 +65,17 @@ public class MedicoController {
         obj = medicoService.update(id, obj);
         return ResponseEntity.ok().body(obj);
     }
+
+    @GetMapping("/por-especialidade/{especialidade}")
+    public ResponseEntity<List<MedicoDTO>> buscarPorEspecialidade(@PathVariable String especialidade) {
+        List<Medico> medicos = medicoService.buscarPorEspecialidade(especialidade);
+        List<MedicoDTO> dtos = medicos.stream()
+                .map(m -> new MedicoDTO(m.getId(), m.getNome()))
+                .toList();
+
+        return ResponseEntity.ok(dtos);
+    }
+
 }
 
 

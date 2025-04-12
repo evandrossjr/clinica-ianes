@@ -1,0 +1,75 @@
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const especialidadeSelect = document.getElementById('especialidade');
+    const medicoSelect = document.getElementById('medico');
+    const dataInput = document.getElementById('data');
+    const horaSelect = document.getElementById('hora');
+
+    // Quando a especialidade mudar, carrega os médicos para aquela especialidade
+    especialidadeSelect.addEventListener('change', function () {
+      const especialidade = especialidadeSelect.value;
+
+      // Limpar as opções de médicos e horários
+      medicoSelect.innerHTML = '<option value="">Selecione</option>';
+      dataInput.value = '';
+      horaSelect.innerHTML = '<option value="">Selecione</option>';
+
+      if (especialidade) {
+        // Aqui você fará a requisição para buscar os médicos dessa especialidade
+        fetch(`/medicos/por-especialidade/${especialidade}`)
+          .then(response => response.json())
+          .then(medicos => {
+            medicos.forEach(medico => {
+              const option = document.createElement('option');
+              option.value = medico.id;
+              option.textContent = medico.nome;
+              medicoSelect.appendChild(option);
+            });
+          });
+      }
+    });
+
+    // Quando o médico for selecionado, carrega as datas disponíveis
+    medicoSelect.addEventListener('change', function () {
+      const medicoId = medicoSelect.value;
+      dataInput.value = '';
+      horaSelect.innerHTML = '<option value="">Selecione</option>';
+
+      if (medicoId) {
+        // Requisição para buscar datas disponíveis para o médico
+        fetch(`/agenda/${medicoId}`)
+          .then(response => response.json())
+          .then(agenda => {
+            agenda.forEach(item => {
+              const option = document.createElement('option');
+              option.value = item.data;
+              option.textContent = item.data;
+              dataInput.appendChild(option);
+            });
+          });
+      }
+    });
+
+    // Quando a data for selecionada, carrega os horários disponíveis
+    dataInput.addEventListener('change', function () {
+      const medicoId = medicoSelect.value;
+      const data = dataInput.value;
+
+      horaSelect.innerHTML = '<option value="">Selecione</option>';
+
+      if (medicoId && data) {
+        // Requisição para buscar horários disponíveis para o médico e data selecionada
+        fetch(`/agenda/${medicoId}/horarios?data=${data}`)
+          .then(response => response.json())
+          .then(horarios => {
+            horarios.forEach(horario => {
+              const option = document.createElement('option');
+              option.value = horario;
+              option.textContent = horario;
+              horaSelect.appendChild(option);
+            });
+          });
+      }
+    });
+  });
+</script>

@@ -57,8 +57,9 @@ public class MedicoService {
     }
 
 
-
-
+    public List<Medico> buscarPorEspecialidade(String especialidade) {
+        return medicoRepository.findByEspecialidade(especialidade);
+    }
 }
 
 

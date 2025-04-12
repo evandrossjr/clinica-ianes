@@ -1,14 +1,14 @@
 package com.sistema.clinica.controllers;
 
 import com.sistema.clinica.models.dtos.AgendaDisponivelDTO;
+import com.sistema.clinica.models.dtos.HorarioDisponivelDTO;
 import com.sistema.clinica.services.AgendaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,4 +41,24 @@ public class AgendaController {
             return map;
         }).collect(Collectors.toList());
     }
+
+    // Endpoint para obter horários disponíveis por médico e data
+    @GetMapping("/{idMedico}/horarios")
+    public ResponseEntity<List<LocalTime>> consultarHorariosDisponiveis(@PathVariable Long idMedico, @RequestParam LocalDate data) {
+        List<LocalTime> horarios = agendaService.getHorariosDisponiveis(idMedico, data);
+        return ResponseEntity.ok(horarios);
+    }
+    @GetMapping("/agenda/{idMedico}/disponibilidades")
+    public ResponseEntity<List<HorarioDisponivelDTO>> listarDisponibilidades(@PathVariable Long idMedico) {
+        List<AgendaDisponivelDTO> agenda = agendaService.listarAgenda(idMedico);
+
+        List<HorarioDisponivelDTO> disponibilidades = agenda.stream()
+                .flatMap(dto -> dto.getHorariosDisponiveis().stream()
+                        .map(horario -> new HorarioDisponivelDTO(dto.getData(), horario)))
+                .toList();
+
+        return ResponseEntity.ok(disponibilidades);
+    }
+
+
 }

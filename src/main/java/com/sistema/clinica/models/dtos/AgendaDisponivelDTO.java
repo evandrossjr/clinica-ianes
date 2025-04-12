@@ -2,6 +2,7 @@ package com.sistema.clinica.models.dtos;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.List;
 
 public class AgendaDisponivelDTO {
@@ -21,4 +22,6 @@ public class AgendaDisponivelDTO {
     public List<LocalTime> getHorariosDisponiveis() {
         return horariosDisponiveis;
     }
+
+
 }

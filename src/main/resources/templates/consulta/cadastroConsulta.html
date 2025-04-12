@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Agendar Consulta</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        display: flex;
+    }
+
+    .sidebar {
+        width: 250px;
+        background-color: #343a40;
+        color: white;
+        padding-top: 20px;
+        flex-shrink: 0;
+        height: 100vh;
+        position: fixed;
+    }
+
+    .sidebar a {
+        color: white;
+        text-decoration: none;
+        display: block;
+        padding: 10px 20px;
+    }
+
+    .sidebar a:hover {
+        background-color: #495057;
+    }
+
+    .content {
+        margin-left: 250px;
+        flex-grow: 1;
+        padding: 30px;
+        background-color: #f8f9fa;
+    }
+
+    .form-container {
+        max-width: 800px;
+        margin: auto;
+    }
+
+    /* Estilo para os campos lado a lado */
+    .form-row .col {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <div class="logo-svg">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="#0dcaf0" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 2h-2v6.586l-2.707 2.707A3.978 3.978 0 0113 12h-2a3.978 3.978 0 01-2.293-.707L6 8.586V2H4v6.586a5.978 5.978 0 002.293 4.707A5.962 5.962 0 0011 14v2h-2v2h6v-2h-2v-2a5.962 5.962 0 004.707-2.707A5.978 5.978 0 0020 8.586V2z"/>
+      <circle cx="18" cy="20" r="2" fill="#0dcaf0"/>
+    </svg>
+    <span class="logo-text"><a href="/">Clínica Ianes</a></span>
+  </div>
+  <a href="/medico/cadastro">Médicos</a>
+  <a href="#">Funcionários</a>
+  <a href="/consulta/cadastro">Consultas</a>
+  <a href="/agenda/proximas">Próximas Consultas</a>
+</div>
+
+<!-- Conteúdo -->
+<div class="content">
+  <h2 class="mb-4 text-center">Agende sua Consulta</h2>
+
+  <div th:if="${mensagem}" class="alert alert-success d-flex align-items-center" role="alert">
+    <svg class="bi flex-shrink-0 me-2" width="24" height="24" fill="green" viewBox="0 0 16 16" role="img" aria-label="Success:">
+      <path d="M16 8a8 8 0 1 1-16 0 8 8 0 0 1 16 0zM6.93 10.588l-2.47-2.47 1.06-1.06L6.93 8.47l4.95-4.95 1.06 1.06-6.01 6.01z"/>
+    </svg>
+    <span th:text="${mensagem}"></span>
+  </div>
+
+  <div class="form-container">
+    <form action="/consultas" method="post">
+      <div class="mb-3 row">
+        <label for="paciente" class="col-sm-2 col-form-label">Paciente</label>
+        <div class="col-sm-10">
+          <select id="paciente" name="paciente.id" class="form-control" required>
+            <option value="">Selecione</option>
+            <option th:each="p : ${pacientes}" th:value="${p.id}" th:text="${p.nome}"></option>
+          </select>
+        </div>
+      </div>
+
+      <div class="mb-3 row">
+        <label for="especialidade" class="col-sm-2 col-form-label">Especialidade</label>
+        <div class="col-sm-10">
+          <select id="especialidade" class="form-control" required>
+            <option value="">Selecione</option>
+            <option th:each="esp : ${especialidades}" th:value="${esp}" th:text="${esp}"></option>
+          </select>
+        </div>
+      </div>
+
+      <div class="mb-3 row">
+        <label for="medico" class="col-sm-2 col-form-label">Médico</label>
+        <div class="col-sm-10">
+          <select id="medico" name="medico.id" class="form-control" required></select>
+        </div>
+      </div>
+
+      <div class="mb-3 row">
+        <label for="dataHora" class="col-sm-2 col-form-label">Data e Horário</label>
+        <div class="col-sm-10">
+          <select id="dataHora" name="dataHora" class="form-control" required>
+            <option value="">Selecione</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Modalidade -->
+      <div class="mb-3 row">
+        <label for="modalidade" class="col-sm-2 col-form-label">Modalidade</label>
+        <div class="col-sm-10">
+          <select id="modalidade" name="modalidade" class="form-control">
+            <option value="SUS">SUS</option>
+            <option value="PLANO_DE_SAUDE">Plano de Saúde</option>
+            <option value="PARTICULAR">Particular</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Pagamento -->
+      <div class="mb-3 row">
+        <label for="metodoPagamento" class="col-sm-2 col-form-label">Método de Pagamento</label>
+        <div class="col-sm-10">
+          <select id="metodoPagamento" name="metodoPagamento" class="form-control">
+            <option value="DINHEIRO">Dinheiro</option>
+            <option value="DEBITO">Débito</option>
+            <option value="CARTAO">Cartão</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-check mb-3 row">
+        <div class="col-sm-10 offset-sm-2">
+          <input type="checkbox" class="form-check-input" id="pagamentoRealizado" name="pagamentoRealizado">
+          <label class="form-check-label" for="pagamentoRealizado">Pagamento Realizado</label>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Salvar</button>
+    </form>
+  </div>
+</body>
+
+
+<script th:src="@{/js/scriptConsulta.js}"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const especialidadeSelect = document.getElementById('especialidade');
+    const medicoSelect = document.getElementById('medico');
+    const dataHoraSelect = document.getElementById('dataHora');
+
+    // Quando a especialidade mudar, carrega os médicos para aquela especialidade
+    especialidadeSelect.addEventListener('change', function () {
+      const especialidade = especialidadeSelect.value;
+      medicoSelect.innerHTML = '<option value="">Selecione</option>';
+      dataHoraSelect.innerHTML = '<option value="">Selecione</option>';
+
+      if (especialidade) {
+        fetch(`/medicos/por-especialidade/${especialidade}`)
+          .then(response => response.json())
+          .then(medicos => {
+            medicos.forEach(medico => {
+              const option = document.createElement('option');
+              option.value = medico.id;
+              option.textContent = medico.nome;
+              medicoSelect.appendChild(option);
+            });
+          });
+      }
+    });
+
+ </body>
+</script>
+
+
+</html>
