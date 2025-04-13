@@ -1,4 +1,4 @@
-package com.sistema.clinica.models.dtos;
+package com.sistema.clinica.models.enums;
 
 public enum Role {
     ROLE_ADMIN,

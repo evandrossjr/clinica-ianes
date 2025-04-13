@@ -1,6 +1,7 @@
 package com.sistema.clinica.models;
 
 import com.sistema.clinica.models.enums.DiaDaSemana;
+import com.sistema.clinica.models.enums.Role;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -10,10 +11,6 @@ import java.util.Set;
 @Entity
 public class Medico extends Pessoa{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     private int crm;
     private String especialidade;
 
@@ -21,23 +18,21 @@ public class Medico extends Pessoa{
     @Enumerated(EnumType.STRING)
     private Set<DiaDaSemana> diasDisponiveis;
 
-    public Medico() { }
+    public Medico(){}
 
-    public Medico(String nome, String cpf, String email, Integer telefone, Long id, int crm, String especialidade, Set<DiaDaSemana> diasDisponiveis) {
-        super(nome, cpf, email, telefone);
-        this.id = id;
+
+    public Medico(Long id, String nome, String username, String password, String cpf, String email, String telefone, Set<Role> roles, int crm, String especialidade, Set<DiaDaSemana> diasDisponiveis) {
+        super(id, nome, username, password, cpf, email, telefone, roles);
         this.crm = crm;
         this.especialidade = especialidade;
         this.diasDisponiveis = diasDisponiveis;
     }
 
-    public Long getId() {
-        return id;
+    public Medico(Long id, String nome, String username, String password, String cpf, String email, String telefone, Set<Role> roles) {
+        super(id, nome, username, password, cpf, email, telefone, roles);
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+
 
     public int getCrm() {
         return crm;
@@ -62,6 +57,8 @@ public class Medico extends Pessoa{
     public void setDiasDisponiveis(Set<DiaDaSemana> diasDisponiveis) {
         this.diasDisponiveis = diasDisponiveis;
     }
+
+
 }
 
 

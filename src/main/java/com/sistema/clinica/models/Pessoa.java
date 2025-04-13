@@ -1,28 +1,54 @@
 package com.sistema.clinica.models;
 
+import com.sistema.clinica.models.enums.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 
+import java.util.HashSet;
+import java.util.Set;
 
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Pessoa {
 
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String nome;
+    private String username;
+    private String password;
     private String cpf;
     private String email;
-    private Integer telefone;
+
+    @Pattern(regexp = "\\(?\\d{2}\\)?\\s?\\d{8,9}", message = "Telefone inválido")
+    private String telefone;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles = new HashSet<>();
 
 
     public Pessoa() {
     }
 
-    public Pessoa(String nome, String cpf, String email, Integer telefone) {
+    public Pessoa(Long id, String nome, String username, String password, String cpf, String email, String telefone, Set<Role> roles) {
+        this.id = id;
         this.nome = nome;
+        this.username = username;
+        this.password = password;
         this.cpf = cpf;
         this.email = email;
         this.telefone = telefone;
+        this.roles = roles;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getNome() {
         return nome;
@@ -30,6 +56,22 @@ public abstract class Pessoa {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getCpf() {
@@ -48,11 +90,19 @@ public abstract class Pessoa {
         this.email = email;
     }
 
-    public Integer getTelefone() {
+    public String getTelefone() {
         return telefone;
     }
 
-    public void setTelefone(Integer telefone) {
+    public void setTelefone(String telefone) {
         this.telefone = telefone;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

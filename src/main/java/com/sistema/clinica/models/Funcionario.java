@@ -1,29 +1,30 @@
 package com.sistema.clinica.models;
 
+import com.sistema.clinica.models.enums.Role;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.util.Set;
+
 @Entity
-public class    Funcionario extends Pessoa{
+public class Funcionario extends Pessoa{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String setor;
     private int matricula;
-    private String password;
 
-    public Funcionario() {
-    }
 
-    public Funcionario(String nome, String cpf, String email, Integer telefone, Long id, String setor, int matricula,String password) {
-        super(nome, cpf, email, telefone);
-        this.id = id;
+    public Funcionario(){}
+
+    public Funcionario(Long id, String nome, String username, String password, String cpf, String email, String telefone, Set<Role> roles, Long id1, String setor, int matricula) {
+        super(id, nome, username, password, cpf, email, telefone, roles);
+        this.id = id1;
         this.setor = setor;
         this.matricula = matricula;
-        this.password = password;
     }
 
     public Long getId() {
@@ -50,11 +51,5 @@ public class    Funcionario extends Pessoa{
         this.matricula = matricula;
     }
 
-    public String getPassword() {
-        return password;
-    }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }
