@@ -18,23 +18,13 @@ public class PessoaDetails implements UserDetails {
     public PessoaDetails(Pessoa pessoa) {
         this.pessoa = pessoa;
     }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        String role;
-
-        if (pessoa instanceof Medico) {
-            role = "ROLE_MEDICO";
-        } else if (pessoa instanceof Funcionario) {
-            role = "ROLE_FUNCIONARIO";
-        } else if (pessoa instanceof Paciente) {
-            role = "ROLE_PACIENTE";
-        } else {
-            role = "ROLE_PACIENTE"; // Caso seja uma classe desconhecida ou nula
-        }
-
-        return List.of(new SimpleGrantedAuthority(role));
+        return pessoa.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+                .toList();
     }
+
 
 
     @Override

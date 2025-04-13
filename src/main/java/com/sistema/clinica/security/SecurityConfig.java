@@ -17,7 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
 
-    @Bean
+
     public UserDetailsService userDetailsService(PessoaRepository pessoaRepository) {
         return new PessoaDetailsService(pessoaRepository);
     }
@@ -29,16 +29,16 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/css/**", "/js/**","/h2-console/**").permitAll() // permite acesso à página de login e recursos estáticos
-                        .requestMatchers("/medico/**").hasRole("MEDICO")
-                        .requestMatchers("/funcionario/**").hasRole("FUNCIONARIO")
-                        .requestMatchers("/paciente/**").hasRole("PACIENTE")
-                        .requestMatchers("/").authenticated()
+                        .requestMatchers("/medico","/medico/**").hasRole("MEDICO")
+                        .requestMatchers("funcionario","/funcionario/**").hasRole("FUNCIONARIO")
+                        .requestMatchers("paciente","/paciente/**").hasRole("PACIENTE")
+                        .requestMatchers("/index").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login") // rota que o usuário acessa
                         .loginProcessingUrl("/login") // rota que o form faz POST (deixa igual ao `th:action`)
-                        .defaultSuccessUrl("/", true) // redireciona ao logar com sucesso
+                        .defaultSuccessUrl("/index", true) // redireciona ao logar com sucesso
                         .permitAll()
                 )
                 .logout(logout -> logout

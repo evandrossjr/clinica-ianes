@@ -101,7 +101,7 @@
 
     <div class="card shadow-sm form-container">
         <div class="card-body">
-            <form method="post" action="/medico">
+            <form th:action="@{/medico/cadastro}" method="post">
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="nome" class="form-label">Nome</label>

@@ -20,11 +20,20 @@ public class PessoaDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Pessoa pessoa = pessoaRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+        System.out.println("Tentando logar com: " + username);
 
+        Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(username)
+                .orElseThrow(() -> {
+                    System.out.println("Usuário não encontrado");
+                    return new UsernameNotFoundException("Usuário não encontrado");
+                });
+
+        System.out.println("Usuário encontrado: " + pessoa.getUsername());
+        System.out.println("Roles: " + pessoa.getRoles());
+        System.out.println("Classe: " + pessoa.getClass().getSimpleName());
 
         return new PessoaDetails(pessoa);
     }
+
 }
 
