@@ -4,11 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 
 import com.sistema.clinica.models.Paciente;
-import com.sistema.clinica.security.repositories.PacienteRepository;
+import com.sistema.clinica.repositories.PacienteRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -18,6 +19,13 @@ public class PacienteService {
 
     @Autowired
     private PacienteRepository pacienteRepository ;
+
+    private final PasswordEncoder passwordEncoder;
+
+    public PacienteService(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
 
 
     public List<Paciente> findAll(){
@@ -30,6 +38,9 @@ public class PacienteService {
     }
 
     public Paciente insert(Paciente obj){
+
+        String senhaCriptografada = passwordEncoder.encode(obj.getPassword());
+        obj.setPassword(senhaCriptografada);
         return pacienteRepository.save(obj);
     }
 
@@ -53,6 +64,12 @@ public class PacienteService {
         entity.setCpf(obj.getCpf());
         entity.setEmail(obj.getEmail());
         entity.setTelefone(obj.getTelefone());
+        if (obj.getPassword() != null && !obj.getPassword().isBlank()) {
+            if (!obj.getPassword().startsWith("$2a$")) {
+                entity.setPassword(passwordEncoder.encode(obj.getPassword()));
+            }
+        }
+
 
     }
 

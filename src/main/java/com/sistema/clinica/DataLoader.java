@@ -8,14 +8,15 @@ import com.sistema.clinica.models.enums.DiaDaSemana;
 import com.sistema.clinica.models.enums.MetodoPagamento;
 import com.sistema.clinica.models.enums.Modalidade;
 import com.sistema.clinica.models.enums.Role;
-import com.sistema.clinica.security.repositories.FuncionarioRepository;
-import com.sistema.clinica.security.repositories.PacienteRepository;
-import com.sistema.clinica.security.repositories.ConsultaRepository;
-import com.sistema.clinica.security.repositories.MedicoRepository;
+import com.sistema.clinica.repositories.FuncionarioRepository;
+import com.sistema.clinica.repositories.PacienteRepository;
+import com.sistema.clinica.repositories.ConsultaRepository;
+import com.sistema.clinica.repositories.MedicoRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -37,6 +38,9 @@ public class DataLoader implements CommandLineRunner {
     @Autowired
     private FuncionarioRepository funcionarioRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public void run(String... args) throws Exception {
 
@@ -49,7 +53,7 @@ public class DataLoader implements CommandLineRunner {
         medico.setDiasDisponiveis(Set.of(DiaDaSemana.SEGUNDA, DiaDaSemana.QUARTA, DiaDaSemana.SEXTA));
         medico.setEspecialidade("Oftalmologista");
         medico.setUsername("Fabio");
-        medico.setPassword("1234");
+        medico.setPassword(passwordEncoder.encode("1234"));
         medico.setRoles(Set.of(Role.ROLE_MEDICO));
 
 
@@ -62,7 +66,7 @@ public class DataLoader implements CommandLineRunner {
         paciente.setEmail("maria.silva@email.com");
         paciente.setTelefone("71991213094");
         paciente.setUsername("Maria");
-        paciente.setPassword("1234");
+        paciente.setPassword(passwordEncoder.encode("1234"));
         paciente.setRoles(Set.of(Role.ROLE_PACIENTE));
         // ... outros campos que você tiver no Paciente
 
@@ -108,7 +112,7 @@ public class DataLoader implements CommandLineRunner {
         f1.setSetor("Recepão");
         f1.setPassword("Testando");
         f1.setUsername("Joana");
-        f1.setPassword("1234");
+        f1.setPassword(passwordEncoder.encode("1234"));
         f1.setRoles(Set.of(Role.ROLE_FUNCIONARIO));
 
         Funcionario f2 = new Funcionario();
@@ -120,7 +124,7 @@ public class DataLoader implements CommandLineRunner {
         f2.setSetor("Administrativo");
         f2.setPassword("1234");
         f2.setUsername("Carlos");
-        f2.setPassword("1234");
+        f2.setPassword(passwordEncoder.encode("1234"));
         f2.setRoles(Set.of(Role.ROLE_FUNCIONARIO));
 
         funcionarioRepository.saveAll(List.of(f1, f2));
@@ -136,7 +140,7 @@ public class DataLoader implements CommandLineRunner {
         m1.setEspecialidade("Cardiologista");
         m1.setDiasDisponiveis(Set.of(DiaDaSemana.SEGUNDA, DiaDaSemana.TERCA));
         m1.setUsername("Carlos");
-        m1.setPassword("1234");
+        m1.setPassword(passwordEncoder.encode("1234"));
         m1.setRoles(Set.of(Role.ROLE_MEDICO));
 
 
@@ -149,7 +153,7 @@ public class DataLoader implements CommandLineRunner {
         m2.setEspecialidade("Dermatologista");
         m2.setDiasDisponiveis(Set.of(DiaDaSemana.QUARTA, DiaDaSemana.QUINTA));
         m2.setUsername("Ana");
-        m2.setPassword("1234");
+        m2.setPassword(passwordEncoder.encode("1234"));
         m2.setRoles(Set.of(Role.ROLE_MEDICO));
 
         Medico m3 = new Medico();
@@ -161,7 +165,7 @@ public class DataLoader implements CommandLineRunner {
         m3.setEspecialidade("Ginecologista");
         m3.setDiasDisponiveis(Set.of(DiaDaSemana.SEXTA));
         m3.setUsername("roberto");
-        m3.setPassword("1234");
+        m3.setPassword(passwordEncoder.encode("1234"));
         m3.setRoles(Set.of(Role.ROLE_MEDICO));
 
         Medico m4 = new Medico();
@@ -173,7 +177,7 @@ public class DataLoader implements CommandLineRunner {
         m4.setEspecialidade("Neurologista");
         m4.setDiasDisponiveis(Set.of(DiaDaSemana.TERCA, DiaDaSemana.QUINTA));
         m4.setUsername("juliana");
-        m4.setPassword("1234");
+        m4.setPassword(passwordEncoder.encode("1234"));
         m4.setRoles(Set.of(Role.ROLE_MEDICO));
 
         Medico m5 = new Medico();
@@ -185,7 +189,7 @@ public class DataLoader implements CommandLineRunner {
         m5.setEspecialidade("Pediatra");
         m5.setDiasDisponiveis(Set.of(DiaDaSemana.SEGUNDA, DiaDaSemana.QUARTA));
         m5.setUsername("Fernanda");
-        m5.setPassword("1234");
+        m5.setPassword(passwordEncoder.encode("1234"));
         m5.setRoles(Set.of(Role.ROLE_MEDICO));
 
         medicoRepository.saveAll(List.of(m1, m2, m3, m4, m5));
@@ -196,7 +200,7 @@ public class DataLoader implements CommandLineRunner {
         p1.setEmail("joao.oliveira@email.com");
         p1.setTelefone("71991213094");
         p1.setUsername("joao");
-        p1.setPassword("1234");
+        p1.setPassword(passwordEncoder.encode("1234"));
         p1.setRoles(Set.of(Role.ROLE_PACIENTE));
 
         Paciente p2 = new Paciente();
@@ -205,7 +209,7 @@ public class DataLoader implements CommandLineRunner {
         p2.setEmail("larissa.gomes@email.com");
         p2.setTelefone("71991213094");
         p2.setUsername("Larissa");
-        p2.setPassword("1234");
+        p2.setPassword(passwordEncoder.encode("1234"));
         p2.setRoles(Set.of(Role.ROLE_PACIENTE));
 
         Paciente p3 = new Paciente();
@@ -214,7 +218,7 @@ public class DataLoader implements CommandLineRunner {
         p3.setEmail("lucas.martins@email.com");
         p3.setTelefone("71991213094");
         p3.setUsername("Lucas");
-        p3.setPassword("1234");
+        p3.setPassword(passwordEncoder.encode("1234"));
         p3.setRoles(Set.of(Role.ROLE_PACIENTE));
 
         Paciente p4 = new Paciente();
@@ -223,7 +227,7 @@ public class DataLoader implements CommandLineRunner {
         p4.setEmail("mariana.lopes@email.com");
         p4.setTelefone("71991213094");
         p4.setUsername("mariana");
-        p4.setPassword("1234");
+        p4.setPassword(passwordEncoder.encode("1234"));
         p4.setRoles(Set.of(Role.ROLE_PACIENTE));
 
         Paciente p5 = new Paciente();
@@ -232,7 +236,7 @@ public class DataLoader implements CommandLineRunner {
         p5.setEmail("ricardo.silva@email.com");
         p5.setTelefone("71991213094");
         p5.setUsername("Ricardo");
-        p5.setPassword("1234");
+        p5.setPassword(passwordEncoder.encode("1234"));
         p5.setRoles(Set.of(Role.ROLE_PACIENTE));
 
         pacienteRepository.saveAll(List.of(p1, p2, p3, p4, p5));
@@ -246,7 +250,7 @@ public class DataLoader implements CommandLineRunner {
         func1.setMatricula(2001);
         func1.setSetor("Recepção");
         func1.setUsername("pedro");
-        func1.setPassword("1234");
+        func1.setPassword(passwordEncoder.encode("1234"));
         func1.setRoles(Set.of(Role.ROLE_FUNCIONARIO));
 
 
@@ -258,7 +262,7 @@ public class DataLoader implements CommandLineRunner {
         func2.setMatricula(2002);
         func2.setSetor("Financeiro");
         func2.setUsername("beattriz");
-        func2.setPassword("1234");
+        func2.setPassword(passwordEncoder.encode("1234"));
         func2.setRoles(Set.of(Role.ROLE_FUNCIONARIO));
 
         Funcionario func3 = new Funcionario();
@@ -269,7 +273,7 @@ public class DataLoader implements CommandLineRunner {
         func3.setMatricula(2003);
         func3.setSetor("TI");
         func3.setUsername("thiago");
-        func3.setPassword("1234");
+        func3.setPassword(passwordEncoder.encode("1234"));
         func3.setRoles(Set.of(Role.ROLE_FUNCIONARIO));
 
         Funcionario func4 = new Funcionario();
@@ -280,7 +284,7 @@ public class DataLoader implements CommandLineRunner {
         func4.setMatricula(2004);
         func4.setSetor("RH");
         func4.setUsername("amanda");
-        func4.setPassword("1234");
+        func4.setPassword(passwordEncoder.encode("1234"));
         func4.setRoles(Set.of(Role.ROLE_FUNCIONARIO));
 
         Funcionario func5 = new Funcionario();
@@ -291,7 +295,7 @@ public class DataLoader implements CommandLineRunner {
         func5.setMatricula(2005);
         func5.setSetor("Atendimento");
         func5.setUsername("rodrigo");
-        func5.setPassword("1234");
+        func5.setPassword(passwordEncoder.encode("1234"));
         func5.setRoles(Set.of(Role.ROLE_FUNCIONARIO));
 
 

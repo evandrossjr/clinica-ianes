@@ -1,4 +1,4 @@
-package com.sistema.clinica.security.repositories;
+package com.sistema.clinica.repositories;
 import com.sistema.clinica.models.enums.DiaDaSemana;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

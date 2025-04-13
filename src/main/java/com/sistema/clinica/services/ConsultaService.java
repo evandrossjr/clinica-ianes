@@ -1,7 +1,7 @@
 package com.sistema.clinica.services;
 
 import com.sistema.clinica.models.Consulta;
-import com.sistema.clinica.security.repositories.ConsultaRepository;
+import com.sistema.clinica.repositories.ConsultaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
