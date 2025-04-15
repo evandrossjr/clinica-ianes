@@ -1,6 +1,7 @@
 package com.sistema.clinica.services;
 
 import com.sistema.clinica.models.Funcionario;
+import com.sistema.clinica.models.enums.Role;
 import com.sistema.clinica.repositories.FuncionarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class FuncionarioService {
@@ -38,6 +38,13 @@ public class FuncionarioService {
     public Funcionario insert(Funcionario obj) {
         String senhaCriptografada = passwordEncoder.encode(obj.getPassword());
         obj.setPassword(senhaCriptografada);
+
+        if (obj.getUsername() == null || obj.getUsername().isEmpty()) {
+            obj.setUsername(obj.getEmail());
+        }
+
+        Set<Role> roles = EnumSet.of(Role.ROLE_FUNCIONARIO);  // Define 'USER' como a role padrão
+        obj.setRoles(roles);
         return funcionarioRepository.save(obj);
     }
 

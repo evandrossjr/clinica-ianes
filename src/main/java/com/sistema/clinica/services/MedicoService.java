@@ -1,8 +1,11 @@
 package com.sistema.clinica.services;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
+import com.sistema.clinica.models.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,6 +39,13 @@ public class MedicoService {
     public Medico insert(Medico obj){
         String senhaCriptografada = passwordEncoder.encode(obj.getPassword());
         obj.setPassword(senhaCriptografada);
+
+        if (obj.getUsername() == null || obj.getUsername().isEmpty()) {
+            obj.setUsername(obj.getEmail());
+        }
+
+        Set<Role> roles = EnumSet.of(Role.ROLE_MEDICO);  // Define 'USER' como a role padrão
+        obj.setRoles(roles);
         return medicoRepository.save(obj);
     }
 

@@ -123,11 +123,23 @@ public class DataLoader implements CommandLineRunner {
         f2.setMatricula(1006);
         f2.setSetor("Administrativo");
         f2.setPassword("1234");
-        f2.setUsername("Carlos");
+        f2.setUsername("Carlos1");
         f2.setPassword(passwordEncoder.encode("1234"));
         f2.setRoles(Set.of(Role.ROLE_FUNCIONARIO));
 
-        funcionarioRepository.saveAll(List.of(f1, f2));
+        Funcionario f3 = new Funcionario();
+        f3.setNome("Administrador");
+        f3.setCpf("95785432100");
+        f3.setEmail("adm@adm.com");
+        f3.setTelefone("71991213094");
+        f3.setMatricula(1010);
+        f3.setSetor("TI");
+        f3.setPassword("1234");
+        f3.setUsername("admin");
+        f3.setPassword(passwordEncoder.encode("1234"));
+        f3.setRoles(Set.of(Role.ROLE_ADMIN));
+
+        funcionarioRepository.saveAll(List.of(f1, f2, f3));
 
 
 
