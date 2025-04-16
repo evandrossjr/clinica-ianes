@@ -1,0 +1,24 @@
+<div th:fragment="sidebar(pessoa)" >
+  <div sec:authorize="hasRole('ROLE_ADMIN')">
+    <a href="/admin/funcionario/cadastro">Cadastro de Funcionário</a>
+    <a href="/admin/dashboard">Dashboard</a>
+  </div>
+
+  <div sec:authorize="hasRole('ROLE_FUNCIONARIO')">
+    <a href="/funcionario/dashboard">Dashboard</a>
+    <a href="/funcionario/paciente/cadastro">Cadastro de Pacientes</a>
+    <a href="/funcionario/medico/cadastro">Cadastro de Médicos</a>
+    <a href="/funcionario/consulta/agendamento">Agendamento de Consultas</a>
+  </div>
+
+  <div sec:authorize="hasRole('ROLE_MEDICO')">
+    <a href="/medico/minha-area">Minha Área</a>
+    <a href="/medico/minhas-consultas">Minhas Consultas</a>
+  </div>
+
+  <div sec:authorize="hasRole('ROLE_PACIENTE')">
+    <a href="/paciente/minha-area">Minha Área</a>
+    <a href="/paciente/minhas-consultas">Minhas Consultas</a>
+    <a href="/paciente/consulta/agendamento">Agendamento de Consultas</a>
+  </div>
+</div>

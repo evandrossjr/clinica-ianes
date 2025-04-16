@@ -67,6 +67,6 @@ public class HomeController {
     public String verProximasConsultas(Model model) {
         List<Consulta> consultas = agendaService.proximasConsultas();
         model.addAttribute("consultas", consultas);
-        return "home"; // nome do template HTML (sem .html)
+        return "home";
     }
 }
