@@ -12,13 +12,14 @@
                 <div class="card-body">
                     <h5 class="card-title">Próximas Consultas</h5>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item" th:each="c : ${consultas}">
-                            <span th:text="${#temporals.format(c.data, 'dd/MM/yyyy')} + ' - ' + c.hora + ' - ' + c.paciente.nome + ' com Dr(a). ' + c.medico.nome + ' (' + c.medico.especialidade + ')'"></span>
-                        </li>
+                        <ul class="list-group">
+                            <li class="list-group-item" th:each="desc : ${descricoesConsultas}" th:text="${desc}"></li>
+                        </ul>
                         <li class="list-group-item" th:if="${#lists.isEmpty(consultas)}">
                             Nenhuma consulta agendada.
                         </li>
                     </ul>
+
                 </div>
             </div>
         </div>
