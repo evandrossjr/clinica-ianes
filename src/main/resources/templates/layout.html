@@ -8,13 +8,20 @@
     <style>
         body {
             display: flex;
+            flex-direction: column;
             min-height: 100vh;
+            margin: 0;
+        }
+        .main-container {
+            display: flex;
+            flex: 1;
         }
         .sidebar {
             width: 250px;
             background-color: #343a40;
             color: white;
             padding-top: 20px;
+            flex-shrink: 0;
         }
         .sidebar a {
             color: white;
@@ -29,6 +36,7 @@
             flex-grow: 1;
             padding: 30px;
             background-color: #f8f9fa;
+            overflow-y: auto;
         }
         .card-title {
             font-size: 1.25rem;
@@ -47,25 +55,43 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
+        footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
     </style>
 </head>
 <body>
-<div class="sidebar">
+<div class="main-container">
+    <div class="sidebar">
+        <div class="logo-svg">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="#0dcaf0" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 2h-2v6.586l-2.707 2.707A3.978 3.978 0 0113 12h-2a3.978 3.978 0 01-2.293-.707L6 8.586V2H4v6.586a5.978 5.978 0 002.293 4.707A5.962 5.962 0 0011 14v2h-2v2h6v-2h-2v-2a5.962 5.962 0 004.707-2.707A5.978 5.978 0 0020 8.586V2z"/>
+                <circle cx="18" cy="20" r="2" fill="#0dcaf0"/>
+            </svg>
+            <span class="logo-text"><a href="/">Clínica Ianes</a></span>
+        </div>
 
-    <div class="logo-svg">
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="#0dcaf0" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20 2h-2v6.586l-2.707 2.707A3.978 3.978 0 0113 12h-2a3.978 3.978 0 01-2.293-.707L6 8.586V2H4v6.586a5.978 5.978 0 002.293 4.707A5.962 5.962 0 0011 14v2h-2v2h6v-2h-2v-2a5.962 5.962 0 004.707-2.707A5.978 5.978 0 0020 8.586V2z"/>
-            <circle cx="18" cy="20" r="2" fill="#0dcaf0"/>
-        </svg>
-        <span class="logo-text"><a href="/">Clínica Ianes</a></span>
+        <div th:replace="~{fragments/sidebar :: sidebar(pessoa=${pessoa})}"></div>
     </div>
 
-    <div th:replace="~{fragments/sidebar :: sidebar(pessoa=${pessoa})}"></div>
+    <div class="content">
+        <div th:replace="~{${conteudo}}"></div>
+    </div>
 </div>
 
-<div class="content">
-    <div th:replace="~{${conteudo}}"></div>
-
-</div>
+<footer class="footer mt-auto py-3 bg-dark text-white text-center">
+    <div class="container">
+            <span>Desenvolvido por
+                <a href="https://github.com/evandrossjr" target="_blank" class="text-info">Evandro Sacramento</a>,
+                <a href="https://github.com/luiVt" target="_blank" class="text-info">Vitor</a>
+                <a href="https://github.com/LuizAugusto-BR" target="_blank" class="text-info">Luiz Augusto</a>
+                 <a href="https://github.com/LuizAugusto-BR" target="_blank" class="text-info">Isaque</a>
+                - <small>© Clínica Ianes 2025</small>
+            </span>
+    </div>
+</footer>
 </body>
 </html>
