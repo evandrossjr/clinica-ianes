@@ -1,15 +1,16 @@
 package com.sistema.clinica.controllers.page;
 
 
-import com.sistema.clinica.models.Consulta;
-import com.sistema.clinica.models.Funcionario;
-import com.sistema.clinica.models.Medico;
+import com.sistema.clinica.models.*;
 import com.sistema.clinica.models.dtos.EspacoVagoDTO;
 import com.sistema.clinica.repositories.FuncionarioRepository;
 import com.sistema.clinica.repositories.MedicoRepository;
+import com.sistema.clinica.repositories.PessoaRepository;
+import com.sistema.clinica.security.PessoaDetails;
 import com.sistema.clinica.services.AgendaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping("/index")
-public class HomeController {
+@RequestMapping("/admin")
+public class AdminPageController {
 
     private final AgendaService agendaService;
 
@@ -30,14 +31,26 @@ public class HomeController {
     private FuncionarioRepository funcionarioRepository;
 
 
+    @Autowired
+    private PessoaRepository pessoaRepository;
 
-    public HomeController(AgendaService agendaService) {
+    public AdminPageController(AgendaService agendaService) {
         this.agendaService = agendaService;
     }
 
 
-    @GetMapping
-    public String mostrarPainel(Model model) {
+    @GetMapping("/dashboard")
+    public String abrirCadastroConsulta(Model model, @AuthenticationPrincipal PessoaDetails pessoaDetails) {
+        Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
+
+        // Aqui fazemos cast seguro, já que só pacientes acessam esse endpoint
+        Funcionario funcionario = (Funcionario) pessoa;
+
+        model.addAttribute("titulo", "Dashboard");
+        model.addAttribute("pessoa", pessoa);
+        model.addAttribute("conteudo", "admin/dashboard");
+
         List<Consulta> proximasConsultas = agendaService.proximasConsultas();
         model.addAttribute("consultas", proximasConsultas);
         List<Medico> medicos = medicoRepository.findAll();
@@ -45,7 +58,15 @@ public class HomeController {
         model.addAttribute("medicos", medicos);
         model.addAttribute("funcionarios", funcionarios);
 
-        return "home";
+
+        return "layout";
+    }
+
+
+    @GetMapping("/")
+    public String mostrarPainel(Model model) {
+        System.out.println("nada");
+        return "admin/dashboard";
     }
 
     @GetMapping("/hoje/medicos")
@@ -67,6 +88,6 @@ public class HomeController {
     public String verProximasConsultas(Model model) {
         List<Consulta> consultas = agendaService.proximasConsultas();
         model.addAttribute("consultas", consultas);
-        return "home";
+        return "admin/dashboard";
     }
 }
