@@ -77,32 +77,4 @@ public class AdminPageController {
 
 
 
-
-    @GetMapping("/")
-    public String mostrarPainel(Model model) {
-        System.out.println("nada");
-        return "admin/dashboard";
-    }
-
-    @GetMapping("/hoje/medicos")
-    public ResponseEntity<List<Medico>> medicosDoDia() {
-        return ResponseEntity.ok(agendaService.medicosDoDia());
-    }
-
-    @GetMapping("/hoje/consultas")
-    public ResponseEntity<List<Consulta>> consultasDoDia() {
-        return ResponseEntity.ok(agendaService.consultasDoDia());
-    }
-
-    @GetMapping("/hoje/espacos-vagos")
-    public ResponseEntity<List<EspacoVagoDTO>> espacosVagosDoDia() {
-        return ResponseEntity.ok(agendaService.espacosVagosDoDia());
-    }
-
-    @GetMapping("/proximas")
-    public String verProximasConsultas(Model model) {
-        List<Consulta> consultas = agendaService.proximasConsultas();
-        model.addAttribute("consultas", consultas);
-        return "admin/dashboard";
-    }
 }
