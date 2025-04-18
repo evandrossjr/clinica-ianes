@@ -60,7 +60,7 @@ public class MedicoPageController {
 
         model.addAttribute("titulo", "Minha Área");
         model.addAttribute("pessoa", medico);
-        model.addAttribute("conteudo", "paciente/minhaArea");
+        model.addAttribute("conteudo", "medico/minhaArea");
 
         return "layout";
     }

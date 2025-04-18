@@ -11,29 +11,19 @@ import java.util.Set;
 @Entity
 public class Funcionario extends Pessoa{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+
     private String setor;
     private int matricula;
 
 
     public Funcionario(){}
 
-    public Funcionario(Long id, String nome, String username, String password, String cpf, String email, String telefone, Set<Role> roles, Long id1, String setor, int matricula) {
-        super(id, nome, username, password, cpf, email, telefone, roles);
-        this.id = id1;
+    public Funcionario(String nome, String username, String password, String cpf, String email, String telefone, Set<Role> roles,  String setor, int matricula) {
+        super( nome, username, password, cpf, email, telefone, roles);
         this.setor = setor;
         this.matricula = matricula;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getSetor() {
         return setor;

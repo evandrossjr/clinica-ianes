@@ -21,15 +21,15 @@ public class Medico extends Pessoa{
     public Medico(){}
 
 
-    public Medico(Long id, String nome, String username, String password, String cpf, String email, String telefone, Set<Role> roles, int crm, String especialidade, Set<DiaDaSemana> diasDisponiveis) {
-        super(id, nome, username, password, cpf, email, telefone, roles);
+    public Medico(String nome, String username, String password, String cpf, String email, String telefone, Set<Role> roles, int crm, String especialidade, Set<DiaDaSemana> diasDisponiveis) {
+        super(nome, username, password, cpf, email, telefone, roles);
         this.crm = crm;
         this.especialidade = especialidade;
         this.diasDisponiveis = diasDisponiveis;
     }
 
-    public Medico(Long id, String nome, String username, String password, String cpf, String email, String telefone, Set<Role> roles) {
-        super(id, nome, username, password, cpf, email, telefone, roles);
+    public Medico(String nome, String username, String password, String cpf, String email, String telefone, Set<Role> roles) {
+        super(nome, username, password, cpf, email, telefone, roles);
     }
 
 

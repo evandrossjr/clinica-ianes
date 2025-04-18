@@ -29,7 +29,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         if (roles.contains("ROLE_ADMIN")) {
             response.sendRedirect("/admin/dashboard");
         } else if (roles.contains("ROLE_MEDICO")) {
-            response.sendRedirect("/medico/minhaArea");
+            response.sendRedirect("/medico/minha-area");
         } else if (roles.contains("ROLE_FUNCIONARIO")) {
             response.sendRedirect("/funcionario/dashboard");
         } else if (roles.contains("ROLE_PACIENTE")) {

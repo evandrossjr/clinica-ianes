@@ -15,9 +15,9 @@
                         <ul class="list-group">
                             <li class="list-group-item" th:each="desc : ${descricoesConsultas}" th:text="${desc}"></li>
                         </ul>
-                        <li class="list-group-item" th:if="${#lists.isEmpty(consultas)}">
+                        <li class="list-group-item" th:if="${#lists.isEmpty(descricoesConsultas)}">
                             Nenhuma consulta agendada.
-                        </li>
+                        </li>'
                     </ul>
 
                 </div>

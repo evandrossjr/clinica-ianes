@@ -10,7 +10,7 @@ public class Paciente extends Pessoa {
 
     public Paciente(){}
 
-    public Paciente(Long id, String nome, String username, String password, String cpf, String email, String telefone, Set<Role> roles) {
-        super(id, nome, username, password, cpf, email, telefone, roles);
+    public Paciente( String nome, String username, String password, String cpf, String email, String telefone, Set<Role> roles) {
+        super( nome, username, password, cpf, email, telefone, roles);
     }
 }

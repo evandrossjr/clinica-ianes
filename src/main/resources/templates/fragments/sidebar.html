@@ -1,6 +1,6 @@
-<div th:fragment="sidebar(pessoa)" >
+<div th:fragment="sidebar(pessoa)" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
   <div sec:authorize="hasRole('ROLE_ADMIN')">
-    <a href="/admin/funcionario/cadastro">Cadastro de Funcionário</a>
+    <a href="/admin/cadastro-funcionario">Cadastro de Funcionário</a>
     <a href="/admin/dashboard">Dashboard</a>
   </div>
 

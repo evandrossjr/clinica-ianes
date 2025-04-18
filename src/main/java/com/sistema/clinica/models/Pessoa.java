@@ -23,6 +23,8 @@ public abstract class Pessoa {
     @Pattern(regexp = "\\(?\\d{2}\\)?\\s?\\d{8,9}", message = "Telefone inválido")
     private String telefone;
 
+
+    @CollectionTable(name = "pessoa_roles", joinColumns = @JoinColumn(name = "pessoa_id"))
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
@@ -31,8 +33,8 @@ public abstract class Pessoa {
     public Pessoa() {
     }
 
-    public Pessoa(Long id, String nome, String username, String password, String cpf, String email, String telefone, Set<Role> roles) {
-        this.id = id;
+    public Pessoa( String nome, String username, String password, String cpf, String email, String telefone, Set<Role> roles) {
+
         this.nome = nome;
         this.username = username;
         this.password = password;
