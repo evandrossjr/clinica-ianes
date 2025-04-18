@@ -1,90 +1,5 @@
-<!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>Agendar Consulta</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-        margin: 0;
-        padding: 0;
-        min-height: 100vh;
-        display: flex;
-    }
-
-    .sidebar {
-        width: 250px;
-        background-color: #343a40;
-        color: white;
-        padding-top: 20px;
-        flex-shrink: 0;
-        height: 100vh;
-        position: fixed;
-    }
-
-    .sidebar a {
-        color: white;
-        text-decoration: none;
-        display: block;
-        padding: 10px 20px;
-    }
-
-    .sidebar a:hover {
-        background-color: #495057;
-    }
-
-    .content {
-        margin-left: 250px;
-        flex-grow: 1;
-        padding: 30px;
-        background-color: #f8f9fa;
-    }
-
-    .logo-svg {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-family: 'Segoe UI', sans-serif;
-            font-size: 20px;
-            font-weight: bold;
-            color: white;
-            padding: 0 20px 20px;
-        }
-
-    .form-container {
-        max-width: 800px;
-        margin: auto;
-    }
-
-    /* Estilo para os campos lado a lado */
-    .form-row .col {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 15px;
-    }
-  </style>
-</head>
-<body>
-
-<!-- Sidebar -->
-<div class="sidebar">
-  <div class="logo-svg">
-    <svg width="30" height="30" viewBox="0 0 24 24" fill="#0dcaf0" xmlns="http://www.w3.org/2000/svg">
-      <path d="M20 2h-2v6.586l-2.707 2.707A3.978 3.978 0 0113 12h-2a3.978 3.978 0 01-2.293-.707L6 8.586V2H4v6.586a5.978 5.978 0 002.293 4.707A5.962 5.962 0 0011 14v2h-2v2h6v-2h-2v-2a5.962 5.962 0 004.707-2.707A5.978 5.978 0 0020 8.586V2z"/>
-      <circle cx="18" cy="20" r="2" fill="#0dcaf0"/>
-    </svg>
-    <span class="logo-text"><a href="/">Clínica Ianes</a></span>
-  </div>
-  <a href="/medico/cadastro">Médicos</a>
-  <a href="/funcionario/cadastro">Funcionários</a>
-  <a href="/consulta/cadastro">Consultas</a>
-  <a href="/paciente/cadastro">Pacientes</a>
-  <a href="/">Próximas Consultas</a>
-</div>
-
-<!-- Conteúdo -->
-<div class="content">
-  <h2 class="mb-4 text-center">Agende sua Consulta</h2>
+<div class="content" xmlns:th="http://www.w3.org/1999/xhtml">
+  <h2 class="mb-4 text-center">Agendamento de Consultas</h2>
 
   <div th:if="${mensagem}" class="alert alert-success d-flex align-items-center" role="alert">
     <svg class="bi flex-shrink-0 me-2" width="24" height="24" fill="green" viewBox="0 0 16 16" role="img" aria-label="Success:">
@@ -94,7 +9,7 @@
   </div>
 
   <div class="form-container">
-    <form action="/consulta" method="post">
+    <form th:action="@{/funcionario/agendamento-consulta}" th:object="${consulta}" method="post">
       <div class="mb-3 row">
         <label for="paciente" class="col-sm-2 col-form-label">Paciente</label>
         <div class="col-sm-10">
@@ -289,11 +204,9 @@ document.getElementById("horaSelecionada").value = horario.hora;
   // Adicionar a classe 'active' ao botão clicado
   btn.classList.add("active");
 
-  // Exibir o horário selecionado
-  alert(`Você escolheu: ${horario.dataHoraFormatada}`);
+
 }
 
 </script>
 
-</body>
-</html>
+
