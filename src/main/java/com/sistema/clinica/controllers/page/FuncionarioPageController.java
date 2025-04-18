@@ -12,6 +12,7 @@ import com.sistema.clinica.security.PessoaDetails;
 import com.sistema.clinica.services.AgendaService;
 import com.sistema.clinica.services.ConsultaService;
 import com.sistema.clinica.services.FuncionarioService;
+import com.sistema.clinica.services.MedicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -45,12 +46,14 @@ public class FuncionarioPageController {
     private final PacienteRepository pacienteRepository;
 
     private final ConsultaService consultaService;
+    private final MedicoService medicoService;
 
 
-    public FuncionarioPageController(AgendaService agendaService, PacienteRepository pacienteRepository, ConsultaService consultaService) {
+    public FuncionarioPageController(AgendaService agendaService, PacienteRepository pacienteRepository, ConsultaService consultaService, MedicoService medicoService) {
         this.agendaService = agendaService;
         this.pacienteRepository = pacienteRepository;
         this.consultaService = consultaService;
+        this.medicoService = medicoService;
     }
 
 
@@ -134,5 +137,42 @@ public class FuncionarioPageController {
     }
 
 
+    @GetMapping("/cadastro-medico")
+    public String abrirCadastroMedico(Model model, @AuthenticationPrincipal PessoaDetails pessoaDetails) {
+        Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
+
+        // Aqui fazemos cast seguro, já que só admin acessam esse endpoint
+        Funcionario funcionario = (Funcionario) pessoa;
+
+        model.addAttribute("titulo", "Cadastro Funcionário");
+        model.addAttribute("pessoa", pessoa);
+        model.addAttribute("conteudo", "funcionario/cadastroMedico");
+
+        model.addAttribute("funcionario", new Funcionario());
+
+        return "layout";
+
+    }
+
+
+
+    @PostMapping("/cadastro-medico")
+    public String salvarCadastroFuncionario(@ModelAttribute Medico medico,
+                                            RedirectAttributes redirectAttributes,
+                                            Model model) {
+        try {
+            System.out.println("Dados recebidos: " + medico); // Log simples
+            medicoService.insert(medico);
+            redirectAttributes.addFlashAttribute("mensagem",
+                    "Médico Dr(a) \"" + medico.getNome() + "\" cadastrado com sucesso!");
+        } catch (Exception e) {
+            System.err.println("Erro ao cadastrar funcionário: " + e.getMessage());
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("erro",
+                    "Erro ao cadastrar funcionário: " + e.getMessage());
+        }
+        return "redirect:/funcionario/cadastro-medico";
+    }
 
 }
