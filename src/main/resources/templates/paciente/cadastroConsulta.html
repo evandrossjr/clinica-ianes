@@ -1,10 +1,199 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div class="content" xmlns:th="http://www.w3.org/1999/xhtml">
+    <h2 class="mb-4 text-center">Agende sua Consulta</h2>
 
-</body>
-</html>
+    <div th:if="${mensagem}" class="alert alert-success d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" fill="green" viewBox="0 0 16 16" role="img" aria-label="Success:">
+            <path d="M16 8a8 8 0 1 1-16 0 8 8 0 0 1 16 0zM6.93 10.588l-2.47-2.47 1.06-1.06L6.93 8.47l4.95-4.95 1.06 1.06-6.01 6.01z"/>
+        </svg>
+        <span th:text="${mensagem}"></span>
+    </div>
+
+    <div class="form-container">
+        <form th:action="@{/paciente/agendamento-consulta}" th:object="${paciente}" method="post">
+
+            <div class="mb-3 row">
+                <label for="especialidade" class="col-sm-2 col-form-label">Especialidade</label>
+                <div class="col-sm-10">
+                    <select id="especialidade" class="form-control" required>
+                        <option value="">Selecione</option>
+                        <option th:each="esp : ${especialidades}" th:value="${esp}" th:text="${esp}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="medico" class="col-sm-2 col-form-label">Médico</label>
+                <div class="col-sm-10">
+                    <select id="medico" name="medico.id" class="form-control" required></select>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="dataHora" class="col-sm-2 col-form-label">Data e Horário</label>
+                <div class="col-sm-10">
+                    <select id="dataHora" name="dataHora" class="form-control"  style="display:none">
+                        <option value="">Selecione</option>
+                    </select>
+                    <div id="horarios-disponiveis" class="mt-4"></div>
+                    <input type="hidden" id="dataSelecionada" name="data">
+                    <input type="hidden" id="horaSelecionada" name="hora">
+
+                </div>
+            </div>
+
+            <!-- Modalidade -->
+            <div class="mb-3 row">
+                <label for="modalidade" class="col-sm-2 col-form-label">Modalidade</label>
+                <div class="col-sm-10">
+                    <select id="modalidade" name="modalidade" class="form-control">
+                        <option value="SUS">SUS</option>
+                        <option value="PLANO_DE_SAUDE">Plano de Saúde</option>
+                        <option value="PARTICULAR">Particular</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Pagamento -->
+            <div class="mb-3 row">
+                <label for="metodoPagamento" class="col-sm-2 col-form-label">Método de Pagamento</label>
+                <div class="col-sm-10">
+                    <select id="metodoPagamento" name="metodoPagamento" class="form-control">
+                        <option value="DINHEIRO">Dinheiro</option>
+                        <option value="DEBITO">Débito</option>
+                        <option value="CARTAO">Cartão</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-check mb-3 row">
+                <div class="col-sm-10 offset-sm-2">
+                    <input type="checkbox" class="form-check-input" id="pagamentoRealizado" name="pagamentoRealizado">
+                    <label class="form-check-label" for="pagamentoRealizado">Pagamento Realizado</label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </form>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const especialidadeSelect = document.getElementById('especialidade');
+      const medicoSelect = document.getElementById('medico');
+      const dataHoraSelect = document.getElementById('dataHora');
+
+      // Quando a especialidade mudar, carrega os médicos para aquela especialidade
+      especialidadeSelect.addEventListener('change', function () {
+        const especialidade = especialidadeSelect.value;
+        medicoSelect.innerHTML = '<option value="">Selecione</option>';
+        dataHoraSelect.innerHTML = '<option value="">Selecione</option>';
+
+        if (especialidade) {
+          // Ajustando a URL para garantir que a especialidade seja passada corretamente
+          fetch(`/medicos/por-especialidade/${especialidade}`)
+            .then(response => response.json())
+            .then(medicos => {
+              if (Array.isArray(medicos) && medicos.length > 0) {
+                medicos.forEach(medico => {
+                  const option = document.createElement('option');
+                  option.value = medico.id;
+                  option.textContent = medico.nome;
+                  medicoSelect.appendChild(option);
+                });
+              } else {
+                const option = document.createElement('option');
+                option.value = "";
+                option.textContent = "Nenhum médico encontrado";
+                medicoSelect.appendChild(option);
+              }
+            })
+            .catch(error => {
+              console.error("Erro ao buscar médicos:", error);
+              const option = document.createElement('option');
+              option.value = "";
+              option.textContent = "Erro ao carregar médicos";
+              medicoSelect.appendChild(option);
+            });
+        }
+      });
+
+      // Quando o médico mudar, carrega os horários disponíveis
+      medicoSelect.addEventListener('change', function () {
+        const medicoId = medicoSelect.value;
+
+        // Limpa os horários anteriores
+        dataHoraSelect.innerHTML = '<option value="">Selecione</option>';
+
+        if (medicoId) {
+          fetch(`/agenda/${medicoId}/disponibilidades`)  // Certifique-se de que a URL está correta
+            .then(response => response.json())
+            .then(horarios => {
+              renderHorariosDisponiveis(horarios);
+            })
+            .catch(error => {
+              console.error("Erro ao carregar horários:", error);
+            });
+        }
+      });
+    });
+
+    function renderHorariosDisponiveis(horarios) {
+    const container = document.getElementById("horarios-disponiveis");
+    container.innerHTML = "";
+
+    const grupos = {};
+
+    horarios.forEach(h => {
+      if (!grupos[h.data]) {
+        grupos[h.data] = [];
+      }
+      grupos[h.data].push(h);
+    });
+
+    Object.keys(grupos).forEach(data => {
+      const grupoDiv = document.createElement("div");
+      grupoDiv.className = "mb-3";
+
+      const dataFormatada = grupos[data][0].dataHoraFormatada.split(" ")[0];
+      const titulo = document.createElement("h6");
+      titulo.textContent = `📅 ${dataFormatada}`;
+      grupoDiv.appendChild(titulo);
+
+      const horariosDiv = document.createElement("div");
+      horariosDiv.className = "d-flex flex-wrap gap-2";
+
+      grupos[data].forEach(horario => {
+        const btn = document.createElement("button");
+        btn.className = "btn btn-outline-primary btn-sm";
+        btn.textContent = horario.hora;
+        btn.type = "button";
+        // Função para marcar o horário como selecionado
+        btn.onclick = () => selecionarHorario(horario, btn);
+
+        horariosDiv.appendChild(btn);
+      });
+
+      grupoDiv.appendChild(horariosDiv);
+      container.appendChild(grupoDiv);
+    });
+  }
+
+  function selecionarHorario(horario, btn) {
+    // Remove destaque dos outros botões
+    const allButtons = document.querySelectorAll("#horarios-disponiveis button");
+    allButtons.forEach(button => button.classList.remove("active"));
+
+    // Destaca o botão clicado
+    btn.classList.add("active");
+
+    // Preenche o input hidden com o valor do horário selecionado
+    document.getElementById("dataSelecionada").value = horario.data;
+  document.getElementById("horaSelecionada").value = horario.hora;
+
+
+    // Adicionar a classe 'active' ao botão clicado
+    btn.classList.add("active");
+
+
+  }
+
+</script>
