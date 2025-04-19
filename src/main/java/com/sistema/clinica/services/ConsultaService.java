@@ -36,6 +36,8 @@ public class ConsultaService {
 
     public Consulta insert(Consulta obj){
 
+        obj.setPagamentoRealizado(false);
+
 
         if (!HORARIOS_FIXOS.contains(obj.getHora())){
             throw new IllegalArgumentException("Horário Inválido");

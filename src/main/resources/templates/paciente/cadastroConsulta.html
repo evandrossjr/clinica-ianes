@@ -61,15 +61,12 @@
                         <option value="DINHEIRO">Dinheiro</option>
                         <option value="DEBITO">Débito</option>
                         <option value="CREDITO">Crédito</option>
+                        <option value="PIX">Pix</option>
+                        <option value="SUS">SUS</option>
                     </select>
                 </div>
             </div>
-            <div class="form-check mb-3 row">
-                <div class="col-sm-10 offset-sm-2">
-                    <input type="checkbox" class="form-check-input" id="pagamentoRealizado" name="pagamentoRealizado">
-                    <label class="form-check-label" for="pagamentoRealizado">Pagamento Realizado</label>
-                </div>
-            </div>
+
 
             <button type="submit" class="btn btn-primary">Salvar</button>
         </form>
@@ -196,4 +193,34 @@
 
   }
 
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const modalidadeSelect = document.getElementById("modalidade");
+        const metodoPagamentoSelect = document.getElementById("metodoPagamento");
+
+        function atualizarMetodoPagamento() {
+            const modalidade = modalidadeSelect.value;
+
+            // Habilita todas as opções antes de aplicar a restrição
+            Array.from(metodoPagamentoSelect.options).forEach(option => {
+                option.disabled = false;
+            });
+
+            if (modalidade === "SUS") {
+                metodoPagamentoSelect.value = "SUS";
+                Array.from(metodoPagamentoSelect.options).forEach(option => {
+                    if (option.value !== "SUS") {
+                        option.disabled = true;
+                    }
+                });
+            }
+        }
+
+        // Evento quando a modalidade mudar
+        modalidadeSelect.addEventListener("change", atualizarMetodoPagamento);
+
+        // Executa ao carregar a página, para refletir o valor inicial
+        atualizarMetodoPagamento();
+    });
 </script>
