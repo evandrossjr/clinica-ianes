@@ -1,18 +1,12 @@
 package com.sistema.clinica.controllers.page;
 
-import com.sistema.clinica.models.Consulta;
-import com.sistema.clinica.models.Funcionario;
-import com.sistema.clinica.models.Medico;
-import com.sistema.clinica.models.Pessoa;
+import com.sistema.clinica.models.*;
 import com.sistema.clinica.repositories.FuncionarioRepository;
 import com.sistema.clinica.repositories.MedicoRepository;
 import com.sistema.clinica.repositories.PacienteRepository;
 import com.sistema.clinica.repositories.PessoaRepository;
 import com.sistema.clinica.security.PessoaDetails;
-import com.sistema.clinica.services.AgendaService;
-import com.sistema.clinica.services.ConsultaService;
-import com.sistema.clinica.services.FuncionarioService;
-import com.sistema.clinica.services.MedicoService;
+import com.sistema.clinica.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -47,13 +41,15 @@ public class FuncionarioPageController {
 
     private final ConsultaService consultaService;
     private final MedicoService medicoService;
+    private final PacienteService pacienteService;
 
 
-    public FuncionarioPageController(AgendaService agendaService, PacienteRepository pacienteRepository, ConsultaService consultaService, MedicoService medicoService) {
+    public FuncionarioPageController(AgendaService agendaService, PacienteRepository pacienteRepository, ConsultaService consultaService, MedicoService medicoService, PacienteService pacienteService) {
         this.agendaService = agendaService;
         this.pacienteRepository = pacienteRepository;
         this.consultaService = consultaService;
         this.medicoService = medicoService;
+        this.pacienteService = pacienteService;
     }
 
 
@@ -142,10 +138,10 @@ public class FuncionarioPageController {
         Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
 
-        // Aqui fazemos cast seguro, já que só admin acessam esse endpoint
+        // Aqui fazemos cast seguro, já que só funcionario acessam esse endpoint
         Funcionario funcionario = (Funcionario) pessoa;
 
-        model.addAttribute("titulo", "Cadastro Funcionário");
+        model.addAttribute("titulo", "Cadastro Médico");
         model.addAttribute("pessoa", pessoa);
         model.addAttribute("conteudo", "funcionario/cadastroMedico");
 
@@ -158,7 +154,7 @@ public class FuncionarioPageController {
 
 
     @PostMapping("/cadastro-medico")
-    public String salvarCadastroFuncionario(@ModelAttribute Medico medico,
+    public String salvarCadastroMedico(@ModelAttribute Medico medico,
                                             RedirectAttributes redirectAttributes,
                                             Model model) {
         try {
@@ -173,6 +169,44 @@ public class FuncionarioPageController {
                     "Erro ao cadastrar funcionário: " + e.getMessage());
         }
         return "redirect:/funcionario/cadastro-medico";
+    }
+
+
+
+    @GetMapping("/cadastro-paciente")
+    public String abrirCadastroPaciente(Model model, @AuthenticationPrincipal PessoaDetails pessoaDetails) {
+        Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
+
+        // Aqui fazemos cast seguro, já que só funcionario acessam esse endpoint
+        Funcionario funcionario = (Funcionario) pessoa;
+
+        model.addAttribute("titulo", "Cadastro Paciente");
+        model.addAttribute("pessoa", pessoa);
+        model.addAttribute("conteudo", "funcionario/cadastroPaciente");
+
+        model.addAttribute("funcionario", new Funcionario());
+
+        return "layout";
+
+    }
+
+    @PostMapping("/cadastro-paciente")
+    public String salvarCadastroFuncionario(@ModelAttribute Paciente paciente,
+                                            RedirectAttributes redirectAttributes,
+                                            Model model) {
+        try {
+            System.out.println("Dados recebidos: " + paciente); // Log simples
+            pacienteService.insert(paciente);
+            redirectAttributes.addFlashAttribute("mensagem",
+                    "Paciente \"" + paciente.getNome() + "\" cadastrado com sucesso!");
+        } catch (Exception e) {
+            System.err.println("Erro ao cadastrar paciente: " + e.getMessage());
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("erro",
+                    "Erro ao cadastrar funcionário: " + e.getMessage());
+        }
+        return "redirect:/funcionario/cadastro-paciente";
     }
 
 }
