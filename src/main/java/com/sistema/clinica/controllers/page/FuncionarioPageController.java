@@ -63,7 +63,7 @@ public class FuncionarioPageController {
 
         model.addAttribute("titulo", "Dashboard");
         model.addAttribute("pessoa", pessoa);
-        model.addAttribute("conteudo", "admin/dashboard");
+        model.addAttribute("conteudo", "funcionario/dashboard");
 
 
         List<String> descricoesConsultas = agendaService.proximasConsultas().stream()

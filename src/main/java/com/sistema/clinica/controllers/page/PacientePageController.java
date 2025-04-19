@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.sql.RowSet;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -133,5 +134,41 @@ public class PacientePageController {
                     "Erro ao cadastrar consulta: " + e.getMessage());
         }
         return "redirect:/paciente/agendamento-consulta";
+    }
+
+    @GetMapping("/minhas-consultas")
+    public String abrirMinhaArea(Model model, @AuthenticationPrincipal PessoaDetails pessoaDetails) {
+        String username = pessoaDetails.getUsername();
+
+        Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
+
+        // Aqui fazemos cast seguro, já que só pacienete acessam esse endpoint
+        Paciente paciente = (Paciente) pessoa;
+
+        model.addAttribute("titulo", "Dashboard");
+        model.addAttribute("pessoa", pessoa);
+        model.addAttribute("conteudo", "paciente/minhasConsultas");
+
+
+
+
+        List<String> descricoesConsultas = agendaService.proximasConsultas().stream()
+                .filter(c -> c.getPaciente().getId().equals(paciente.getId()))
+                .map(c -> {
+                    String data = c.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                    String hora = c.getHora().format(DateTimeFormatter.ofPattern("HH:mm"));
+                    return data + " - " + hora + " - "  + " com Dr(a). " + c.getMedico().getNome()
+                            + " (" + c.getMedico().getEspecialidade() + ")";
+                }).toList();
+
+        model.addAttribute("descricoesConsultas", descricoesConsultas);
+
+
+        List<Medico> medicos = medicoRepository.findAll();
+        model.addAttribute("medicos", medicos);
+
+
+        return "layout";
     }
 }

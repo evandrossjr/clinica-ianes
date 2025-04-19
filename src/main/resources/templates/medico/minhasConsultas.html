@@ -1,10 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div class="content" xmlns:th="http://www.w3.org/1999/xhtml">
 
-</body>
-</html>
+    <div class="mb-4">
+        <h1 th:text="'Bem-vindo(a), ' + ${pessoa.nome} + '!'">Bem-vindo!</h1>
+        <p>Essa é o seu Quadro de Consultas.</p>
+    </div>
+
+    <div class="row mb-4">
+        <!-- Card: Próximas Consultas -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Próximas Consultas</h5>
+                    <ul class="list-group list-group-flush">
+                        <ul class="list-group">
+                            <li class="list-group-item" th:each="desc : ${descricoesConsultas}" th:text="${desc}"></li>
+                        </ul>
+                        <li class="list-group-item" th:if="${#lists.isEmpty(descricoesConsultas)}">
+                            Nenhuma consulta agendada.
+                        </li>'
+
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
