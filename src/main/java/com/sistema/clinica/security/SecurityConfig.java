@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/css/**", "/js/**","/h2-console/**").permitAll() // permite acesso à página de login e recursos estáticos
+                        .requestMatchers("/login", "/css/**", "/js/**","/h2-console/**","/registro").permitAll() // permite acesso à página de login e recursos estáticos
                         .requestMatchers("/medico","/medico/**").hasAnyRole("MEDICO","ADMIN")
                         .requestMatchers("/funcionario","/funcionario/**").hasAnyRole("FUNCIONARIO","ADMIN")
                         .requestMatchers("/paciente","/paciente/**").hasAnyRole("PACIENTE","ADMIN")
