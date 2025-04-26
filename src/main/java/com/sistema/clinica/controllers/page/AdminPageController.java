@@ -2,6 +2,7 @@ package com.sistema.clinica.controllers.page;
 
 
 import com.sistema.clinica.models.*;
+import com.sistema.clinica.models.dtos.EditarPerfilForm;
 import com.sistema.clinica.models.dtos.EspacoVagoDTO;
 import com.sistema.clinica.repositories.FuncionarioRepository;
 import com.sistema.clinica.repositories.MedicoRepository;
@@ -99,11 +100,7 @@ public class AdminPageController {
 
         model.addAttribute("funcionario", new Funcionario());
 
-
-
-
         return "layout";
-
     }
 
     @PostMapping("/cadastro-funcionario")
@@ -123,6 +120,47 @@ public class AdminPageController {
         }
         return "redirect:/admin/cadastro-funcionario";
     }
+
+
+    @GetMapping("/lista-de-funcionario")
+    public String listaDeFuncionarios(Model model, @AuthenticationPrincipal PessoaDetails pessoaDetails){
+        Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
+
+        // Aqui fazemos cast seguro, já que só admin acessam esse endpoint
+        Funcionario funcionario = (Funcionario) pessoa;
+
+        model.addAttribute("titulo", "Lista de Funcionários");
+        model.addAttribute("pessoa", pessoa);
+        model.addAttribute("conteudo", "admin/listaDeFuncionarios");
+
+
+        List<Funcionario> funcionarios = funcionarioRepository.findAll();
+        model.addAttribute("funcionarios", funcionarios);
+
+        return "layout";
+    }
+
+    @GetMapping("/perfil-funcionario")
+    public String editarFuncionario(Model model, @AuthenticationPrincipal PessoaDetails pessoaDetails) {
+        Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
+
+        EditarPerfilForm form = new EditarPerfilForm();
+        form.setEmail(pessoa.getEmail());
+
+
+        model.addAttribute("pacientes", pessoaRepository.findAll());
+
+        model.addAttribute("form", form);
+        model.addAttribute("titulo", "Editar Funcionario");
+        model.addAttribute("pessoa", pessoa);
+        model.addAttribute("conteudo", "admin/perfilFuncionario");
+
+        return "layout";
+    }
+
+
 
 
 }

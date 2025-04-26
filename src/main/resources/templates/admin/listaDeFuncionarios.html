@@ -1,0 +1,29 @@
+<div class="content" xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <div class="mb-4">
+        <h1 th:text="'Bem-vindo(a), ' + ${pessoa.nome} + '!'">Bem-vindo!</h1>
+        <p>Lista de Funcionários</p>
+    </div>
+
+    <div class="row mb-4">
+
+        <!-- Card: Funcionários -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Funcionários</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" th:each="f : ${funcionarios}">
+                            <span th:text="|${f.nome} - ${f.setor}|" >  </span>
+                            <a href="">Editar</a> <a href="">Deletar</a>
+                        </li>
+                        <li class="list-group-item" th:if="${#lists.isEmpty(funcionarios)}">
+                            Nenhum funcionário cadastrado.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

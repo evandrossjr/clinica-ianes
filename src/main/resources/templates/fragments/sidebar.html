@@ -2,6 +2,8 @@
   <div sec:authorize="hasRole('ROLE_ADMIN')">
     <a href="/admin/cadastro-funcionario">Cadastro de Funcionário</a>
     <a href="/admin/dashboard">Dashboard</a>
+    <a href="/admin/lista-de-funcionario">Lista de Funcionários</a>
+
     <a href="/perfil/editar">Editar Perfil</a>
   </div>
 
@@ -14,13 +16,11 @@
   </div>
 
   <div sec:authorize="hasRole('ROLE_MEDICO')">
-    <a href="/medico/minha-area">Minha Área</a>
     <a href="/medico/minhas-consultas">Minhas Consultas</a>
     <a href="/perfil/editar">Editar Perfil</a>
   </div>
 
   <div sec:authorize="hasRole('ROLE_PACIENTE')">
-    <a href="/paciente/minha-area">Minha Área</a>
     <a href="/paciente/minhas-consultas">Minhas Consultas</a>
     <a href="/paciente/agendamento-consulta">Agendamento de Consultas</a>
     <a href="/perfil/editar">Editar Perfil</a>

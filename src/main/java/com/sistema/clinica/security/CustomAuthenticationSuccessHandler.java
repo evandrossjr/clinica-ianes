@@ -29,11 +29,11 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         if (roles.contains("ROLE_ADMIN")) {
             response.sendRedirect("/admin/dashboard");
         } else if (roles.contains("ROLE_MEDICO")) {
-            response.sendRedirect("/medico/minha-area");
+            response.sendRedirect("/medico/minhas-consultas");
         } else if (roles.contains("ROLE_FUNCIONARIO")) {
             response.sendRedirect("/funcionario/dashboard");
         } else if (roles.contains("ROLE_PACIENTE")) {
-            response.sendRedirect("/paciente/minha-area");
+            response.sendRedirect("/paciente/minhas-consultas");
         } else {
             response.sendRedirect("/index"); // fallback
         }

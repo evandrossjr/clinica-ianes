@@ -1,0 +1,65 @@
+<div class="content" th:fragment="content" xmlns:th="http://www.w3.org/1999/xhtml">
+    <h2 class="mb-4 text-center">Funcionário</h2>
+
+    <div th:if="${mensagem}" class="alert alert-success d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" fill="green" viewBox="0 0 16 16" role="img" aria-label="Success:">
+            <path d="M16 8a8 8 0 1 1-16 0 8 8 0 0 1 16 0zM6.93 10.588l-2.47-2.47 1.06-1.06L6.93 8.47l4.95-4.95 1.06 1.06-6.01 6.01z"/>
+        </svg>
+        <span th:text="${mensagem}"></span>
+    </div>
+
+    <div class="card shadow-sm form-container">
+        <div class="card-body">
+            <form th:action="@{/admin/perfil-funcionario}" th:object="${pessoa}" method="post">
+
+                <div class="row">
+                    <div class="mb-3 row">
+                        <label for="pessoa" class="col-sm-2 col-form-label">P</label>
+                        <div class="col-sm-10">
+                            <select id="pessoa" name="pessoa.id" class="form-control" required>
+                                <option value="">Selecione</option>
+                                <option th:each="p : ${pessoa}" th:value="${p.id}" th:text="${p.nome}"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="cpf" class="form-label">CPF</label>
+                        <input type="text" class="form-control" th:field="*{cpf}" id="cpf" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="email" class="form-label">E-mail / Usuário</label>
+                        <input type="text" class="form-control" th:field="*{email}" id="email" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="telefone" class="form-label">Telefone</label>
+                        <input type="text" class="form-control" th:field="*{telefone}" id="telefone" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="setor" class="form-label">Setor</label>
+                        <input type="text" class="form-control" th:field="*{setor}" id="setor" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="matricula" class="form-label">Matrícula</label>
+                        <input type="text" class="form-control" th:field="*{matricula}" id="matricula" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="password" class="form-label">Senha</label>
+                        <input type="text" class="form-control" th:field="*{password}" id="password" required>
+                    </div>
+
+
+
+
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Salvar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
