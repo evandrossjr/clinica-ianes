@@ -10,52 +10,53 @@
 
     <div class="card shadow-sm form-container">
         <div class="card-body">
+            <form id="selectPessoaForm" th:action="@{/admin/perfil-funcionario/selecionar}" th:object="${pessoa}" method="get">
+                <div class="mb-3 row">
+                    <label for="pessoa" class="col-sm-2 col-form-label">Usuário</label>
+                    <div class="col-sm-10">
+                        <select id="pessoa" name="id" class="form-control" onchange="document.getElementById('selectPessoaForm').submit()" required>
+                            <option value="">Selecione</option>
+                            <option th:each="p : ${pessoas}" th:value="${p.id}" th:text="${p.nome}" th:selected="${pessoa != null && p.id == pessoa.id}"></option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+
             <form th:action="@{/admin/perfil-funcionario}" th:object="${pessoa}" method="post">
 
-                <div class="row">
-                    <div class="mb-3 row">
-                        <label for="pessoa" class="col-sm-2 col-form-label">P</label>
-                        <div class="col-sm-10">
-                            <select id="pessoa" name="pessoa.id" class="form-control" required>
-                                <option value="">Selecione</option>
-                                <option th:each="p : ${pessoa}" th:value="${p.id}" th:text="${p.nome}"></option>
-                            </select>
-                        </div>
-                    </div>
+                <input type="hidden" th:field="*{id}" />
 
-                    <div class="col-md-6 mb-3">
-                        <label for="cpf" class="form-label">CPF</label>
-                        <input type="text" class="form-control" th:field="*{cpf}" id="cpf" required>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="email" class="form-label">E-mail / Usuário</label>
-                        <input type="text" class="form-control" th:field="*{email}" id="email" required>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="telefone" class="form-label">Telefone</label>
-                        <input type="text" class="form-control" th:field="*{telefone}" id="telefone" required>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="setor" class="form-label">Setor</label>
-                        <input type="text" class="form-control" th:field="*{setor}" id="setor" required>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="matricula" class="form-label">Matrícula</label>
-                        <input type="text" class="form-control" th:field="*{matricula}" id="matricula" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="password" class="form-label">Senha</label>
-                        <input type="text" class="form-control" th:field="*{password}" id="password" required>
-                    </div>
-
-
-
-
+                <div class="col-md-6 mb-3">
+                    <label for="nome" class="form-label">Nome</label>
+                    <input type="text" class="form-control" th:field="*{nome}" id="nome" required>
                 </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="cpf" class="form-label">CPF</label>
+                    <input type="text" class="form-control" th:field="*{cpf}" id="cpf" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="email" class="form-label">E-mail / Usuário</label>
+                    <input type="text" class="form-control" th:field="*{email}" id="email" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="telefone" class="form-label">Telefone</label>
+                    <input type="text" class="form-control" th:field="*{telefone}" id="telefone" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="setor" class="form-label">Setor</label>
+                    <input type="text" class="form-control" th:field="*{setor}" id="setor" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="matricula" class="form-label">Matrícula</label>
+                    <input type="text" class="form-control" th:field="*{matricula}" id="matricula" required>
+                </div>
+
+
 
                 <button type="submit" class="btn btn-primary w-100">Salvar</button>
             </form>

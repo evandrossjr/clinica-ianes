@@ -13,12 +13,10 @@ import com.sistema.clinica.services.FuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.format.DateTimeFormatter;
@@ -122,24 +120,7 @@ public class AdminPageController {
     }
 
 
-    @GetMapping("/lista-de-funcionario")
-    public String listaDeFuncionarios(Model model, @AuthenticationPrincipal PessoaDetails pessoaDetails){
-        Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
 
-        // Aqui fazemos cast seguro, já que só admin acessam esse endpoint
-        Funcionario funcionario = (Funcionario) pessoa;
-
-        model.addAttribute("titulo", "Lista de Funcionários");
-        model.addAttribute("pessoa", pessoa);
-        model.addAttribute("conteudo", "admin/listaDeFuncionarios");
-
-
-        List<Funcionario> funcionarios = funcionarioRepository.findAll();
-        model.addAttribute("funcionarios", funcionarios);
-
-        return "layout";
-    }
 
     @GetMapping("/perfil-funcionario")
     public String editarFuncionario(Model model, @AuthenticationPrincipal PessoaDetails pessoaDetails) {
@@ -150,7 +131,7 @@ public class AdminPageController {
         form.setEmail(pessoa.getEmail());
 
 
-        model.addAttribute("pacientes", pessoaRepository.findAll());
+        model.addAttribute("pessoas", funcionarioRepository.findAll());
 
         model.addAttribute("form", form);
         model.addAttribute("titulo", "Editar Funcionario");
@@ -161,6 +142,33 @@ public class AdminPageController {
     }
 
 
+    @GetMapping("/perfil-funcionario/selecionar")
+    public String selecionarPessoa(@RequestParam(name = "id", required = false) Long id, Model model) {
+        Pessoa pessoa = (id != null) ? funcionarioService.findById(id) : new Funcionario();
+        model.addAttribute("pessoa", pessoa);
+        model.addAttribute("pessoas", funcionarioService.findAll());
+        model.addAttribute("titulo", "Editar Funcionário");
+        model.addAttribute("conteudo", "admin/perfilFuncionario");
 
 
+        return "layout";
+    }
+
+    @PostMapping("/perfil-funcionario")
+    public String salvarFuncionario(@ModelAttribute Funcionario pessoa, RedirectAttributes redirectAttributes) {
+        // Garantir que a senha não seja alterada
+        if (pessoa instanceof Funcionario) {
+            Funcionario funcionario = (Funcionario) pessoa;
+            // Setar a senha antiga novamente para garantir que não será alterada
+            Funcionario funcionarioExistente = funcionarioService.findById(funcionario.getId());
+            funcionario.setPassword(funcionarioExistente.getPassword());
+            // Salvar as alterações, exceto a senha
+            funcionarioService.insert(funcionario);
+            redirectAttributes.addFlashAttribute("mensagem", "Perfil de " + funcionarioExistente.getNome() +" atualizado com sucesso!");
+        }
+        return "redirect:/admin/perfil-funcionario/selecionar?id=" + pessoa.getId();
+    }
 }
+
+
+
