@@ -1,4 +1,4 @@
-package com.sistema.clinica.controllers.page;
+package com.sistema.clinica.controllers.web;
 
 import com.sistema.clinica.models.*;
 import com.sistema.clinica.repositories.FuncionarioRepository;

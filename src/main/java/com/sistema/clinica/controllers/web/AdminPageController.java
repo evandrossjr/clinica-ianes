@@ -1,9 +1,8 @@
-package com.sistema.clinica.controllers.page;
+package com.sistema.clinica.controllers.web;
 
 
 import com.sistema.clinica.models.*;
 import com.sistema.clinica.models.dtos.EditarPerfilForm;
-import com.sistema.clinica.models.dtos.EspacoVagoDTO;
 import com.sistema.clinica.repositories.FuncionarioRepository;
 import com.sistema.clinica.repositories.MedicoRepository;
 import com.sistema.clinica.repositories.PessoaRepository;
@@ -11,9 +10,7 @@ import com.sistema.clinica.security.PessoaDetails;
 import com.sistema.clinica.services.AgendaService;
 import com.sistema.clinica.services.FuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

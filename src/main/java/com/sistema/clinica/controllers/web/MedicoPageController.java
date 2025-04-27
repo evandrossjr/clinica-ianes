@@ -1,7 +1,6 @@
-package com.sistema.clinica.controllers.page;
+package com.sistema.clinica.controllers.web;
 
 import com.sistema.clinica.models.Medico;
-import com.sistema.clinica.models.Paciente;
 import com.sistema.clinica.models.Pessoa;
 import com.sistema.clinica.repositories.PessoaRepository;
 import com.sistema.clinica.security.PessoaDetails;

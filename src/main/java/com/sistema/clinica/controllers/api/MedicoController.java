@@ -1,9 +1,7 @@
-package com.sistema.clinica.controllers;
+package com.sistema.clinica.controllers.api;
 
 import java.net.URI;
-import java.time.DayOfWeek;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.sistema.clinica.models.dtos.MedicoDTO;

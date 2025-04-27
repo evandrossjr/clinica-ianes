@@ -1,4 +1,4 @@
-package com.sistema.clinica.controllers;
+package com.sistema.clinica.controllers.api;
 
 import com.sistema.clinica.models.Funcionario;
 import com.sistema.clinica.services.FuncionarioService;

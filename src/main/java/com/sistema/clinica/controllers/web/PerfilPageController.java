@@ -1,6 +1,5 @@
-package com.sistema.clinica.controllers.page;
+package com.sistema.clinica.controllers.web;
 
-import com.sistema.clinica.models.Paciente;
 import com.sistema.clinica.models.Pessoa;
 import com.sistema.clinica.models.dtos.EditarPerfilForm;
 import com.sistema.clinica.repositories.PessoaRepository;

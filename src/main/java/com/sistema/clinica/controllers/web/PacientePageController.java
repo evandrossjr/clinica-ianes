@@ -1,4 +1,4 @@
-package com.sistema.clinica.controllers.page;
+package com.sistema.clinica.controllers.web;
 
 import com.sistema.clinica.models.*;
 import com.sistema.clinica.repositories.MedicoRepository;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.sql.RowSet;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 

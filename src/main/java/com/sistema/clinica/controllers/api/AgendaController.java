@@ -1,6 +1,5 @@
-package com.sistema.clinica.controllers;
+package com.sistema.clinica.controllers.api;
 
-import com.sistema.clinica.models.Consulta;
 import com.sistema.clinica.models.dtos.AgendaDisponivelDTO;
 import com.sistema.clinica.models.dtos.HorarioDisponivelDTO;
 import com.sistema.clinica.services.AgendaService;
