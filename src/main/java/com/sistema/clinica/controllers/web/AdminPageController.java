@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin")
@@ -165,7 +166,32 @@ public class AdminPageController {
         }
         return "redirect:/admin/perfil-funcionario/selecionar?id=" + pessoa.getId();
     }
-}
 
+    @PostMapping("/perfil-funcionario/selecionar")
+    public String deletarFuncionario(@RequestParam(name = "id") Long id, RedirectAttributes redirectAttributes, @AuthenticationPrincipal PessoaDetails pessoaDetails) {
+
+        Long idUsuarioLogado = pessoaDetails.getPessoa().getId();
+
+        Optional<Pessoa> funcionarioSelecionado = pessoaRepository.findById(id);
+        if (funcionarioSelecionado.isPresent()) {
+
+            Pessoa funcionario = funcionarioSelecionado.get();
+
+            if (idUsuarioLogado.equals(funcionario.getId())) {
+
+                redirectAttributes.addFlashAttribute("erro", "Você não pode deletar seu próprio usuário.");
+                return "redirect:/admin/perfil-funcionario";
+            }
+            if (funcionario.getRoles().contains("ROLE_ADMIN")) {
+                redirectAttributes.addFlashAttribute("erro", "Você não pode deletar um usuário com a role ADMIN.");
+                return "redirect:/admin/perfil-funcionario";
+            }
+        }
+        funcionarioService.delete(id);
+        redirectAttributes.addFlashAttribute("mensagem", "Perfil deletado com sucesso!");
+        return "redirect:/admin/dashboard";
+    }
+
+}
 
 

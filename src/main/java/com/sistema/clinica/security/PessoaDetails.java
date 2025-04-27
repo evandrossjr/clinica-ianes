@@ -56,5 +56,9 @@ public class PessoaDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public Pessoa getPessoa() {
+        return pessoa;
+    }
 }
 
