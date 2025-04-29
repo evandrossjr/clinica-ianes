@@ -155,15 +155,15 @@ public class AdminPageController {
     @PostMapping("/perfil-funcionario")
     public String salvarFuncionario(@ModelAttribute Funcionario pessoa, RedirectAttributes redirectAttributes) {
         // Garantir que a senha não seja alterada
-        if (pessoa instanceof Funcionario) {
-            Funcionario funcionario = (Funcionario) pessoa;
+        if (pessoa != null) {
             // Setar a senha antiga novamente para garantir que não será alterada
-            Funcionario funcionarioExistente = funcionarioService.findById(funcionario.getId());
-            funcionario.setPassword(funcionarioExistente.getPassword());
+            Funcionario funcionarioExistente = funcionarioService.findById(((Funcionario) pessoa).getId());
+            ((Funcionario) pessoa).setPassword(funcionarioExistente.getPassword());
             // Salvar as alterações, exceto a senha
-            funcionarioService.insert(funcionario);
+            funcionarioService.insert((Funcionario) pessoa);
             redirectAttributes.addFlashAttribute("mensagem", "Perfil de " + funcionarioExistente.getNome() +" atualizado com sucesso!");
         }
+        assert pessoa != null;
         return "redirect:/admin/perfil-funcionario/selecionar?id=" + pessoa.getId();
     }
 

@@ -1,6 +1,7 @@
 package com.sistema.clinica.controllers.web;
 
 import com.sistema.clinica.models.*;
+import com.sistema.clinica.models.dtos.EditarPerfilForm;
 import com.sistema.clinica.repositories.FuncionarioRepository;
 import com.sistema.clinica.repositories.MedicoRepository;
 import com.sistema.clinica.repositories.PacienteRepository;
@@ -207,6 +208,27 @@ public class FuncionarioPageController {
                     "Erro ao cadastrar funcionário: " + e.getMessage());
         }
         return "redirect:/funcionario/cadastro-paciente";
+    }
+
+    @GetMapping("/editar-medico")
+    public String editarMedico(Model model, @AuthenticationPrincipal PessoaDetails pessoaDetails) {
+        Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
+
+        EditarPerfilForm form = new EditarPerfilForm();
+        form.setEmail(pessoa.getEmail());
+
+        Funcionario funcionario = (Funcionario) pessoa;
+
+
+        model.addAttribute("pessoas", medicoRepository.findAll());
+
+        model.addAttribute("form", form);
+        model.addAttribute("titulo", "Editar Médico");
+        model.addAttribute("pessoa", pessoa);
+        model.addAttribute("conteudo", "funcionario/editarMedico");
+
+        return "layout";
     }
 
 }
