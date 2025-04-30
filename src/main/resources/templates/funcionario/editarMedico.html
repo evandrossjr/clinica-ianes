@@ -32,6 +32,9 @@
 
             <form th:action="@{/funcionario/editar-medico}" th:object="${medico}" method="post">
                 <div class="row">
+
+                    <input type="hidden" th:field="*{id}" />
+
                     <div class="col-md-6 mb-3">
                         <label for="nome" class="form-label">Nome</label>
                         <input type="text" class="form-control" th:field="*{nome}" id="nome" required>

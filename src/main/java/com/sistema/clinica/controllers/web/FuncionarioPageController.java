@@ -236,4 +236,19 @@ public class FuncionarioPageController {
         return "layout";
     }
 
+    @PostMapping("/editar-medico")
+    public String salvarFuncionario(@ModelAttribute Medico pessoa, RedirectAttributes redirectAttributes) {
+        // Garantir que a senha não seja alterada
+        if (pessoa != null) {
+            // Setar a senha antiga novamente para garantir que não será alterada
+            Medico medicoExistente = medicoService.findById(((Medico) pessoa).getId());
+            ((Medico) pessoa).setPassword(medicoExistente.getPassword());
+            // Salvar as alterações, exceto a senha
+            medicoService.insert((Medico) pessoa);
+            redirectAttributes.addFlashAttribute("mensagem", "Perfil de " + medicoExistente.getNome() +" atualizado com sucesso!");
+        }
+        assert pessoa != null;
+        return "redirect:/funcionario/editar-medico/selecionar?id=" + pessoa.getId();
+    }
+
 }
