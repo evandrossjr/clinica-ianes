@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.format.DateTimeFormatter;
@@ -221,12 +218,26 @@ public class FuncionarioPageController {
         Funcionario funcionario = (Funcionario) pessoa;
 
 
-        model.addAttribute("pessoas", medicoRepository.findAll());
+        model.addAttribute("medicos", medicoRepository.findAll());
 
         model.addAttribute("form", form);
         model.addAttribute("titulo", "Editar Médico");
-        model.addAttribute("pessoa", pessoa);
+        model.addAttribute("medico", pessoa);
         model.addAttribute("conteudo", "funcionario/editarMedico");
+
+        return "layout";
+    }
+
+
+
+    @GetMapping("/editar-medico/selecionar")
+    public String selecionarPessoa(@RequestParam(name = "id", required = false) Long id, Model model) {
+        Pessoa pessoa = (id != null) ? medicoService.findById(id) : new Funcionario();
+        model.addAttribute("medico", pessoa);
+        model.addAttribute("medicos", medicoService.findAll());
+        model.addAttribute("titulo", "Editar Funcionário");
+        model.addAttribute("conteudo", "admin/perfilFuncionario");
+
 
         return "layout";
     }
