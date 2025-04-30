@@ -212,31 +212,25 @@ public class FuncionarioPageController {
         Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
 
-        EditarPerfilForm form = new EditarPerfilForm();
-        form.setEmail(pessoa.getEmail());
-
         Funcionario funcionario = (Funcionario) pessoa;
-
+        Medico medico = new Medico();
 
         model.addAttribute("medicos", medicoRepository.findAll());
 
-        model.addAttribute("form", form);
         model.addAttribute("titulo", "Editar Médico");
-        model.addAttribute("medico", pessoa);
+        model.addAttribute("medico", medico);
         model.addAttribute("conteudo", "funcionario/editarMedico");
 
         return "layout";
     }
 
-
-
     @GetMapping("/editar-medico/selecionar")
     public String selecionarPessoa(@RequestParam(name = "id", required = false) Long id, Model model) {
-        Pessoa pessoa = (id != null) ? medicoService.findById(id) : new Funcionario();
-        model.addAttribute("medico", pessoa);
+        Medico medico = (id != null) ? medicoService.findById(id) : new Medico();
+        model.addAttribute("medico", medico);
         model.addAttribute("medicos", medicoService.findAll());
-        model.addAttribute("titulo", "Editar Funcionário");
-        model.addAttribute("conteudo", "admin/perfilFuncionario");
+        model.addAttribute("titulo", "Editar Médico");
+        model.addAttribute("conteudo", "funcionario/editarMedico");
 
 
         return "layout";
