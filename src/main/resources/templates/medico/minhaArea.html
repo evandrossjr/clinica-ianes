@@ -22,39 +22,5 @@
                 </div>
             </div>
         </div>
-
-        <!-- Card: Funcionários -->
-        <div class="col-md-6 col-lg-4">
-            <div class="card shadow-sm mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Funcionários</h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item" th:each="f : ${funcionarios}">
-                            <span th:text="|${f.nome} - ${f.setor}|"></span>
-                        </li>
-                        <li class="list-group-item" th:if="${#lists.isEmpty(funcionarios)}">
-                            Nenhum funcionário cadastrado.
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- Card: Médicos Disponíveis -->
-        <div class="col-md-6 col-lg-4">
-            <div class="card shadow-sm mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Médicos Disponíveis</h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item" th:each="m : ${medicos}">
-                            <span th:text="|${m.nome} - ${m.especialidade}|"></span>
-                        </li>
-                        <li class="list-group-item" th:if="${#lists.isEmpty(medicos)}">
-                            Nenhum médico cadastrado.
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
     </div>
 </div>

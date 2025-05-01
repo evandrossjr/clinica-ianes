@@ -35,7 +35,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         } else if (roles.contains("ROLE_PACIENTE")) {
             response.sendRedirect("/paciente/minhas-consultas");
         } else {
-            response.sendRedirect("/index"); // fallback
+            response.sendRedirect("/index");
         }
     }
 

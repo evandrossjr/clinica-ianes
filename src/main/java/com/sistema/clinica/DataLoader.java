@@ -78,7 +78,6 @@ public class DataLoader implements CommandLineRunner {
         c1.setMedico(medico);
         c1.setData(LocalDate.now().plusDays(1));
         c1.setHora(LocalTime.of(9, 0));
-        c1.setMetodoPagamento(MetodoPagamento.DEBITO);
         c1.setPagamentoRealizado(true);
         c1.setModalidade(Modalidade.PARTICULAR);
 
@@ -87,7 +86,6 @@ public class DataLoader implements CommandLineRunner {
         c2.setMedico(medico);
         c2.setData(LocalDate.now().plusDays(3));
         c2.setHora(LocalTime.of(10, 30));
-        c2.setMetodoPagamento(MetodoPagamento.DINHEIRO);
         c2.setPagamentoRealizado(true);
         c2.setModalidade(Modalidade.SUS);
 
@@ -96,7 +94,6 @@ public class DataLoader implements CommandLineRunner {
         c3.setMedico(medico);
         c3.setData(LocalDate.now().plusDays(5));
         c3.setHora(LocalTime.of(15, 0));
-        c3.setMetodoPagamento(MetodoPagamento.CREDITO);
         c3.setPagamentoRealizado(false);
         c3.setModalidade(Modalidade.PLANO_DE_SAUDE);
 
@@ -317,8 +314,7 @@ public class DataLoader implements CommandLineRunner {
         nova1.setMedico(m1);
         nova1.setData(LocalDate.now().plusDays(2));
         nova1.setHora(LocalTime.of(9, 0));
-        nova1.setMetodoPagamento(MetodoPagamento.DEBITO);
-        nova1.setPagamentoRealizado(true);
+        nova1.setPagamentoRealizado(false);
         nova1.setModalidade(Modalidade.SUS);
 
         Consulta nova2 = new Consulta();
@@ -326,7 +322,6 @@ public class DataLoader implements CommandLineRunner {
         nova2.setMedico(m2);
         nova2.setData(LocalDate.now().plusDays(3));
         nova2.setHora(LocalTime.of(10, 30));
-        nova2.setMetodoPagamento(MetodoPagamento.DINHEIRO);
         nova2.setPagamentoRealizado(false);
         nova2.setModalidade(Modalidade.PARTICULAR);
 
@@ -335,8 +330,7 @@ public class DataLoader implements CommandLineRunner {
         nova3.setMedico(m3);
         nova3.setData(LocalDate.now().plusDays(4));
         nova3.setHora(LocalTime.of(14, 0));
-        nova3.setMetodoPagamento(MetodoPagamento.CREDITO);
-        nova3.setPagamentoRealizado(true);
+        nova3.setPagamentoRealizado(false);
         nova3.setModalidade(Modalidade.PLANO_DE_SAUDE);
 
         Consulta nova4 = new Consulta();
@@ -344,8 +338,7 @@ public class DataLoader implements CommandLineRunner {
         nova4.setMedico(m4);
         nova4.setData(LocalDate.now().plusDays(5));
         nova4.setHora(LocalTime.of(15, 30));
-        nova4.setMetodoPagamento(MetodoPagamento.DEBITO);
-        nova4.setPagamentoRealizado(true);
+        nova4.setPagamentoRealizado(false);
         nova4.setModalidade(Modalidade.SUS);
 
         Consulta nova5 = new Consulta();
@@ -353,11 +346,11 @@ public class DataLoader implements CommandLineRunner {
         nova5.setMedico(m5);
         nova5.setData(LocalDate.now().plusDays(6));
         nova5.setHora(LocalTime.of(9, 30));
-        nova5.setMetodoPagamento(MetodoPagamento.DINHEIRO);
         nova5.setPagamentoRealizado(false);
         nova5.setModalidade(Modalidade.PARTICULAR);
 
         consultaRepository.saveAll(List.of(nova1, nova2, nova3, nova4, nova5));
+
 
 
         System.out.println("Dados de teste salvos com sucesso!");

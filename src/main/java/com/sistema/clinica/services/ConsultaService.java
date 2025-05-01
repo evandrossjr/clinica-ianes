@@ -71,7 +71,6 @@ public class ConsultaService {
     }
 
     private void updateData(Consulta entity, Consulta obj) {
-        entity.setMetodoPagamento(obj.getMetodoPagamento());
         entity.setMedico(obj.getMedico());
         entity.setData(obj.getData());
         entity.setPaciente(obj.getPaciente());

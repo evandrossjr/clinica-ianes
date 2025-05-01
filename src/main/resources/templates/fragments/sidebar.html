@@ -1,30 +1,66 @@
 <div th:fragment="sidebar(pessoa)" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
   <div sec:authorize="hasRole('ROLE_ADMIN')">
-    <a href="/admin/cadastro-funcionario">Cadastro de Funcionário</a>
-    <a href="/admin/dashboard">Dashboard</a>
-    <a href="/admin/perfil-funcionario">Perfil Funcionário</a>
-    <a href="/perfil/editar">Editar Perfil</a>
+
+    <div class="logo-svg">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="#0dcaf0" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 2h-2v6.586l-2.707 2.707A3.978 3.978 0 0113 12h-2a3.978 3.978 0 01-2.293-.707L6 8.586V2H4v6.586a5.978 5.978 0 002.293 4.707A5.962 5.962 0 0011 14v2h-2v2h6v-2h-2v-2a5.962 5.962 0 004.707-2.707A5.978 5.978 0 0020 8.586V2z"/>
+        <circle cx="18" cy="20" r="2" fill="#0dcaf0"/>
+      </svg>
+      <span class="logo-text"><a href="/admin/dashboard">Clínica Ianes</a></span>
+    </div>
+    <div>
+      <a href="/admin/cadastro-funcionario">Cadastro de Funcionário</a>
+      <a href="/admin/dashboard">Dashboard</a>
+      <a href="/admin/perfil-funcionario">Perfil Funcionário</a>
+      <a href="/perfil/editar">Editar Perfil</a>
+    </div>
   </div>
 
   <div sec:authorize="hasRole('ROLE_FUNCIONARIO')">
-    <a href="/funcionario/dashboard">Dashboard</a>
-    <a href="/funcionario/cadastro-paciente">Cadastro de Pacientes</a>
-    <a href="/funcionario/cadastro-medico">Cadastro de Médicos</a>
-    <a href="/funcionario/agendamento-consulta">Agendamento de Consultas</a>
-    <a href="/funcionario/editar-medico">Editar Médicos</a>
-    <a href="/perfil/editar">Editar Perfil</a>
+    <div class="logo-svg">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="#0dcaf0" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 2h-2v6.586l-2.707 2.707A3.978 3.978 0 0113 12h-2a3.978 3.978 0 01-2.293-.707L6 8.586V2H4v6.586a5.978 5.978 0 002.293 4.707A5.962 5.962 0 0011 14v2h-2v2h6v-2h-2v-2a5.962 5.962 0 004.707-2.707A5.978 5.978 0 0020 8.586V2z"/>
+        <circle cx="18" cy="20" r="2" fill="#0dcaf0"/>
+      </svg>
+      <span class="logo-text"><a href="/funcionario/dashboard">Clínica Ianes</a></span>
+    </div>
+    <div>
+      <a href="/funcionario/dashboard">Dashboard</a>
+      <a href="/funcionario/cadastro-paciente">Cadastro de Pacientes</a>
+      <a href="/funcionario/cadastro-medico">Cadastro de Médicos</a>
+      <a href="/funcionario/agendamento-consulta">Agendamento de Consultas</a>
+      <a href="/funcionario/editar-medico">Editar Médicos</a>
+      <a href="/perfil/editar">Editar Perfil</a>
+    </div>
   </div>
 
   <div sec:authorize="hasRole('ROLE_MEDICO')">
-    <a href="/medico/minhas-consultas">Minhas Consultas</a>
-    <a href="/perfil/editar">Editar Perfil</a>
+    <div class="logo-svg">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="#0dcaf0" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 2h-2v6.586l-2.707 2.707A3.978 3.978 0 0113 12h-2a3.978 3.978 0 01-2.293-.707L6 8.586V2H4v6.586a5.978 5.978 0 002.293 4.707A5.962 5.962 0 0011 14v2h-2v2h6v-2h-2v-2a5.962 5.962 0 004.707-2.707A5.978 5.978 0 0020 8.586V2z"/>
+        <circle cx="18" cy="20" r="2" fill="#0dcaf0"/>
+      </svg>
+      <span class="logo-text"><a href="/medico/minhas-consultas">Clínica Ianes</a></span>
+    </div>
+    <div>
+      <a href="/medico/minhas-consultas">Minhas Consultas</a>
+      <a href="/perfil/editar">Editar Perfil</a>
+    </div>
   </div>
 
   <div sec:authorize="hasRole('ROLE_PACIENTE')">
-    <a href="/paciente/minhas-consultas">Minhas Consultas</a>
-    <a href="/paciente/agendamento-consulta">Agendamento de Consultas</a>
-    <a href="/perfil/editar">Editar Perfil</a>
-
+    <div class="logo-svg">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="#0dcaf0" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 2h-2v6.586l-2.707 2.707A3.978 3.978 0 0113 12h-2a3.978 3.978 0 01-2.293-.707L6 8.586V2H4v6.586a5.978 5.978 0 002.293 4.707A5.962 5.962 0 0011 14v2h-2v2h6v-2h-2v-2a5.962 5.962 0 004.707-2.707A5.978 5.978 0 0020 8.586V2z"/>
+        <circle cx="18" cy="20" r="2" fill="#0dcaf0"/>
+      </svg>
+      <span class="logo-text"><a href="/paciente/minhas-consultas">Clínica Ianes</a></span>
+    </div>
+    <div>
+      <a href="/paciente/minhas-consultas">Minhas Consultas</a>
+      <a href="/paciente/agendamento-consulta">Agendamento de Consultas</a>
+      <a href="/perfil/editar">Editar Perfil</a>
+    </div>
   </div>
 
   <div sec:authorize="isAuthenticated()">

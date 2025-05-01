@@ -28,21 +28,19 @@ public class Consulta {
 
     private boolean pagamentoRealizado;
 
-    @Enumerated(EnumType.STRING)
-    private MetodoPagamento metodoPagamento;
+
 
     public Consulta() {
     }
 
 
-    public Consulta(Long id, Paciente paciente, Medico medico, LocalDate data, LocalTime hora, boolean pagamentoRealizado, MetodoPagamento metodoPagamento, Modalidade modalidade) {
+    public Consulta(Long id, Paciente paciente, Medico medico, LocalDate data, LocalTime hora, boolean pagamentoRealizado,  Modalidade modalidade) {
         this.id = id;
         this.paciente = paciente;
         this.medico = medico;
         this.data = data;
         this.hora = hora;
         this.pagamentoRealizado = pagamentoRealizado;
-        this.metodoPagamento = metodoPagamento;
         this.modalidade = modalidade;
     }
 
@@ -78,13 +76,6 @@ public class Consulta {
         this.pagamentoRealizado = pagamentoRealizado;
     }
 
-    public MetodoPagamento getMetodoPagamento() {
-        return metodoPagamento;
-    }
-
-    public void setMetodoPagamento(MetodoPagamento metodoPagamento) {
-        this.metodoPagamento = metodoPagamento;
-    }
 
     public Paciente getPaciente() {
         return paciente;

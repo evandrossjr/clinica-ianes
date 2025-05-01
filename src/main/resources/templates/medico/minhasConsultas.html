@@ -1,7 +1,7 @@
 <div class="content" xmlns:th="http://www.w3.org/1999/xhtml">
 
     <div class="mb-4">
-        <h1 th:text="'Bem-vindo(a), ' + ${pessoa.nome} + '!'">Bem-vindo!</h1>
+        <h1 th:text="'Bem-vindo(a) Dr(a) ' + ${pessoa.nome} + '!'">Bem-vindo!</h1>
         <p>Essa é o seu Quadro de Consultas.</p>
     </div>
 
@@ -17,7 +17,7 @@
                         </ul>
                         <li class="list-group-item" th:if="${#lists.isEmpty(descricoesConsultas)}">
                             Nenhuma consulta agendada.
-                        </li>'
+                        </li>
 
                     </ul>
 
