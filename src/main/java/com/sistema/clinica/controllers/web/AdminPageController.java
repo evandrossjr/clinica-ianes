@@ -120,7 +120,7 @@ public class AdminPageController {
 
 
 
-    @GetMapping("/perfil-funcionario")
+    @GetMapping("/editar-funcionario")
     public String editarFuncionario(Model model, @AuthenticationPrincipal PessoaDetails pessoaDetails) {
         Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
@@ -134,25 +134,25 @@ public class AdminPageController {
         model.addAttribute("form", form);
         model.addAttribute("titulo", "Editar Funcionario");
         model.addAttribute("pessoa", pessoa);
-        model.addAttribute("conteudo", "admin/perfilFuncionario");
+        model.addAttribute("conteudo", "admin/editarFuncionario");
 
         return "layout";
     }
 
 
-    @GetMapping("/perfil-funcionario/selecionar")
+    @GetMapping("/editar-funcionario/selecionar")
     public String selecionarPessoa(@RequestParam(name = "id", required = false) Long id, Model model) {
         Pessoa pessoa = (id != null) ? funcionarioService.findById(id) : new Funcionario();
         model.addAttribute("pessoa", pessoa);
         model.addAttribute("pessoas", funcionarioService.findAll());
         model.addAttribute("titulo", "Editar Funcionário");
-        model.addAttribute("conteudo", "admin/perfilFuncionario");
+        model.addAttribute("conteudo", "admin/editarFuncionario");
 
 
         return "layout";
     }
 
-    @PostMapping("/perfil-funcionario")
+    @PostMapping("/editar-funcionario")
     public String salvarFuncionario(@ModelAttribute Funcionario pessoa, RedirectAttributes redirectAttributes) {
         // Garantir que a senha não seja alterada
         if (pessoa != null) {
@@ -161,13 +161,13 @@ public class AdminPageController {
             ((Funcionario) pessoa).setPassword(funcionarioExistente.getPassword());
             // Salvar as alterações, exceto a senha
             funcionarioService.insert((Funcionario) pessoa);
-            redirectAttributes.addFlashAttribute("mensagem", "Perfil de " + funcionarioExistente.getNome() +" atualizado com sucesso!");
+            redirectAttributes.addFlashAttribute("mensagem", "Usuário de " + funcionarioExistente.getNome() +" atualizado com sucesso!");
         }
         assert pessoa != null;
-        return "redirect:/admin/perfil-funcionario/selecionar?id=" + pessoa.getId();
+        return "redirect:/admin/editar-funcionario/selecionar?id=" + pessoa.getId();
     }
 
-    @PostMapping("/perfil-funcionario/selecionar")
+    @PostMapping("/editar-funcionario/selecionar")
     public String deletarFuncionario(@RequestParam(name = "id") Long id, RedirectAttributes redirectAttributes, @AuthenticationPrincipal PessoaDetails pessoaDetails) {
 
         Long idUsuarioLogado = pessoaDetails.getPessoa().getId();
@@ -180,15 +180,15 @@ public class AdminPageController {
             if (idUsuarioLogado.equals(funcionario.getId())) {
 
                 redirectAttributes.addFlashAttribute("erro", "Você não pode deletar seu próprio usuário.");
-                return "redirect:/admin/perfil-funcionario";
+                return "redirect:/admin/editar-funcionario";
             }
             if (funcionario.getRoles().contains("ROLE_ADMIN")) {
                 redirectAttributes.addFlashAttribute("erro", "Você não pode deletar um usuário com a role ADMIN.");
-                return "redirect:/admin/perfil-funcionario";
+                return "redirect:/admin/editar-funcionario";
             }
         }
         funcionarioService.delete(id);
-        redirectAttributes.addFlashAttribute("mensagem", "Perfil deletado com sucesso!");
+        redirectAttributes.addFlashAttribute("mensagem", "Usuário deletado com sucesso!");
         return "redirect:/admin/dashboard";
     }
 

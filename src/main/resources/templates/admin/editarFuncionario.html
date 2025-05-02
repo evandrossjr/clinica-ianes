@@ -17,7 +17,7 @@
 
     <div class="card shadow-sm form-container">
         <div class="card-body">
-            <form id="selectPessoaForm" th:action="@{/admin/perfil-funcionario/selecionar}" th:object="${pessoa}" method="get">
+            <form id="selectPessoaForm" th:action="@{/admin/editar-funcionario/selecionar}" th:object="${pessoa}" method="get">
                 <div class="mb-3 row">
                     <label for="pessoa" class="col-sm-2 col-form-label">Usuário</label>
                     <div class="col-sm-10">
@@ -29,7 +29,7 @@
                 </div>
             </form>
 
-            <form th:action="@{/admin/perfil-funcionario}" th:object="${pessoa}" method="post">
+            <form th:action="@{/admin/editar-funcionario}" th:object="${pessoa}" method="post">
 
                 <input type="hidden" th:field="*{id}" />
 
@@ -71,7 +71,7 @@
             <br>
             <br>
 
-            <form th:object="${pessoa}" th:action="@{'/admin/perfil-funcionario/selecionar'(id=${pessoa.id})}" th:method="post">
+            <form th:object="${pessoa}" th:action="@{'/admin/editar-funcionario/selecionar'(id=${pessoa.id})}" th:method="post">
                 <button type="submit" class ="btn btn-danger w-100">Deletar</button>
             </form>
         </div>
