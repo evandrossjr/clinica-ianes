@@ -225,7 +225,7 @@ public class FuncionarioPageController {
     }
 
     @GetMapping("/editar-medico/selecionar")
-    public String selecionarPessoa(@RequestParam(name = "id", required = false) Long id, Model model) {
+    public String selecionarMedico(@RequestParam(name = "id", required = false) Long id, Model model) {
         Medico medico = (id != null) ? medicoService.findById(id) : new Medico();
         model.addAttribute("medico", medico);
         model.addAttribute("medicos", medicoService.findAll());
@@ -237,7 +237,7 @@ public class FuncionarioPageController {
     }
 
     @PostMapping("/editar-medico")
-    public String salvarFuncionario(@ModelAttribute Medico pessoa, RedirectAttributes redirectAttributes) {
+    public String salvarMedico(@ModelAttribute Medico pessoa, RedirectAttributes redirectAttributes) {
         // Garantir que a senha não seja alterada
         if (pessoa != null) {
             // Setar a senha antiga novamente para garantir que não será alterada
@@ -245,10 +245,54 @@ public class FuncionarioPageController {
             ((Medico) pessoa).setPassword(medicoExistente.getPassword());
             // Salvar as alterações, exceto a senha
             medicoService.insert((Medico) pessoa);
-            redirectAttributes.addFlashAttribute("mensagem", "Perfil de " + medicoExistente.getNome() +" atualizado com sucesso!");
+            redirectAttributes.addFlashAttribute("mensagem", "Perfil de Dr(a) " + medicoExistente.getNome() +" atualizado com sucesso!");
         }
         assert pessoa != null;
         return "redirect:/funcionario/editar-medico/selecionar?id=" + pessoa.getId();
+    }
+
+    @GetMapping("/editar-paciente")
+    public String editarPaciente(Model model, @AuthenticationPrincipal PessoaDetails pessoaDetails) {
+        Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
+
+        Funcionario funcionario = (Funcionario) pessoa;
+        Paciente paciente = new Paciente();
+
+        model.addAttribute("pacientes", pacienteRepository.findAll());
+
+        model.addAttribute("titulo", "Editar Paciente");
+        model.addAttribute("paciente", paciente);
+        model.addAttribute("conteudo", "funcionario/editarPaciente");
+
+        return "layout";
+    }
+
+    @GetMapping("/editar-paciente/selecionar")
+    public String selecionarPaciente(@RequestParam(name = "id", required = false) Long id, Model model) {
+        Paciente paciente = (id != null) ? pacienteService.findById(id) : new Paciente();
+        model.addAttribute("paciente", paciente);
+        model.addAttribute("pacientes", pacienteService.findAll());
+        model.addAttribute("titulo", "Editar Paciente");
+        model.addAttribute("conteudo", "funcionario/editarPaciente");
+
+
+        return "layout";
+    }
+
+    @PostMapping("/editar-paciente")
+    public String salvarPaciente(@ModelAttribute Paciente pessoa, RedirectAttributes redirectAttributes) {
+        // Garantir que a senha não seja alterada
+        if (pessoa != null) {
+            // Setar a senha antiga novamente para garantir que não será alterada
+            Paciente pacienteExistente = pacienteService.findById(((Paciente) pessoa).getId());
+            ((Paciente) pessoa).setPassword(pacienteExistente.getPassword());
+            // Salvar as alterações, exceto a senha
+            pacienteService.insert((Paciente) pessoa);
+            redirectAttributes.addFlashAttribute("mensagem", "Perfil de " + pacienteExistente.getNome() +" atualizado com sucesso!");
+        }
+        assert pessoa != null;
+        return "redirect:/funcionario/editar-paciente/selecionar?id=" + pessoa.getId();
     }
 
 }

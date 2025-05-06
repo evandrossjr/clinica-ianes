@@ -17,14 +17,13 @@
 
     <div class="card shadow-sm form-container">
         <div class="card-body">
-
             <form id="selectPessoaForm" th:action="@{/funcionario/editar-paciente/selecionar}" th:object="${paciente}" method="get">
                 <div class="mb-3 row">
                     <label for="pessoa" class="col-sm-2 col-form-label">Usuário</label>
                     <div class="col-sm-10">
                         <select id="pessoa" name="id" class="form-control" onchange="document.getElementById('selectPessoaForm').submit()" required>
                             <option value="">Selecione</option>
-                            <option th:each="p : ${pacientes}" th:value="${p.id}" th:text="${p.nome}" th:selected="${paciente != null && m.id == paciente.id}"></option>
+                            <option th:each="p : ${pacientes}" th:value="${p.id}" th:text="${p.nome}" th:selected="${paciente != null && p.id == paciente.id}"></option>
                         </select>
                     </div>
                 </div>
@@ -32,31 +31,22 @@
 
             <form th:action="@{/funcionario/editar-paciente}" th:object="${paciente}" method="post">
                 <div class="row">
-
                     <input type="hidden" th:field="*{id}" />
-
                     <div class="col-md-6 mb-3">
                         <label for="nome" class="form-label">Nome</label>
                         <input type="text" class="form-control" th:field="*{nome}" id="nome" required>
                     </div>
-
                     <div class="col-md-6 mb-3">
                         <label for="cpf" class="form-label">CPF</label>
                         <input type="text" class="form-control" th:field="*{cpf}" id="cpf" required>
                     </div>
-
                     <div class="col-md-6 mb-3">
                         <label for="email" class="form-label">E-mail / Usuário</label>
                         <input type="text" class="form-control" th:field="*{email}" id="email" required>
                     </div>
-
                     <div class="col-md-6 mb-3">
                         <label for="telefone" class="form-label">Telefone</label>
                         <input type="text" class="form-control" th:field="*{telefone}" id="telefone" required>
-                    </div>
-
-
-                        <small class="form-text text-muted">Segure Ctrl (ou Cmd no Mac) para selecionar múltiplos dias</small>
                     </div>
                 </div>
 
