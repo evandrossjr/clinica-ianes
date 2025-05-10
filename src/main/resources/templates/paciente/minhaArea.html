@@ -9,7 +9,7 @@
         <div class="col-md-6 col-lg-4">
             <div class="card shadow-sm mb-3">
                 <div class="card-body">
-                    <h5 class="card-title">Próximas Consultas</h5>
+                    <h5 class="card-title">Próximas Consultas (7 dias)</h5>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item" th:each="c : ${consultas}">
                             <span th:text="${#temporals.format(c.data, 'dd/MM/yyyy')} + ' - ' + c.hora + ' - ' + c.paciente.nome + ' com Dr(a). ' + c.medico.nome + ' (' + c.medico.especialidade + ')'"></span>
