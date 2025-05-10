@@ -27,7 +27,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
 
         if (roles.contains("ROLE_ADMIN")) {
-            response.sendRedirect("/admin/dashboard");
+            response.sendRedirect("/funcionario/dashboard");
         } else if (roles.contains("ROLE_MEDICO")) {
             response.sendRedirect("/medico/minhas-consultas");
         } else if (roles.contains("ROLE_FUNCIONARIO")) {
@@ -35,7 +35,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         } else if (roles.contains("ROLE_PACIENTE")) {
             response.sendRedirect("/paciente/minhas-consultas");
         } else {
-            response.sendRedirect("/index");
+            response.sendRedirect("/erro");
         }
     }
 

@@ -79,8 +79,10 @@ public class FuncionarioPageController {
 
         List<Medico> medicos = medicoRepository.findAll();
         List<Funcionario> funcionarios = funcionarioRepository.findAll();
+        List<Paciente> pacientes = pacienteRepository.findAll();
         model.addAttribute("medicos", medicos);
         model.addAttribute("funcionarios", funcionarios);
+        model.addAttribute("pacientes", pacientes);
 
 
         return "layout";
