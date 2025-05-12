@@ -121,7 +121,7 @@ public class AgendaService {
 
     public List<Consulta> proximasConsultas() {
         LocalDate hoje = LocalDate.now();
-        LocalDate fim = hoje.plusDays(7);
+        LocalDate fim = hoje.plusDays(30);
         return consultaRepository.findByDataBetweenOrderByDataAscHoraAsc(hoje, fim);
     }
 
