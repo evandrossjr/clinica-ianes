@@ -2,6 +2,8 @@ package com.sistema.clinica.models;
 
 import com.sistema.clinica.models.enums.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 import java.util.HashSet;
@@ -14,10 +16,15 @@ public abstract class Pessoa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     private String nome;
+    @NotBlank
     private String username;
+    @NotNull
     private String password;
+    @NotNull
     private String cpf;
+    @NotNull
     private String email;
 
     @Pattern(regexp = "\\(?\\d{2}\\)?\\s?\\d{8,9}", message = "Telefone inválido")
