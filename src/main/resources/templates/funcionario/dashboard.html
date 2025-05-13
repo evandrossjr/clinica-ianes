@@ -5,12 +5,12 @@
         <p>Essa é seu Dashboard.</p>
     </div>
 
-    <div class="row mb-4">
+    <div class="row mb-3">
         <!-- Card: Próximas Consultas -->
-        <div class="col-md-6 col-lg-4">
+        <div class="col-md-6 col-lg-3">
             <div class="card shadow-sm mb-3">
                 <div class="card-body">
-                    <h5 class="card-title">Próximas Consultas</h5>
+                    <h5 class="card-title">Próximas Consultas<br>(30 dias)</h5>
                     <ul class="list-group list-group-flush">
                         <ul class="list-group">
                             <li class="list-group-item" th:each="desc : ${descricoesConsultas}" th:text="${desc}"></li>
@@ -18,15 +18,13 @@
                         <li class="list-group-item" th:if="${#lists.isEmpty(descricoesConsultas)}">
                             Nenhuma consulta agendada.
                         </li>
-
                     </ul>
-
                 </div>
             </div>
         </div>
 
         <!-- Card: Funcionários -->
-        <div class="col-md-6 col-lg-4">
+        <div class="col-md-6 col-lg-3">
             <div class="card shadow-sm mb-3">
                 <div class="card-body">
                     <h5 class="card-title">Funcionários</h5>
@@ -43,16 +41,33 @@
         </div>
 
         <!-- Card: Médicos Disponíveis -->
-        <div class="col-md-6 col-lg-4">
+        <div class="col-md-6 col-lg-3">
             <div class="card shadow-sm mb-3">
                 <div class="card-body">
-                    <h5 class="card-title">Médicos Disponíveis</h5>
+                    <h5 class="card-title">Médicos</h5>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item" th:each="m : ${medicos}">
                             <span th:text="|${m.nome} - ${m.especialidade}|"></span>
                         </li>
                         <li class="list-group-item" th:if="${#lists.isEmpty(medicos)}">
                             Nenhum médico cadastrado.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card: Pacientes Disponíveis -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Pacientes</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" th:each="p : ${pacientes}">
+                            <span th:text="|${p.nome}|"></span>
+                        </li>
+                        <li class="list-group-item" th:if="${#lists.isEmpty(pacientes)}">
+                            Nenhum paciente cadastrado.
                         </li>
                     </ul>
                 </div>

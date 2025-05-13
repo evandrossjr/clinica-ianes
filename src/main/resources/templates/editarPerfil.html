@@ -32,10 +32,13 @@
 
             <!-- Coluna com a imagem -->
             <div class="col-md-6 d-flex align-items-center justify-content-center">
-                <img th:src="@{https://www.w3schools.com/howto/img_avatar.png}"
-                     alt="Foto de perfil"
-                     class="img-fluid rounded-circle"
-                     style="max-width: 200px;" />
+                <div class="logo-svg-perfil">
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="#0dcaf0" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 2h-2v6.586l-2.707 2.707A3.978 3.978 0 0113 12h-2a3.978 3.978 0 01-2.293-.707L6 8.586V2H4v6.586a5.978 5.978 0 002.293 4.707A5.962 5.962 0 0011 14v2h-2v2h6v-2h-2v-2a5.962 5.962 0 004.707-2.707A5.978 5.978 0 0020 8.586V2z"/>
+                        <circle cx="18" cy="20" r="2" fill="#0dcaf0"/>
+                    </svg>
+                    <span class="logo-text">Clínica Ianes</span>
+                </div>
             </div>
         </div>
     </form>
