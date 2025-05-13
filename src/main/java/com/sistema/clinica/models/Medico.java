@@ -3,6 +3,7 @@ package com.sistema.clinica.models;
 import com.sistema.clinica.models.enums.DiaDaSemana;
 import com.sistema.clinica.models.enums.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,9 @@ import java.util.Set;
 @Entity
 public class Medico extends Pessoa{
 
+    @NotBlank
     private int crm;
+    @NotBlank
     private String especialidade;
 
     @ElementCollection(fetch = FetchType.EAGER)

@@ -3,6 +3,7 @@ package com.sistema.clinica.models;
 import com.sistema.clinica.models.enums.MetodoPagamento;
 import com.sistema.clinica.models.enums.Modalidade;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -20,7 +21,9 @@ public class Consulta {
     @ManyToOne
     private Medico medico; //um médico pode ter varias consultas
 
+    @NotNull
     private LocalDate data;
+    @NotNull
     private LocalTime hora;
 
     @Enumerated(EnumType.STRING)

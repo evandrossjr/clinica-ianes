@@ -28,15 +28,15 @@ public class PerfilPageController {
     @GetMapping("/editar")
     public String abrirPacienteArea(Model model, @AuthenticationPrincipal PessoaDetails pessoaDetails) {
         Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         EditarPerfilForm form = new EditarPerfilForm();
         form.setEmail(pessoa.getEmail());
 
         model.addAttribute("form", form);
-        model.addAttribute("titulo", "Editar Perfil");
+        model.addAttribute("titulo", "Editar Senha");
         model.addAttribute("pessoa", pessoa);
-        model.addAttribute("conteudo", "editarPerfil");
+        model.addAttribute("conteudo", "editarSenha");
 
         return "layout";
     }
@@ -47,7 +47,7 @@ public class PerfilPageController {
                                @AuthenticationPrincipal PessoaDetails pessoaDetails) {
 
         Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         // Verifica se a senha atual está correta
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -65,7 +65,7 @@ public class PerfilPageController {
         }
 
         pessoaRepository.save(pessoa);
-        redirectAttributes.addFlashAttribute("mensagem", "Perfil atualizado com sucesso!");
+        redirectAttributes.addFlashAttribute("mensagem", "Usuário atualizado com sucesso!");
 
         return "redirect:/perfil/editar";
     }
