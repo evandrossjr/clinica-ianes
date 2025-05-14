@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Set;
 
@@ -15,7 +16,7 @@ public class Funcionario extends Pessoa{
 
     @NotBlank
     private String setor;
-    @NotBlank
+    @NotNull
     private int matricula;
 
 
