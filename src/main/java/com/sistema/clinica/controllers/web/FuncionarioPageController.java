@@ -297,4 +297,22 @@ public class FuncionarioPageController {
         return "redirect:/funcionario/editar-paciente/selecionar?id=" + pessoa.getId();
     }
 
+    @GetMapping("/validar-consultas")
+    public String abrirValidarConsulta(Model model, @AuthenticationPrincipal PessoaDetails pessoaDetails) {
+        Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
+
+        // Aqui fazemos cast seguro, já que só funcionario acessam esse endpoint
+        Funcionario funcionario = (Funcionario) pessoa;
+
+        model.addAttribute("titulo", "Agendamento de Consultas");
+        model.addAttribute("pessoa", pessoa);
+        model.addAttribute("conteudo", "funcionario/cadastroConsulta");
+        model.addAttribute("pacientes", pacienteRepository.findAll());
+        model.addAttribute("especialidades", medicoRepository.findEspecialidades());
+
+        return "layout";
+
+    }
+
 }
