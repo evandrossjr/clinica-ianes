@@ -305,9 +305,9 @@ public class FuncionarioPageController {
         // Aqui fazemos cast seguro, já que só funcionario acessam esse endpoint
         Funcionario funcionario = (Funcionario) pessoa;
 
-        model.addAttribute("titulo", "Agendamento de Consultas");
+        model.addAttribute("titulo", "Validar Consultas");
         model.addAttribute("pessoa", pessoa);
-        model.addAttribute("conteudo", "funcionario/cadastroConsulta");
+        model.addAttribute("conteudo", "funcionario/validarConsultas");
         model.addAttribute("pacientes", pacienteRepository.findAll());
         model.addAttribute("especialidades", medicoRepository.findEspecialidades());
 
