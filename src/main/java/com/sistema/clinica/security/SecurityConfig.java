@@ -40,9 +40,9 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login") // rota que o usuário acessa
-                        .loginProcessingUrl("/login") // rota que o form faz POST (deixa igual ao `th:action`)
-                        .successHandler(new CustomAuthenticationSuccessHandler()) // redireciona ao logar com sucesso
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .successHandler(new CustomAuthenticationSuccessHandler())
                         .permitAll()
                 )
                 .logout(logout -> logout

@@ -171,7 +171,7 @@ public class DataLoader implements CommandLineRunner {
         m3.setEmail("roberto.lima@clinica.com");
         m3.setTelefone("71991213094");
         m3.setCrm(1003);
-        m3.setEspecialidade("Ginecologista");
+        m3.setEspecialidade("Ortopedista");
         m3.setDiasDisponiveis(Set.of(DiaDaSemana.SEXTA));
         m3.setUsername("roberto");
         m3.setPassword(passwordEncoder.encode("1234"));

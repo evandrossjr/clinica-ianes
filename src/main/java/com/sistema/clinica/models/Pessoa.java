@@ -16,17 +16,11 @@ public abstract class Pessoa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank
     private String nome;
-    @NotBlank
     private String username;
-    @NotBlank
     private String password;
-    @NotBlank
     private String cpf;
-    @NotBlank
     private String email;
-
     @Pattern(regexp = "\\(?\\d{2}\\)?\\s?\\d{8,9}", message = "Telefone inválido")
     private String telefone;
 
