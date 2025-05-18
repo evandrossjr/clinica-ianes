@@ -1,14 +1,24 @@
 package com.sistema.clinica.services;
 
 import com.sistema.clinica.models.Consulta;
+import com.sistema.clinica.models.Medico;
+import com.sistema.clinica.models.Paciente;
+import com.sistema.clinica.models.dtos.ConsultaDTO;
+import com.sistema.clinica.models.dtos.ConsultaForm;
+import com.sistema.clinica.models.dtos.mappers.ConsultaMapper;
 import com.sistema.clinica.repositories.ConsultaRepository;
+import com.sistema.clinica.repositories.MedicoRepository;
+import com.sistema.clinica.repositories.PacienteRepository;
+import com.sistema.clinica.repositories.PessoaRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -16,6 +26,12 @@ public class ConsultaService {
 
     @Autowired
     private ConsultaRepository consultaRepository;
+    @Autowired
+    private MedicoRepository medicoRepository;
+    @Autowired
+    private PessoaRepository pessoaRepository;
+    @Autowired
+    private PacienteRepository pacienteRepository;
 
     private static final List<LocalTime> HORARIOS_FIXOS = List.of(
             LocalTime.of(9, 0), LocalTime.of(9, 30),
@@ -34,25 +50,34 @@ public class ConsultaService {
         return obj.orElseThrow(()-> new ResourceAccessException("Consulta não encontrado"));
     }
 
-    public Consulta insert(Consulta obj){
+    public ConsultaDTO insert(@Valid ConsultaForm form, Long pacienteId, Long medicoId) {
+        Objects.requireNonNull(form, "Dados da consulta não podem ser nulos");
 
-        obj.setPagamentoRealizado(false);
+        Paciente paciente = pacienteRepository.findById(pacienteId)
+                .orElseThrow(() -> new EntityNotFoundException("Paciente não encontrado"));
 
+        Medico medico = medicoRepository.findById(medicoId)
+                .orElseThrow(() -> new EntityNotFoundException("Médico não encontrado"));
 
-        if (!HORARIOS_FIXOS.contains(obj.getHora())){
+        Consulta consulta = ConsultaMapper.formToEntity(form, paciente, medico);
+        consulta.setPagamentoRealizado(false); // Garante que inicie como false
+
+        if (!HORARIOS_FIXOS.contains(consulta.getHora())) {
             throw new IllegalArgumentException("Horário Inválido");
-
         }
 
         boolean existe = consultaRepository.existsByMedicoIdAndDataAndHora(
-                obj.getMedico().getId(),
-                obj.getData(),
-                obj.getHora()
+                consulta.getMedico().getId(),
+                consulta.getData(),
+                consulta.getHora()
         );
-        if (existe){
-            throw new IllegalArgumentException("Já existe consulta marcada para o médico(a) Dr(a)" + obj.getMedico().getNome() + "neste dia e horário");
+
+        if (existe) {
+            throw new IllegalArgumentException("Já existe consulta marcada para este médico no dia e horário selecionados");
         }
-        return consultaRepository.save(obj);
+
+        Consulta saved = consultaRepository.save(consulta);
+        return ConsultaMapper.toDTO(saved);
     }
 
     public void delete(Long id){
@@ -77,8 +102,6 @@ public class ConsultaService {
         entity.setHora(obj.getHora());
         entity.setModalidade(obj.getModalidade());
     }
-
-
 
 
 }

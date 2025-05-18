@@ -3,16 +3,21 @@ package com.sistema.clinica.controllers.web;
 
 import com.sistema.clinica.models.*;
 import com.sistema.clinica.models.dtos.EditarPerfilForm;
+import com.sistema.clinica.models.dtos.mappers.FuncionarioFormDTO;
+import com.sistema.clinica.models.enums.Role;
 import com.sistema.clinica.repositories.FuncionarioRepository;
 import com.sistema.clinica.repositories.MedicoRepository;
 import com.sistema.clinica.repositories.PessoaRepository;
 import com.sistema.clinica.security.PessoaDetails;
 import com.sistema.clinica.services.AgendaService;
 import com.sistema.clinica.services.FuncionarioService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -48,57 +53,42 @@ public class AdminPageController {
 
 
     @GetMapping("/cadastro-funcionario")
-    public String abrirCadastroFuncionario(Model model, @AuthenticationPrincipal PessoaDetails pessoaDetails) {
-        Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
-
-        // Aqui fazemos cast seguro, já que só admin acessam esse endpoint
-        Funcionario funcionario = (Funcionario) pessoa;
-
-        model.addAttribute("titulo", "Cadastro Funcionário");
-        model.addAttribute("pessoa", pessoa);
+    public String abrirCadastroFuncionario(Model model) {
+        model.addAttribute("funcionarioForm", new FuncionarioFormDTO());
+        model.addAttribute("titulo", "Cadastro de Funcionário");
         model.addAttribute("conteudo", "admin/cadastroFuncionario");
-
-        model.addAttribute("funcionario", new Funcionario());
-
         return "layout";
     }
 
     @PostMapping("/cadastro-funcionario")
-    public String salvarCadastroFuncionario(@ModelAttribute Funcionario funcionario,
-                                            RedirectAttributes redirectAttributes,
-                                            Model model) {
+    public String salvarCadastroFuncionario(@Valid @ModelAttribute("funcionarioForm") FuncionarioFormDTO formDTO,
+                                            BindingResult result,
+                                            RedirectAttributes redirectAttributes) {
+
+        if (result.hasErrors()) {
+            return "admin/funcionarios/cadastro";
+        }
+
         try {
-            System.out.println("Dados recebidos: " + funcionario); // Log simples
-            funcionarioService.insert(funcionario);
+            funcionarioService.insert(formDTO);
             redirectAttributes.addFlashAttribute("mensagem",
-                    "Funcionário \"" + funcionario.getNome() + "\" cadastrado com sucesso!");
+                    "Funcionário " + formDTO.getNome() + " cadastrado com sucesso!");
+            return "redirect:/admin/funcionarios";
         } catch (Exception e) {
-            System.err.println("Erro ao cadastrar funcionário: " + e.getMessage());
-            e.printStackTrace();
             redirectAttributes.addFlashAttribute("erro",
                     "Erro ao cadastrar funcionário: " + e.getMessage());
+            return "redirect:/admin/cadastro-funcionario";
         }
-        return "redirect:/admin/cadastro-funcionario";
     }
 
 
 
 
     @GetMapping("/editar-funcionario")
-    public String editarFuncionario(Model model, @AuthenticationPrincipal PessoaDetails pessoaDetails) {
-        Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
-
-        EditarPerfilForm form = new EditarPerfilForm();
-        form.setEmail(pessoa.getEmail());
-
-
-        model.addAttribute("pessoas", funcionarioRepository.findAll());
-
-        model.addAttribute("form", form);
+    public String editarFuncionario(@PathVariable Long id, Model model) {
+        FuncionarioFormDTO formDTO = funcionarioService.buscarParaEdicao(id);
+        model.addAttribute("funcionarioForm", formDTO);
         model.addAttribute("titulo", "Editar Funcionario");
-        model.addAttribute("pessoa", pessoa);
         model.addAttribute("conteudo", "admin/editarFuncionario");
 
         return "layout";
@@ -118,42 +108,60 @@ public class AdminPageController {
     }
 
     @PostMapping("/editar-funcionario")
-    public String salvarFuncionario(@ModelAttribute Funcionario pessoa, RedirectAttributes redirectAttributes) {
-        // Garantir que a senha não seja alterada
-        if (pessoa != null) {
-            // Setar a senha antiga novamente para garantir que não será alterada
-            Funcionario funcionarioExistente = funcionarioService.findById(((Funcionario) pessoa).getId());
-            ((Funcionario) pessoa).setPassword(funcionarioExistente.getPassword());
-            // Salvar as alterações, exceto a senha
-            funcionarioService.insert((Funcionario) pessoa);
-            redirectAttributes.addFlashAttribute("mensagem", "Usuário de " + funcionarioExistente.getNome() +" atualizado com sucesso!");
+    public String salvarFuncionario(@PathVariable Long id,
+                                    @Valid @ModelAttribute("funcionarioForm") FuncionarioFormDTO formDTO,
+                                    BindingResult result,
+                                    RedirectAttributes redirectAttributes) {
+
+        if (result.hasErrors()) {
+            return "admin/funcionarios/editar";
         }
-        assert pessoa != null;
-        return "redirect:/admin/editar-funcionario/selecionar?id=" + pessoa.getId();
+
+        try {
+            funcionarioService.update(id, formDTO);
+            redirectAttributes.addFlashAttribute("mensagem",
+                    "Funcionário atualizado com sucesso!");
+            return "redirect:/admin/funcionarios";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("erro",
+                    "Erro ao atualizar funcionário: " + e.getMessage());
+        return "redirect:/admin/editar-funcionario/selecionar?id=" + id;
     }
+        }
+
 
     @PostMapping("/editar-funcionario/selecionar")
-    public String deletarFuncionario(@RequestParam(name = "id") Long id, RedirectAttributes redirectAttributes, @AuthenticationPrincipal PessoaDetails pessoaDetails) {
+    public String deletarFuncionario(@PathVariable Long id,
+                                     @AuthenticationPrincipal PessoaDetails pessoaDetails,
+                                     RedirectAttributes redirectAttributes) {
 
-        Long idUsuarioLogado = pessoaDetails.getPessoa().getId();
-
-        Optional<Pessoa> funcionarioSelecionado = pessoaRepository.findById(id);
-        if (funcionarioSelecionado.isPresent()) {
-
-            Pessoa funcionario = funcionarioSelecionado.get();
-
-            if (idUsuarioLogado.equals(funcionario.getId())) {
-
-                redirectAttributes.addFlashAttribute("erro", "Você não pode deletar seu próprio usuário.");
-                return "redirect:/admin/editar-funcionario";
+        try {
+            // 1. Verifica se o usuário está tentando se auto-excluir
+            if (pessoaDetails.getPessoa().getId().equals(id)) {
+                throw new IllegalStateException("Você não pode excluir seu próprio usuário");
             }
-            if (funcionario.getRoles().contains("ROLE_ADMIN")) {
-                redirectAttributes.addFlashAttribute("erro", "Você não pode deletar um usuário com a role ADMIN.");
-                return "redirect:/admin/editar-funcionario";
+
+            // 2. Busca o funcionário
+            Funcionario funcionario = funcionarioRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Funcionário não encontrado"));
+
+            // 3. Verifica se é ADMIN
+            if (funcionario.getRoles().contains(Role.ROLE_ADMIN)) {
+                throw new UnsupportedOperationException("Não é permitido excluir um usuário ADMIN");
             }
+
+            // 4. Executa a exclusão
+            funcionarioRepository.delete(funcionario);
+
+            redirectAttributes.addFlashAttribute("mensagem", "Funcionário excluído com sucesso!");
+        } catch (IllegalStateException | UnsupportedOperationException e) {
+            redirectAttributes.addFlashAttribute("erro", e.getMessage());
+        } catch (EntityNotFoundException e) {
+            redirectAttributes.addFlashAttribute("erro", e.getMessage());
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("erro", "Erro ao excluir funcionário: " + e.getMessage());
         }
-        funcionarioService.delete(id);
-        redirectAttributes.addFlashAttribute("mensagem", "Usuário deletado com sucesso!");
+
         return "redirect:/admin/dashboard";
     }
 

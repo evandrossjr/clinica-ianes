@@ -1,9 +1,11 @@
 package com.sistema.clinica.services;
 
 import com.sistema.clinica.models.Funcionario;
+import com.sistema.clinica.models.dtos.FuncionarioDTO;
+import com.sistema.clinica.models.dtos.mappers.FuncionarioFormDTO;
+import com.sistema.clinica.models.dtos.mappers.FuncionarioMapper;
 import com.sistema.clinica.models.enums.Role;
 import com.sistema.clinica.repositories.FuncionarioRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,48 +37,47 @@ public class FuncionarioService {
         return obj.orElseThrow(() -> new ResourceAccessException("Funcionário não encontrado"));
     }
 
-    public Funcionario insert(Funcionario obj) {
-        String senhaCriptografada = passwordEncoder.encode(obj.getPassword());
-        obj.setPassword(senhaCriptografada);
+    public FuncionarioFormDTO buscarParaEdicao(Long id) {
+        return funcionarioRepository.findById(id)
+                .map(FuncionarioMapper::toFormDTO)
+                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
+    }
 
-        if (obj.getUsername() == null || obj.getUsername().isEmpty()) {
-            obj.setUsername(obj.getEmail());
-        }
+    public FuncionarioDTO insert(FuncionarioFormDTO formDTO) {
+        Funcionario funcionario = FuncionarioMapper.formToEntity(formDTO);
+        funcionario.setPassword(passwordEncoder.encode(formDTO.getPassword()));
+        funcionario.setRoles(Set.of(Role.ROLE_FUNCIONARIO));
 
-        Set<Role> roles = EnumSet.of(Role.ROLE_FUNCIONARIO);  // Define 'USER' como a role padrão
-        obj.setRoles(roles);
-        return funcionarioRepository.save(obj);
+        Funcionario funcionarioSalvo = funcionarioRepository.save(funcionario);
+        return FuncionarioMapper.toDTO(funcionarioSalvo);
     }
 
     public void delete(Long id) {
         funcionarioRepository.deleteById(id);
     }
 
-    public Funcionario update(Long id, Funcionario obj) {
-        try {
-            Funcionario entity = funcionarioRepository
-                    .findById(id).orElseThrow(() -> new EntityNotFoundException("Funcionário não encontrado com matrícula: " + id));
-            updateData(entity, obj);
-            return funcionarioRepository.save(entity);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao atualizar o Funcionário: " + e.getMessage(), e);
-        }
-    }
+    public FuncionarioDTO update(Long id, FuncionarioFormDTO formDTO) {
+        Funcionario funcionario = funcionarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
 
-    private void updateData(Funcionario entity, Funcionario obj) {
-        entity.setNome(obj.getNome());
-        entity.setCpf(obj.getCpf());
-        entity.setEmail(obj.getEmail());
-        entity.setTelefone(obj.getTelefone());
-        entity.setSetor(obj.getSetor());
-        entity.setMatricula(obj.getMatricula());
-        if (obj.getPassword() != null && !obj.getPassword().isEmpty()) {
-            entity.setPassword(passwordEncoder.encode(obj.getPassword()));
+        funcionario.setNome(formDTO.getNome());
+        funcionario.setCpf(formDTO.getCpf());
+        funcionario.setEmail(formDTO.getEmail());
+        funcionario.setTelefone(formDTO.getTelefone());
+        funcionario.setSetor(formDTO.getSetor());
+        funcionario.setMatricula(formDTO.getMatricula());
 
+        // Atualiza senha apenas se for informada
+        if (formDTO.getPassword() != null && !formDTO.getPassword().isEmpty()) {
+            funcionario.setPassword(passwordEncoder.encode(formDTO.getPassword()));
         }
 
-
+        return FuncionarioMapper.toDTO(funcionarioRepository.save(funcionario));
     }
+
+
+
+
 
 }
 

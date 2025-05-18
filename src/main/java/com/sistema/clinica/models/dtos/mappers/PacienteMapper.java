@@ -4,7 +4,7 @@ import com.sistema.clinica.models.Paciente;
 import com.sistema.clinica.models.dtos.PacienteDTO;
 
 public class PacienteMapper {
-    // Entidade → DTO
+    // Entidade -> DTO
     public static PacienteDTO toDTO(Paciente paciente) {
         return new PacienteDTO(
                 paciente.getId(),
@@ -17,7 +17,7 @@ public class PacienteMapper {
         );
     }
 
-    // DTO → Entidade
+    // DTO -> Entidade
     public static Paciente toEntity(PacienteDTO dto) {
         Paciente paciente = new Paciente();
         paciente.setId(dto.id());
@@ -28,4 +28,5 @@ public class PacienteMapper {
         paciente.setTelefone(dto.telefone());
         return paciente;
     }
+
 }

@@ -1,11 +1,13 @@
 package com.sistema.clinica.services;
 
-import java.util.EnumSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
-import com.sistema.clinica.models.enums.Role;
+import com.sistema.clinica.models.dtos.MedicoDTO;
+import com.sistema.clinica.models.dtos.MedicoFormDTO;
+import com.sistema.clinica.models.dtos.MedicoResumoDTO;
+import com.sistema.clinica.models.dtos.mappers.MedicoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,51 +29,47 @@ public class MedicoService {
     }
 
 
-    public List<Medico> findAll(){
-        return medicoRepository.findAll();
+    public List<MedicoDTO> findAll(){
+        return medicoRepository.findAll().stream().map(MedicoMapper::toDTO).collect(Collectors.toList());
     }
 
-    public Medico findById(Long id){
-        Optional<Medico> obj = medicoRepository.findById(id);
-        return obj.orElseThrow(()-> new ResourceAccessException("Medico não encontrado"));
+    public MedicoDTO findById(Long id){
+        Medico medico = medicoRepository.findById(id).orElseThrow(()-> new ResourceAccessException("Medico não encontrado"));
+        return MedicoMapper.toDTO(medico);
     }
 
-    public Medico insert(Medico obj){
-        String senhaCriptografada = passwordEncoder.encode(obj.getPassword());
-        obj.setPassword(senhaCriptografada);
 
-        if (obj.getUsername() == null || obj.getUsername().isEmpty()) {
-            obj.setUsername(obj.getEmail());
-        }
 
-        Set<Role> roles = EnumSet.of(Role.ROLE_MEDICO);  // Define 'USER' como a role padrão
-        obj.setRoles(roles);
-        return medicoRepository.save(obj);
+    public List<MedicoResumoDTO> listarTodosResumidos() {
+        return medicoRepository.findAll()
+                .stream()
+                .map(MedicoMapper::toResumoDTO)
+                .collect(Collectors.toList());
+    }
+
+    public MedicoDTO insert(MedicoFormDTO formDTO) {
+        Medico medico = MedicoMapper.formToEntity(formDTO);
+        // Configurações adicionais (senha, roles, etc.)
+        Medico medicoSalvo = medicoRepository.save(medico);
+        return MedicoMapper.toDTO(medicoSalvo);
     }
 
     public void delete(Long id){
         medicoRepository.deleteById(id);
     }
 
-    public Medico update(Long id, Medico obj){
-        try{
-            Medico entity = medicoRepository
-                    .findById(id).orElseThrow(() -> new EntityNotFoundException("Medico não encontrado com matrícula: " + id));
-            updateData(entity, obj);
-            return medicoRepository.save(entity);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao atualizar a medico: " + e.getMessage(), e);
-        }
-    }
+    public Medico update(MedicoDTO medicoDTO, Medico medicoExistente) {
+        // Atualiza apenas os campos permitidos
+        medicoExistente.setNome(medicoDTO.nome());
+        medicoExistente.setEmail(medicoDTO.email());
+        medicoExistente.setTelefone(medicoDTO.telefone());
+        medicoExistente.setCrm(medicoDTO.crm());
+        medicoExistente.setEspecialidade(medicoDTO.especialidade());
+        medicoExistente.setDiasDisponiveis(medicoDTO.diasDisponiveis());
 
-    private void updateData(Medico entity, Medico obj) {
-        entity.setCrm(obj.getCrm());
-        entity.setNome(obj.getNome());
-        entity.setCpf(obj.getCpf());
-        entity.setEmail(obj.getEmail());
-        entity.setTelefone(obj.getTelefone());
-        entity.setEspecialidade(obj.getEspecialidade());
-        entity.setDiasDisponiveis(obj.getDiasDisponiveis());
+        // A senha não é atualizada aqui (mantém a existente)
+
+        return medicoRepository.save(medicoExistente);
     }
 
 

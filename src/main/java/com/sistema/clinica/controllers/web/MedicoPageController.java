@@ -2,6 +2,8 @@ package com.sistema.clinica.controllers.web;
 
 import com.sistema.clinica.models.Medico;
 import com.sistema.clinica.models.Pessoa;
+import com.sistema.clinica.models.dtos.MedicoDTO;
+import com.sistema.clinica.models.dtos.MedicoFormDTO;
 import com.sistema.clinica.repositories.PessoaRepository;
 import com.sistema.clinica.security.PessoaDetails;
 import com.sistema.clinica.services.AgendaService;
@@ -48,9 +50,9 @@ public class MedicoPageController {
 
 
     @PostMapping("/cadastro")
-    public String salvarViaFormulario(@ModelAttribute Medico medico, RedirectAttributes redirectAttributes) {
-        medicoService.insert(medico);
-        redirectAttributes.addFlashAttribute("mensagem", "Médico \"" + medico.getNome() + "\" cadastrado com sucesso!");
+    public String salvarViaFormulario(@ModelAttribute MedicoFormDTO medicoDTO, RedirectAttributes redirectAttributes) {
+        medicoService.insert(medicoDTO);
+        redirectAttributes.addFlashAttribute("mensagem", "Médico \"" + medicoDTO.getNome() + "\" cadastrado com sucesso!");
         return "redirect:/medico/cadastro";
     }
 

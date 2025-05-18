@@ -1,20 +1,18 @@
 package com.sistema.clinica.models.dtos;
+import com.sistema.clinica.models.enums.DiaDaSemana;
+import java.util.Set;
 
-public class MedicoDTO {
-    private Long id;
-    private String nome;
+public record MedicoDTO(
+        Long id,
+        String nome,
+        String cpf,
+        String email,
+        String telefone,
+        int crm,
+        String especialidade,
+        Set<DiaDaSemana> diasDisponiveis,
+        String username
+) {
 
-    public MedicoDTO(Long id, String nome) {
-        this.id = id;
-        this.nome = nome;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
 }
 

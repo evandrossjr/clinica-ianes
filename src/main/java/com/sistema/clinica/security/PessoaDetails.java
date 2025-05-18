@@ -60,5 +60,7 @@ public class PessoaDetails implements UserDetails {
     public Pessoa getPessoa() {
         return pessoa;
     }
+
+
 }
 

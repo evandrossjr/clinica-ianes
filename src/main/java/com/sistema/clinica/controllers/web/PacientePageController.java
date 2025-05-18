@@ -1,6 +1,10 @@
 package com.sistema.clinica.controllers.web;
 
 import com.sistema.clinica.models.*;
+import com.sistema.clinica.models.dtos.ConsultaDTO;
+import com.sistema.clinica.models.dtos.ConsultaForm;
+import com.sistema.clinica.models.dtos.PacienteDTO;
+import com.sistema.clinica.models.dtos.mappers.PacienteMapper;
 import com.sistema.clinica.repositories.MedicoRepository;
 import com.sistema.clinica.repositories.PacienteRepository;
 import com.sistema.clinica.repositories.PessoaRepository;
@@ -55,9 +59,9 @@ public class PacientePageController {
     //Metodo sem o thymeleaf
 
     @PostMapping
-    public String salvarViaFormulario(@ModelAttribute Paciente paciente, RedirectAttributes redirectAttributes) {
-        pacienteService.insert(paciente);
-        redirectAttributes.addFlashAttribute("mensagem", "Paciente \"" + paciente.getNome() + "\" cadastrado com sucesso!");
+    public String salvarViaFormulario(@ModelAttribute PacienteDTO dto, RedirectAttributes redirectAttributes) {
+        pacienteService.insert(dto);
+        redirectAttributes.addFlashAttribute("mensagem", "Paciente \"" + dto.nome() + "\" cadastrado com sucesso!");
         return "redirect:/paciente/cadastro";
     }
 
@@ -65,13 +69,13 @@ public class PacientePageController {
 
 
 
+
     @GetMapping("/minha-area")
     public String abrirPacienteArea(Model model, @AuthenticationPrincipal PessoaDetails pessoaDetails) {
-        Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
+        Paciente paciente = (Paciente) pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
 
-        // Aqui fazemos cast seguro, já que só pacientes acessam esse endpoint
-        Paciente paciente = (Paciente) pessoa;
+        PacienteDTO pacienteDTO = PacienteMapper.toDTO(paciente);
 
         model.addAttribute("titulo", "Minha Área");
         model.addAttribute("pessoa", paciente);
@@ -82,20 +86,17 @@ public class PacientePageController {
 
     @GetMapping("/agendamento-consulta")
     public String abrirCadastroConsulta(Model model, @AuthenticationPrincipal PessoaDetails pessoaDetails) {
-        Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
+        Paciente paciente = (Paciente) pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
 
-        // Aqui fazemos cast seguro, já que só pacienete acessam esse endpoint
-        Paciente paciente = (Paciente) pessoa;
-
         model.addAttribute("titulo", "Agendamento de Consultas");
-        model.addAttribute("pessoa", pessoa);
+        model.addAttribute("pessoa", PacienteMapper.toDTO(paciente));
         model.addAttribute("conteudo", "paciente/cadastroConsulta");
-
-        model.addAttribute("pacientes", pacienteRepository.findAll());
+        model.addAttribute("pacientes", pacienteRepository.findAll().
+                stream().
+                map(PacienteMapper::toDTO).
+                toList());
         model.addAttribute("especialidades", medicoRepository.findEspecialidades());
-
-
 
         return "layout";
 
@@ -103,36 +104,35 @@ public class PacientePageController {
 
 
     @PostMapping("/agendamento-consulta")
-    public String salvarAgendametoConsultas(@ModelAttribute Consulta consulta,
+    public String salvarAgendametoConsultas(@ModelAttribute ConsultaForm consultaForm,
                                             RedirectAttributes redirectAttributes,
-                                            Model model,
                                             @AuthenticationPrincipal PessoaDetails pessoaDetails) {
+
         try {
-            System.out.println("Dados recebidos: " + consulta);
-            Long idMedico = consulta.getMedico().getId();
-            Medico medico = medicoRepository.findById(idMedico)
+            // Obter paciente autenticado
+            Paciente paciente = (Paciente) pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
+                    .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
+
+            // Obter médico selecionado
+            Medico medico = medicoRepository.findById(consultaForm.getMedicoId())
                     .orElseThrow(() -> new RuntimeException("Médico não encontrado"));
 
+            // Converter form para DTO completo
+            ConsultaDTO consultaDTO = consultaForm.toDTO(paciente, medico);
 
+            // Chamar o serviço
+            consultaService.insert(consultaForm,medico.getId(),paciente.getId());
 
-            Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
-                    .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
-
-
-            Paciente paciente = (Paciente) pessoa; // cast seguro
-
-            consulta.setMedico(medico);
-            consulta.setPaciente(paciente);
-            consultaService.insert(consulta);
             redirectAttributes.addFlashAttribute("mensagem",
-                    "Consulta com o médico(a) Dr(a) \"" + consulta.getMedico().getNome() + "\" agendada com sucesso!");
+                    "Consulta agendada com sucesso para " +
+                            consultaForm.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+
+            return "redirect:/paciente/agendamento-consulta";
         } catch (Exception e) {
-            System.err.println("Erro ao cadastrar consulta: " + e.getMessage());
-            e.printStackTrace();
             redirectAttributes.addFlashAttribute("erro",
-                    "Erro ao cadastrar consulta: " + e.getMessage());
+                    "Erro ao agendar consulta: " + e.getMessage());
+            return "redirect:/paciente/agendamento-consulta";
         }
-        return "redirect:/paciente/agendamento-consulta";
     }
 
     @GetMapping("/minhas-consultas")

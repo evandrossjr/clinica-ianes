@@ -24,7 +24,7 @@
             <div class="mb-3 row">
                 <label for="medico" class="col-sm-2 col-form-label">Médico</label>
                 <div class="col-sm-10">
-                    <select id="medico" name="medico.id" class="form-control" required></select>
+                    <select id="medico" th:field="*{medicoId}" class="form-control" required></select>
                 </div>
             </div>
 
@@ -35,8 +35,8 @@
                         <option value="">Selecione</option>
                     </select>
                     <div id="horarios-disponiveis" class="mt-4"></div>
-                    <input type="hidden" id="dataSelecionada" name="data">
-                    <input type="hidden" id="horaSelecionada" name="hora">
+                    <input type="hidden" id="dataSelecionada" th:field="*{data}">
+                    <input type="hidden" id="horaSelecionada" th:field="*{hora}">
 
                 </div>
             </div>
@@ -45,10 +45,11 @@
             <div class="mb-3 row">
                 <label for="modalidade" class="col-sm-2 col-form-label">Modalidade</label>
                 <div class="col-sm-10">
-                    <select id="modalidade" name="modalidade" class="form-control">
-                        <option value="SUS">SUS</option>
-                        <option value="PLANO_DE_SAUDE">Plano de Saúde</option>
-                        <option value="PARTICULAR">Particular</option>
+                    <select id="modalidade" th:field="*{modalidade}" class="form-control" required>
+                        <option value="">Selecione</option>
+                        <option th:each="mod : ${T(com.seuapp.enums.Modalidade).values()}"
+                                th:value="${mod}"
+                                th:text="${mod.descricao}"></option>
                     </select>
                 </div>
             </div>
