@@ -53,14 +53,12 @@ public class FuncionarioPageController {
 
     @GetMapping("/dashboard")
     public String abrirDashboardFuncionario(Model model, @AuthenticationPrincipal PessoaDetails pessoaDetails) {
-        Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
+        Funcionario funcionario = (Funcionario) pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
 
-        // Aqui fazemos cast seguro, já que só admin acessam esse endpoint
-        Funcionario funcionario = (Funcionario) pessoa;
 
         model.addAttribute("titulo", "Dashboard");
-        model.addAttribute("pessoa", pessoa);
+        model.addAttribute("pessoa", funcionario);
         model.addAttribute("conteudo", "funcionario/dashboard");
 
 
@@ -90,14 +88,12 @@ public class FuncionarioPageController {
 
     @GetMapping("/agendamento-consulta")
     public String abrirCadastroConsulta(Model model, @AuthenticationPrincipal PessoaDetails pessoaDetails) {
-        Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
+        Funcionario funcionario = (Funcionario) pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
 
-        // Aqui fazemos cast seguro, já que só funcionario acessam esse endpoint
-        Funcionario funcionario = (Funcionario) pessoa;
 
         model.addAttribute("titulo", "Agendamento de Consultas");
-        model.addAttribute("pessoa", pessoa);
+        model.addAttribute("pessoa", funcionario);
         model.addAttribute("conteudo", "funcionario/cadastroConsulta");
 
         model.addAttribute("pacientes", pacienteRepository.findAll());
@@ -135,14 +131,12 @@ public class FuncionarioPageController {
 
     @GetMapping("/cadastro-medico")
     public String abrirCadastroMedico(Model model, @AuthenticationPrincipal PessoaDetails pessoaDetails) {
-        Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
+        Funcionario funcionario = (Funcionario) pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
 
-        // Aqui fazemos cast seguro, já que só funcionario acessam esse endpoint
-        Funcionario funcionario = (Funcionario) pessoa;
 
         model.addAttribute("titulo", "Cadastro Médico");
-        model.addAttribute("pessoa", pessoa);
+        model.addAttribute("pessoa", funcionario);
         model.addAttribute("conteudo", "funcionario/cadastroMedico");
 
         model.addAttribute("funcionario", new Funcionario());
@@ -175,14 +169,12 @@ public class FuncionarioPageController {
 
     @GetMapping("/cadastro-paciente")
     public String abrirCadastroPaciente(Model model, @AuthenticationPrincipal PessoaDetails pessoaDetails) {
-        Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
+        Funcionario funcionario = (Funcionario) pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
 
-        // Aqui fazemos cast seguro, já que só funcionario acessam esse endpoint
-        Funcionario funcionario = (Funcionario) pessoa;
 
         model.addAttribute("titulo", "Cadastro Paciente");
-        model.addAttribute("pessoa", pessoa);
+        model.addAttribute("pessoa", funcionario);
         model.addAttribute("conteudo", "funcionario/cadastroPaciente");
 
         model.addAttribute("funcionario", new Funcionario());
@@ -211,10 +203,9 @@ public class FuncionarioPageController {
 
     @GetMapping("/editar-medico")
     public String editarMedico(Model model, @AuthenticationPrincipal PessoaDetails pessoaDetails) {
-        Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
+        Funcionario funcionario = (Funcionario) pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
 
-        Funcionario funcionario = (Funcionario) pessoa;
         Medico medico = new Medico();
 
         model.addAttribute("medicos", medicoRepository.findAll());
@@ -240,12 +231,9 @@ public class FuncionarioPageController {
 
     @PostMapping("/editar-medico")
     public String salvarMedico(@ModelAttribute Medico pessoa, RedirectAttributes redirectAttributes) {
-        // Garantir que a senha não seja alterada
         if (pessoa != null) {
-            // Setar a senha antiga novamente para garantir que não será alterada
             Medico medicoExistente = medicoService.findById(((Medico) pessoa).getId());
             ((Medico) pessoa).setPassword(medicoExistente.getPassword());
-            // Salvar as alterações, exceto a senha
             medicoService.insert((Medico) pessoa);
             redirectAttributes.addFlashAttribute("mensagem", "Perfil de Dr(a) " + medicoExistente.getNome() +" atualizado com sucesso!");
         }
@@ -255,10 +243,9 @@ public class FuncionarioPageController {
 
     @GetMapping("/editar-paciente")
     public String editarPaciente(Model model, @AuthenticationPrincipal PessoaDetails pessoaDetails) {
-        Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
+        Funcionario funcionario = (Funcionario) pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
 
-        Funcionario funcionario = (Funcionario) pessoa;
         Paciente paciente = new Paciente();
 
         model.addAttribute("pacientes", pacienteRepository.findAll());
@@ -284,12 +271,9 @@ public class FuncionarioPageController {
 
     @PostMapping("/editar-paciente")
     public String salvarPaciente(@ModelAttribute Paciente pessoa, RedirectAttributes redirectAttributes) {
-        // Garantir que a senha não seja alterada
         if (pessoa != null) {
-            // Setar a senha antiga novamente para garantir que não será alterada
             Paciente pacienteExistente = pacienteService.findById(((Paciente) pessoa).getId());
             ((Paciente) pessoa).setPassword(pacienteExistente.getPassword());
-            // Salvar as alterações, exceto a senha
             pacienteService.insert((Paciente) pessoa);
             redirectAttributes.addFlashAttribute("mensagem", "Perfil de " + pacienteExistente.getNome() +" atualizado com sucesso!");
         }
@@ -299,14 +283,12 @@ public class FuncionarioPageController {
 
     @GetMapping("/validar-consultas")
     public String abrirValidarConsulta(Model model, @AuthenticationPrincipal PessoaDetails pessoaDetails) {
-        Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
+        Funcionario funcionario = (Funcionario) pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
 
-        // Aqui fazemos cast seguro, já que só funcionario acessam esse endpoint
-        Funcionario funcionario = (Funcionario) pessoa;
 
         model.addAttribute("titulo", "Validar Consultas");
-        model.addAttribute("pessoa", pessoa);
+        model.addAttribute("pessoa", funcionario);
         model.addAttribute("conteudo", "funcionario/validarConsultas");
         model.addAttribute("pacientes", pacienteRepository.findAll());
         model.addAttribute("especialidades", medicoRepository.findEspecialidades());

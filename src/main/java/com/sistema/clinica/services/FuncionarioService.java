@@ -1,6 +1,8 @@
 package com.sistema.clinica.services;
 
 import com.sistema.clinica.models.Funcionario;
+import com.sistema.clinica.models.dtos.FuncionarioDTO;
+import com.sistema.clinica.models.dtos.mappers.FuncionarioMapper;
 import com.sistema.clinica.models.enums.Role;
 import com.sistema.clinica.repositories.FuncionarioRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -26,17 +28,19 @@ public class FuncionarioService {
 
 
 
-    public List<Funcionario> findAll() {
-        return funcionarioRepository.findAll();
+    public List<FuncionarioDTO> findAll() {
+        return funcionarioRepository.findAll().stream().map(FuncionarioMapper::toDTO).toList();
     }
 
-    public Funcionario findById(Long id) {
-        Optional<Funcionario> obj = funcionarioRepository.findById(id);
-        return obj.orElseThrow(() -> new ResourceAccessException("Funcionário não encontrado"));
+    public FuncionarioDTO findById(Long id) {
+        Funcionario funcionario = funcionarioRepository.findById(id).orElseThrow(() -> new ResourceAccessException("Funcionário não encontrado"));
+        return FuncionarioMapper.toDTO(funcionario);
     }
 
-    public Funcionario insert(Funcionario obj) {
-        String senhaCriptografada = passwordEncoder.encode(obj.getPassword());
+    public FuncionarioDTO insert(FuncionarioDTO dto) {
+        Funcionario obj = FuncionarioMapper.toEntity(dto);
+
+        String senhaCriptografada = passwordEncoder.encode(dto.password());
         obj.setPassword(senhaCriptografada);
 
         if (obj.getUsername() == null || obj.getUsername().isEmpty()) {
@@ -45,19 +49,25 @@ public class FuncionarioService {
 
         Set<Role> roles = EnumSet.of(Role.ROLE_FUNCIONARIO);  // Define 'USER' como a role padrão
         obj.setRoles(roles);
-        return funcionarioRepository.save(obj);
+
+        Funcionario funcioanrioSalvo =  funcionarioRepository.save(obj);
+        return FuncionarioMapper.toDTO(funcioanrioSalvo);
     }
 
     public void delete(Long id) {
         funcionarioRepository.deleteById(id);
     }
 
-    public Funcionario update(Long id, Funcionario obj) {
+    public FuncionarioDTO update(Long id, FuncionarioDTO dto) {
         try {
-            Funcionario entity = funcionarioRepository
-                    .findById(id).orElseThrow(() -> new EntityNotFoundException("Funcionário não encontrado com matrícula: " + id));
-            updateData(entity, obj);
-            return funcionarioRepository.save(entity);
+            Funcionario entity = funcionarioRepository.findById(id).
+                    orElseThrow(() -> new ResourceAccessException("Funcionário não encontrado"));
+
+            Funcionario updates =FuncionarioMapper.toEntity(dto);
+            updateData(entity, updates);
+
+            Funcionario updated = funcionarioRepository.save(entity);
+            return FuncionarioMapper.toDTO(updated);
         } catch (Exception e) {
             throw new RuntimeException("Erro ao atualizar o Funcionário: " + e.getMessage(), e);
         }

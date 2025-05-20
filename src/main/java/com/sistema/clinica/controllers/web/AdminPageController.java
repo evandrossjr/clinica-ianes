@@ -3,6 +3,8 @@ package com.sistema.clinica.controllers.web;
 
 import com.sistema.clinica.models.*;
 import com.sistema.clinica.models.dtos.EditarPerfilForm;
+import com.sistema.clinica.models.dtos.FuncionarioDTO;
+import com.sistema.clinica.models.dtos.mappers.FuncionarioMapper;
 import com.sistema.clinica.repositories.FuncionarioRepository;
 import com.sistema.clinica.repositories.MedicoRepository;
 import com.sistema.clinica.repositories.PessoaRepository;
@@ -70,7 +72,7 @@ public class AdminPageController {
                                             Model model) {
         try {
             System.out.println("Dados recebidos: " + funcionario); // Log simples
-            funcionarioService.insert(funcionario);
+            funcionarioService.insert(FuncionarioMapper.toDTO(funcionario));
             redirectAttributes.addFlashAttribute("mensagem",
                     "Funcionário \"" + funcionario.getNome() + "\" cadastrado com sucesso!");
         } catch (Exception e) {
@@ -107,7 +109,7 @@ public class AdminPageController {
 
     @GetMapping("/editar-funcionario/selecionar")
     public String selecionarPessoa(@RequestParam(name = "id", required = false) Long id, Model model) {
-        Pessoa pessoa = (id != null) ? funcionarioService.findById(id) : new Funcionario();
+        Object pessoa = (id != null) ? funcionarioService.findById(id) : new Funcionario();
         model.addAttribute("pessoa", pessoa);
         model.addAttribute("pessoas", funcionarioService.findAll());
         model.addAttribute("titulo", "Editar Funcionário");
@@ -118,18 +120,32 @@ public class AdminPageController {
     }
 
     @PostMapping("/editar-funcionario")
-    public String salvarFuncionario(@ModelAttribute Funcionario pessoa, RedirectAttributes redirectAttributes) {
+    public String salvarFuncionario(@ModelAttribute FuncionarioDTO pessoa, RedirectAttributes redirectAttributes) {
         // Garantir que a senha não seja alterada
         if (pessoa != null) {
             // Setar a senha antiga novamente para garantir que não será alterada
-            Funcionario funcionarioExistente = funcionarioService.findById(((Funcionario) pessoa).getId());
-            ((Funcionario) pessoa).setPassword(funcionarioExistente.getPassword());
-            // Salvar as alterações, exceto a senha
-            funcionarioService.insert((Funcionario) pessoa);
-            redirectAttributes.addFlashAttribute("mensagem", "Usuário de " + funcionarioExistente.getNome() +" atualizado com sucesso!");
+            FuncionarioDTO funcionarioExistente = funcionarioService.findById(pessoa.id());
+
+            FuncionarioDTO funcionarioAtualizado = new FuncionarioDTO(
+                    pessoa.id(),
+                    pessoa.nome(),
+                    pessoa.username(),
+                    funcionarioExistente.password(), // senha antiga mantida aqui
+                    pessoa.cpf(),
+                    pessoa.email(),
+                    pessoa.telefone(),
+                    pessoa.setor(),
+                    pessoa.matricula()
+            );
+            funcionarioService.update(funcionarioAtualizado);
+
+            redirectAttributes.addFlashAttribute("mensagem", "Usuário de " + funcionarioExistente.nome() + " atualizado com sucesso!");
+
+            return "redirect:/admin/editar-funcionario/selecionar?id=" + pessoa.id();
         }
-        assert pessoa != null;
-        return "redirect:/admin/editar-funcionario/selecionar?id=" + pessoa.getId();
+
+        // Caso pessoa seja null, pode retornar algo ou lançar exceção
+        throw new IllegalArgumentException("Funcionário inválido");
     }
 
     @PostMapping("/editar-funcionario/selecionar")
