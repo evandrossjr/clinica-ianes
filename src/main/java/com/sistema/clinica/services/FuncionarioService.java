@@ -28,6 +28,7 @@ public class FuncionarioService {
 
 
 
+
     public List<FuncionarioDTO> findAll() {
         return funcionarioRepository.findAll().stream().map(FuncionarioMapper::toDTO).toList();
     }
@@ -40,6 +41,7 @@ public class FuncionarioService {
     public FuncionarioDTO insert(FuncionarioDTO dto) {
         Funcionario obj = FuncionarioMapper.toEntity(dto);
 
+
         String senhaCriptografada = passwordEncoder.encode(dto.password());
         obj.setPassword(senhaCriptografada);
 
@@ -47,7 +49,7 @@ public class FuncionarioService {
             obj.setUsername(obj.getEmail());
         }
 
-        Set<Role> roles = EnumSet.of(Role.ROLE_FUNCIONARIO);  // Define 'USER' como a role padrão
+        Set<Role> roles = EnumSet.of(Role.ROLE_FUNCIONARIO);
         obj.setRoles(roles);
 
         Funcionario funcioanrioSalvo =  funcionarioRepository.save(obj);

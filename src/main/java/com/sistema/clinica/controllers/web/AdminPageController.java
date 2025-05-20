@@ -61,20 +61,20 @@ public class AdminPageController {
         model.addAttribute("pessoa", pessoa);
         model.addAttribute("conteudo", "admin/cadastroFuncionario");
 
-        model.addAttribute("funcionario", new Funcionario());
+        model.addAttribute("funcionario", new FuncionarioDTO(null, "", "", "", "", "", "", "", 0));
 
         return "layout";
     }
 
     @PostMapping("/cadastro-funcionario")
-    public String salvarCadastroFuncionario(@ModelAttribute Funcionario funcionario,
+    public String salvarCadastroFuncionario(@ModelAttribute FuncionarioDTO funcionario,
                                             RedirectAttributes redirectAttributes,
                                             Model model) {
         try {
             System.out.println("Dados recebidos: " + funcionario); // Log simples
-            funcionarioService.insert(FuncionarioMapper.toDTO(funcionario));
+            funcionarioService.insert(funcionario);
             redirectAttributes.addFlashAttribute("mensagem",
-                    "Funcionário \"" + funcionario.getNome() + "\" cadastrado com sucesso!");
+                    "Funcionário \"" + funcionario.nome() + "\" cadastrado com sucesso!");
         } catch (Exception e) {
             System.err.println("Erro ao cadastrar funcionário: " + e.getMessage());
             e.printStackTrace();
@@ -121,31 +121,33 @@ public class AdminPageController {
 
     @PostMapping("/editar-funcionario")
     public String salvarFuncionario(@ModelAttribute FuncionarioDTO pessoa, RedirectAttributes redirectAttributes) {
-        // Garantir que a senha não seja alterada
-        if (pessoa != null) {
-            // Setar a senha antiga novamente para garantir que não será alterada
-            FuncionarioDTO funcionarioExistente = funcionarioService.findById(pessoa.id());
-
-            FuncionarioDTO funcionarioAtualizado = new FuncionarioDTO(
-                    pessoa.id(),
-                    pessoa.nome(),
-                    pessoa.username(),
-                    funcionarioExistente.password(), // senha antiga mantida aqui
-                    pessoa.cpf(),
-                    pessoa.email(),
-                    pessoa.telefone(),
-                    pessoa.setor(),
-                    pessoa.matricula()
-            );
-            funcionarioService.update(funcionarioAtualizado);
-
-            redirectAttributes.addFlashAttribute("mensagem", "Usuário de " + funcionarioExistente.nome() + " atualizado com sucesso!");
-
-            return "redirect:/admin/editar-funcionario/selecionar?id=" + pessoa.id();
+        if (pessoa == null || pessoa.id() == null) {
+            throw new IllegalArgumentException("Funcionário inválido");
         }
 
-        // Caso pessoa seja null, pode retornar algo ou lançar exceção
-        throw new IllegalArgumentException("Funcionário inválido");
+        FuncionarioDTO funcionarioExistente = funcionarioService.findById(pessoa.id());
+        if (funcionarioExistente == null) {
+            throw new IllegalArgumentException("Funcionário não encontrado");
+        }
+
+        FuncionarioDTO funcionarioAtualizado = new FuncionarioDTO(
+                pessoa.id(),
+                pessoa.nome(),
+                pessoa.username(),
+                funcionarioExistente.password(), // Mantém senha original
+                pessoa.cpf(),
+                pessoa.email(),
+                pessoa.telefone(),
+                pessoa.setor(),
+                pessoa.matricula()
+        );
+
+        funcionarioService.update(pessoa.id(), funcionarioAtualizado);
+
+        redirectAttributes.addFlashAttribute("mensagem",
+                "Usuário de " + funcionarioExistente.nome() + " atualizado com sucesso!");
+
+        return "redirect:/admin/editar-funcionario/selecionar?id=" + pessoa.id();
     }
 
     @PostMapping("/editar-funcionario/selecionar")
