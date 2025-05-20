@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import com.sistema.clinica.models.dtos.PacienteDTO;
+import com.sistema.clinica.models.dtos.mappers.FuncionarioMapper;
+import com.sistema.clinica.models.dtos.mappers.PacienteMapper;
 import com.sistema.clinica.models.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,18 +34,21 @@ public class PacienteService {
 
 
 
-    public List<Paciente> findAll(){
-        return pacienteRepository.findAll();
+    public List<PacienteDTO> findAll(){
+
+        return pacienteRepository.findAll().stream().map(PacienteMapper::toDTO).toList();
     }
 
-    public Paciente findById(Long id){
-        Optional<Paciente> obj = pacienteRepository.findById(id);
-        return obj.orElseThrow(()-> new ResourceAccessException("Paciente não encontrado"));
+    public PacienteDTO findById(Long id){
+        Paciente paciente = pacienteRepository.findById(id).
+                orElseThrow(()-> new ResourceAccessException("Paciente não encontrado"));
+        return PacienteMapper.toDTO(paciente);
     }
 
-    public Paciente insert(Paciente obj){
+    public PacienteDTO insert(PacienteDTO dto){
+        Paciente obj = PacienteMapper.toEntity(dto);
 
-        String senhaCriptografada = passwordEncoder.encode(obj.getPassword());
+        String senhaCriptografada = passwordEncoder.encode(dto.password());
         obj.setPassword(senhaCriptografada);
 
         if (obj.getUsername() == null || obj.getUsername().isEmpty()) {
@@ -51,19 +57,26 @@ public class PacienteService {
 
         Set<Role> roles = EnumSet.of(Role.ROLE_PACIENTE);  // Define 'USER' como a role padrão
         obj.setRoles(roles);
-        return pacienteRepository.save(obj);
+
+
+        Paciente pacienteSalvo = pacienteRepository.save(obj);
+        return PacienteMapper.toDTO(pacienteSalvo);
     }
 
     public void delete(Long id){
         pacienteRepository.deleteById(id);
     }
 
-    public Paciente update(Long id, Paciente obj){
+    public PacienteDTO update(Long id, PacienteDTO dto){
         try{
             Paciente entity = pacienteRepository
                     .findById(id).orElseThrow(() -> new EntityNotFoundException("Paciente não encontrado com matrícula: " + id));
-            updateData(entity, obj);
-            return pacienteRepository.save(entity);
+
+            Paciente updates = PacienteMapper.toEntity(dto);
+            updateData(entity, updates);
+
+            Paciente updated = pacienteRepository.save(entity);
+            return PacienteMapper.toDTO(updated);
         } catch (Exception e) {
             throw new RuntimeException("Erro ao atualizar o Paciente: " + e.getMessage(), e);
         }

@@ -1,6 +1,7 @@
 package com.sistema.clinica.controllers.web;
 
 import com.sistema.clinica.models.Paciente;
+import com.sistema.clinica.models.dtos.PacienteDTO;
 import com.sistema.clinica.services.PacienteService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,9 +25,9 @@ public class RegistroPageController {
     }
 
     @PostMapping("/registro")
-    public String registroNovPaciente(@ModelAttribute Paciente paciente, RedirectAttributes redirectAttributes) {
+    public String registroNovPaciente(@ModelAttribute PacienteDTO paciente, RedirectAttributes redirectAttributes) {
         pacienteService.insert(paciente);
-        redirectAttributes.addFlashAttribute("mensagem", "Paciente \"" + paciente.getNome() + "\" cadastrado com sucesso!");
+        redirectAttributes.addFlashAttribute("mensagem", "Paciente \"" + paciente.nome() + "\" cadastrado com sucesso!");
         return "redirect:/login";
     }
 

@@ -1,7 +1,10 @@
 package com.sistema.clinica.models.dtos;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public record PacienteDTO(Long id,
-                          String nome,
+                          @NotBlank String nome,
                           String username,
                           String password,
                           String cpf,

@@ -1,6 +1,7 @@
 package com.sistema.clinica.controllers.web;
 
 import com.sistema.clinica.models.*;
+import com.sistema.clinica.models.dtos.PacienteDTO;
 import com.sistema.clinica.repositories.MedicoRepository;
 import com.sistema.clinica.repositories.PacienteRepository;
 import com.sistema.clinica.repositories.PessoaRepository;
@@ -55,9 +56,9 @@ public class PacientePageController {
     //Metodo sem o thymeleaf
 
     @PostMapping
-    public String salvarViaFormulario(@ModelAttribute Paciente paciente, RedirectAttributes redirectAttributes) {
+    public String salvarViaFormulario(@ModelAttribute PacienteDTO paciente, RedirectAttributes redirectAttributes) {
         pacienteService.insert(paciente);
-        redirectAttributes.addFlashAttribute("mensagem", "Paciente \"" + paciente.getNome() + "\" cadastrado com sucesso!");
+        redirectAttributes.addFlashAttribute("mensagem", "Paciente \"" + paciente.nome() + "\" cadastrado com sucesso!");
         return "redirect:/paciente/cadastro";
     }
 
@@ -142,7 +143,7 @@ public class PacientePageController {
         Pessoa pessoa = pessoaRepository.findByUsernameIgnoreCase(pessoaDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
 
-        // Aqui fazemos cast seguro, já que só pacienete acessam esse endpoint
+        // Aqui fazemos cast seguro, já que só paciente acessam esse endpoint
         Paciente paciente = (Paciente) pessoa;
 
         model.addAttribute("titulo", "Dashboard");

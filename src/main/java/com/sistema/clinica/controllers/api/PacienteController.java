@@ -1,6 +1,7 @@
 package com.sistema.clinica.controllers.api;
 
 import com.sistema.clinica.models.Paciente;
+import com.sistema.clinica.models.dtos.PacienteDTO;
 import com.sistema.clinica.services.PacienteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,8 +28,8 @@ public class PacienteController {
             @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
     })
     @GetMapping()
-    public ResponseEntity<List<Paciente>> findAll() {
-        List<Paciente> list = pacienteService.findAll();
+    public ResponseEntity<List<PacienteDTO>> findAll() {
+        List<PacienteDTO> list = pacienteService.findAll();
         return ResponseEntity.ok().body(list);
     }
 
@@ -39,8 +40,8 @@ public class PacienteController {
             @ApiResponse(responseCode = "404", description = "Paciente não encontrado")
     })
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Paciente> findById(@PathVariable Long id) {
-        Paciente obj = pacienteService.findById(id);
+    public ResponseEntity<PacienteDTO> findById(@PathVariable Long id) {
+        PacienteDTO obj = pacienteService.findById(id);
         return ResponseEntity.ok().body(obj);
 
     }
@@ -51,12 +52,12 @@ public class PacienteController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos")
     })
     @PostMapping
-    public ResponseEntity<Paciente> insert(@RequestBody Paciente obj) {
+    public ResponseEntity<PacienteDTO> insert(@RequestBody PacienteDTO obj) {
         obj = pacienteService.insert(obj);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(obj.getId())
+                .buildAndExpand(obj.nome())
                 .toUri();
         return ResponseEntity.created(uri).body(obj);
 
@@ -79,7 +80,7 @@ public class PacienteController {
             @ApiResponse(responseCode = "404", description = "Paciente não encontrado")
     })
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Paciente> update(@PathVariable Long id, @RequestBody Paciente obj) {
+    public ResponseEntity<PacienteDTO> update(@PathVariable Long id, @RequestBody PacienteDTO obj) {
         obj = pacienteService.update(id, obj);
         return ResponseEntity.ok().body(obj);
     }

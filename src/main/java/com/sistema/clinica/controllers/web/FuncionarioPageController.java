@@ -2,16 +2,19 @@ package com.sistema.clinica.controllers.web;
 
 import com.sistema.clinica.models.*;
 import com.sistema.clinica.models.dtos.EditarPerfilForm;
+import com.sistema.clinica.models.dtos.PacienteDTO;
 import com.sistema.clinica.repositories.FuncionarioRepository;
 import com.sistema.clinica.repositories.MedicoRepository;
 import com.sistema.clinica.repositories.PacienteRepository;
 import com.sistema.clinica.repositories.PessoaRepository;
 import com.sistema.clinica.security.PessoaDetails;
 import com.sistema.clinica.services.*;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -184,14 +187,25 @@ public class FuncionarioPageController {
     }
 
     @PostMapping("/cadastro-paciente")
-    public String salvarCadastroFuncionario(@ModelAttribute Paciente paciente,
+    public String salvarCadastroFuncionario(@ModelAttribute @Valid PacienteDTO paciente,
+                                            BindingResult result,
                                             RedirectAttributes redirectAttributes,
                                             Model model) {
+
+        if (result.hasErrors()) {
+            model.addAttribute("titulo", "Cadastro Paciente");
+            model.addAttribute("paciente", new PacienteDTO(null, "", "", "", "", "", ""));
+            model.addAttribute("conteudo", "funcionario/cadastroPaciente");
+            model.addAttribute("erro", "O nome não pode estar em branco");
+
+            return "layout";
+        }
+
         try {
             System.out.println("Dados recebidos: " + paciente); // Log simples
             pacienteService.insert(paciente);
             redirectAttributes.addFlashAttribute("mensagem",
-                    "Paciente \"" + paciente.getNome() + "\" cadastrado com sucesso!");
+                    "Paciente \"" + paciente.nome() + "\" cadastrado com sucesso!");
         } catch (Exception e) {
             System.err.println("Erro ao cadastrar paciente: " + e.getMessage());
             e.printStackTrace();
@@ -259,7 +273,7 @@ public class FuncionarioPageController {
 
     @GetMapping("/editar-paciente/selecionar")
     public String selecionarPaciente(@RequestParam(name = "id", required = false) Long id, Model model) {
-        Paciente paciente = (id != null) ? pacienteService.findById(id) : new Paciente();
+        Object paciente = (id != null) ? pacienteService.findById(id) : new Paciente();
         model.addAttribute("paciente", paciente);
         model.addAttribute("pacientes", pacienteService.findAll());
         model.addAttribute("titulo", "Editar Paciente");
@@ -270,15 +284,32 @@ public class FuncionarioPageController {
     }
 
     @PostMapping("/editar-paciente")
-    public String salvarPaciente(@ModelAttribute Paciente pessoa, RedirectAttributes redirectAttributes) {
-        if (pessoa != null) {
-            Paciente pacienteExistente = pacienteService.findById(((Paciente) pessoa).getId());
-            ((Paciente) pessoa).setPassword(pacienteExistente.getPassword());
-            pacienteService.insert((Paciente) pessoa);
-            redirectAttributes.addFlashAttribute("mensagem", "Perfil de " + pacienteExistente.getNome() +" atualizado com sucesso!");
+    public String salvarPaciente(@ModelAttribute PacienteDTO pessoa, RedirectAttributes redirectAttributes) {
+        if (pessoa == null || pessoa.id() == null){
+            throw new IllegalArgumentException("Paciente Inválido");
         }
-        assert pessoa != null;
-        return "redirect:/funcionario/editar-paciente/selecionar?id=" + pessoa.getId();
+
+        PacienteDTO pacienteExistente = pacienteService.findById(pessoa.id());
+        if (pacienteExistente == null) {
+            throw new IllegalArgumentException("Funcionário não encontrado");
+        }
+
+        PacienteDTO pacienteAtualizado = new PacienteDTO(
+                pessoa.id(),
+                pessoa.nome(),
+                pessoa.username(),
+                pacienteExistente.password(), // Mantém senha original
+                pessoa.cpf(),
+                pessoa.email(),
+                pessoa.telefone()
+        );
+
+        pacienteService.update(pessoa.id(), pacienteAtualizado);
+
+        redirectAttributes.addFlashAttribute("mensagem",
+                "Usuário de " + pacienteExistente.nome() + " atualizado com sucesso!");
+
+        return "redirect:/funcionario/editar-paciente/selecionar?id=" + pessoa.id();
     }
 
     @GetMapping("/validar-consultas")
