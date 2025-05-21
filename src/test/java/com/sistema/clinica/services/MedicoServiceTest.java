@@ -1,6 +1,7 @@
 package com.sistema.clinica.services;
 
 import com.sistema.clinica.models.Medico;
+import com.sistema.clinica.models.dtos.MedicoDTO;
 import com.sistema.clinica.repositories.MedicoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,8 +50,7 @@ public class MedicoServiceTest {
 
     @Test
     public void deveRetornarTodosMedicos() {
-        List<Medico> medicos = List.of(medico);
-        when(medicoRepository.findAll()).thenReturn(medicos);
+        when(medicoRepository.findAll()).thenReturn(List.of(medico));
 
         List<Medico> result = medicoService.findAll();
 

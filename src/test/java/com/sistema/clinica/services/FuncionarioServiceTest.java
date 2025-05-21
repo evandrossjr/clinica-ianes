@@ -1,6 +1,8 @@
 package com.sistema.clinica.services;
 
 import com.sistema.clinica.models.Funcionario;
+import com.sistema.clinica.models.dtos.FuncionarioDTO;
+import com.sistema.clinica.models.dtos.mappers.FuncionarioMapper;
 import com.sistema.clinica.repositories.FuncionarioRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,21 +45,21 @@ public class FuncionarioServiceTest {
     public void deveRetornarTodosFuncionarios() {
         when(funcionarioRepository.findAll()).thenReturn(List.of(funcionario));
 
-        List<Funcionario> result = funcionarioService.findAll();
+        List<FuncionarioDTO> result = funcionarioService.findAll();
 
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals("Carlos Silva", result.get(0).getNome());
+        assertEquals("Carlos Silva", result.get(0).nome());
     }
 
     @Test
     public void deveRetornarFuncionarioPorId() {
         when(funcionarioRepository.findById(1L)).thenReturn(Optional.of(funcionario));
 
-        Funcionario result = funcionarioService.findById(1L);
+        FuncionarioDTO result = funcionarioService.findById(1L);
 
         assertNotNull(result);
-        assertEquals("Carlos Silva", result.getNome());
+        assertEquals("Carlos Silva", result.nome());
     }
 
     @Test
@@ -72,10 +74,12 @@ public class FuncionarioServiceTest {
         when(funcionarioRepository.save(any(Funcionario.class))).thenReturn(funcionario);
         when(passwordEncoder.encode("senha123")).thenReturn("senhaCriptografada");
 
-        Funcionario result = funcionarioService.insert(funcionario);
+        FuncionarioDTO funcionarioDTO = FuncionarioMapper.toDTO(funcionario);
+
+        FuncionarioDTO result = funcionarioService.insert(funcionarioDTO);
 
         assertNotNull(result);
-        assertEquals("senhaCriptografada", result.getPassword());
+        assertEquals("senhaCriptografada", result.password());
     }
 
     @Test
@@ -92,12 +96,14 @@ public class FuncionarioServiceTest {
         Funcionario updatedFuncionario = new Funcionario();
         updatedFuncionario.setNome("Carlos Silva Atualizado");
 
+        FuncionarioDTO updatedFuncionarioDTO = FuncionarioMapper.toDTO(updatedFuncionario);
+
         when(funcionarioRepository.findById(1L)).thenReturn(Optional.of(funcionario));
         when(funcionarioRepository.save(any(Funcionario.class))).thenReturn(updatedFuncionario);
 
-        Funcionario result = funcionarioService.update(1L, updatedFuncionario);
+        FuncionarioDTO result = funcionarioService.update(1L, updatedFuncionarioDTO);
 
         assertNotNull(result);
-        assertEquals("Carlos Silva Atualizado", result.getNome());
+        assertEquals("Carlos Silva Atualizado", result.nome());
     }
 }

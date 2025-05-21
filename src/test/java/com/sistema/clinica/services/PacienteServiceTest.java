@@ -107,11 +107,13 @@ public class PacienteServiceTest {
     public void deveAtualizarPaciente() {
         Paciente updatedPaciente = new Paciente();
         updatedPaciente.setNome("Joana Souza Atualizada");
+        
+        PacienteDTO updatedPacienteDTO = PacienteMapper.toDTO(updatedPaciente);
 
         when(pacienteRepository.findById(1L)).thenReturn(Optional.of(paciente));
         when(pacienteRepository.save(any(Paciente.class))).thenReturn(updatedPaciente);
 
-        PacienteDTO result = pacienteService.update(1L, PacienteMapper.toDTO(updatedPaciente));
+        PacienteDTO result = pacienteService.update(1L, updatedPacienteDTO);
 
         assertEquals("Joana Souza Atualizada", result.nome());
     }
