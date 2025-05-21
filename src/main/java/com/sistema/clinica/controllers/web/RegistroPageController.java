@@ -27,7 +27,7 @@ public class RegistroPageController {
     @PostMapping("/registro")
     public String registroNovPaciente(@ModelAttribute PacienteDTO paciente, RedirectAttributes redirectAttributes) {
         pacienteService.insert(paciente);
-        redirectAttributes.addFlashAttribute("mensagem", "Paciente \"" + paciente.nome() + "\" cadastrado com sucesso!");
+        redirectAttributes.addFlashAttribute("mensagem", "Paciente \"" + paciente.nome() + "\" Paciente cadastrado com sucesso!");
         return "redirect:/login";
     }
 
