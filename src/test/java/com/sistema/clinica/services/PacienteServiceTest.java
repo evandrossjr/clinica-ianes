@@ -1,6 +1,8 @@
 package com.sistema.clinica.services;
 
 import com.sistema.clinica.models.Paciente;
+import com.sistema.clinica.models.dtos.PacienteDTO;
+import com.sistema.clinica.models.dtos.mappers.PacienteMapper;
 import com.sistema.clinica.repositories.PacienteRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,30 +50,30 @@ public class PacienteServiceTest {
 
         Mockito.when(pacienteRepository.save(Mockito.any(Paciente.class))).thenReturn(paciente);
 
-        Paciente createdPaciente = pacienteService.insert(paciente);
+        PacienteDTO createdPaciente = pacienteService.insert(PacienteMapper.toDTO(paciente));
         assertNotNull(createdPaciente);
-        assertEquals("João", createdPaciente.getNome());
+        assertEquals("João", createdPaciente.nome());
     }
 
     @Test
     public void deveRetornarTodosPacientes() {
         when(pacienteRepository.findAll()).thenReturn(List.of(paciente));
 
-        List<Paciente> result = pacienteService.findAll();
+        List<PacienteDTO> result = pacienteService.findAll();
 
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals("Joana Souza", result.get(0).getNome());
+        assertEquals("Joana Souza", result.get(0).nome());
     }
 
     @Test
     public void deveRetornarPacientePorId() {
         when(pacienteRepository.findById(1L)).thenReturn(Optional.of(paciente));
 
-        Paciente result = pacienteService.findById(1L);
+        PacienteDTO result = pacienteService.findById(1L);
 
         assertNotNull(result);
-        assertEquals("Joana Souza", result.getNome());
+        assertEquals("Joana Souza", result.nome());
     }
 
     @Test
@@ -86,10 +88,10 @@ public class PacienteServiceTest {
         when(pacienteRepository.save(any(Paciente.class))).thenReturn(paciente);
         when(passwordEncoder.encode("senhaPaciente")).thenReturn("senhaCriptografada");
 
-        Paciente result = pacienteService.insert(paciente);
+        PacienteDTO result = pacienteService.insert(PacienteMapper.toDTO(paciente));
 
         assertNotNull(result);
-        assertEquals("senhaCriptografada", result.getPassword());
+        assertEquals("senhaCriptografada", result.password());
     }
 
     @Test
@@ -109,9 +111,8 @@ public class PacienteServiceTest {
         when(pacienteRepository.findById(1L)).thenReturn(Optional.of(paciente));
         when(pacienteRepository.save(any(Paciente.class))).thenReturn(updatedPaciente);
 
-        Paciente result = pacienteService.update(1L, updatedPaciente);
+        PacienteDTO result = pacienteService.update(1L, PacienteMapper.toDTO(updatedPaciente));
 
-        assertNotNull(result);
-        assertEquals("Joana Souza Atualizada", result.getNome());
+        assertEquals("Joana Souza Atualizada", result.nome());
     }
 }
