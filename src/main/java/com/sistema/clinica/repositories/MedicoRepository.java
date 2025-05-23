@@ -18,4 +18,9 @@ public interface MedicoRepository extends JpaRepository<Medico, Long> {
     List<String> findEspecialidades();
 
     List<Medico> findByEspecialidade(String especialidade);
+
+    boolean existsByEmail(String email);
+    boolean existsByUsername(String username);
+    boolean existsByCpf(String cpf);
+    boolean existsByCrm(int crm);
 }

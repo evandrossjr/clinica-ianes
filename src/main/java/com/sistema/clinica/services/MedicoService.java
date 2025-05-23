@@ -37,6 +37,21 @@ public class MedicoService {
     }
 
     public Medico insert(Medico obj){
+        if (medicoRepository.existsByEmail(obj.getEmail())) {
+            throw new IllegalArgumentException("E-mail já cadastrado.");
+        }
+        if (medicoRepository.existsByCrm(obj.getCrm())) {
+            throw new IllegalArgumentException("CRM já cadastrado.");
+        }
+        if (medicoRepository.existsByUsername(obj.getUsername())) {
+            throw new IllegalArgumentException("Médico já cadastrado.");
+        }
+        if (medicoRepository.existsByCpf(obj.getCpf())) {
+            throw new IllegalArgumentException("CPF já cadastrado.");
+        }
+
+
+
         String senhaCriptografada = passwordEncoder.encode(obj.getPassword());
         obj.setPassword(senhaCriptografada);
 

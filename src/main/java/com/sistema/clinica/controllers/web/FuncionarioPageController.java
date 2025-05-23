@@ -153,9 +153,20 @@ public class FuncionarioPageController {
     @PostMapping("/cadastro-medico")
     public String salvarCadastroMedico(@ModelAttribute Medico medico,
                                             RedirectAttributes redirectAttributes,
+                                            BindingResult result,
                                             Model model) {
+
+
+        if (result.hasErrors()) {
+            model.addAttribute("titulo", "Cadastro Paciente");
+            model.addAttribute("medico", new Medico());
+            model.addAttribute("conteudo", "funcionario/cadastroMedico");
+            model.addAttribute("erro", "Dados Inválidos");
+
+            return "layout";
+        }
         try {
-            System.out.println("Dados recebidos: " + medico); // Log simples
+            System.out.println("Dados recebidos: " + medico);
             medicoService.insert(medico);
             redirectAttributes.addFlashAttribute("mensagem",
                     "Médico Dr(a) \"" + medico.getNome() + "\" cadastrado com sucesso!");
@@ -163,7 +174,7 @@ public class FuncionarioPageController {
             System.err.println("Erro ao cadastrar funcionário: " + e.getMessage());
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("erro",
-                    "Erro ao cadastrar funcionário: " + e.getMessage());
+                    "Erro ao cadastrar médico: " + e.getMessage());
         }
         return "redirect:/funcionario/cadastro-medico";
     }
