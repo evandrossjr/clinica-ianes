@@ -7,6 +7,8 @@ import com.sistema.clinica.models.Paciente;
 
 @Repository
 public interface PacienteRepository extends JpaRepository<Paciente, Long> {
-
+    boolean existsByEmail(String email);
+    boolean existsByUsername(String username);
+    boolean existsByCpf(String cpf);
     
 }

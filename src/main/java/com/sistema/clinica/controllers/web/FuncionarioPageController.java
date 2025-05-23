@@ -187,7 +187,7 @@ public class FuncionarioPageController {
     }
 
     @PostMapping("/cadastro-paciente")
-    public String salvarCadastroFuncionario(@ModelAttribute @Valid PacienteDTO paciente,
+    public String salvarCadastroPaciente(@ModelAttribute @Valid PacienteDTO paciente,
                                             BindingResult result,
                                             RedirectAttributes redirectAttributes,
                                             Model model) {
@@ -196,21 +196,22 @@ public class FuncionarioPageController {
             model.addAttribute("titulo", "Cadastro Paciente");
             model.addAttribute("paciente", new PacienteDTO(null, "", "", "", "", "", ""));
             model.addAttribute("conteudo", "funcionario/cadastroPaciente");
-            model.addAttribute("erro", "O nome não pode estar em branco");
+            model.addAttribute("erro", "Dados Inválidos");
 
             return "layout";
         }
 
         try {
-            System.out.println("Dados recebidos: " + paciente); // Log simples
+            System.out.println("Dados recebidos: " + paciente);
             pacienteService.insert(paciente);
             redirectAttributes.addFlashAttribute("mensagem",
                     "Paciente \"" + paciente.nome() + "\" cadastrado com sucesso!");
+
         } catch (Exception e) {
             System.err.println("Erro ao cadastrar paciente: " + e.getMessage());
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("erro",
-                    "Erro ao cadastrar funcionário: " + e.getMessage());
+                    "Erro ao cadastrar o paciente: " + e.getMessage());
         }
         return "redirect:/funcionario/cadastro-paciente";
     }

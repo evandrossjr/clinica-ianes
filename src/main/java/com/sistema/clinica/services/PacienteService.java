@@ -46,6 +46,19 @@ public class PacienteService {
     }
 
     public PacienteDTO insert(PacienteDTO dto){
+        if (pacienteRepository.existsByEmail(dto.email())) {
+            throw new IllegalArgumentException("E-mail já cadastrado.");
+        }
+
+        if (pacienteRepository.existsByUsername(dto.username())) {
+            throw new IllegalArgumentException("Usuário já cadastrado.");
+        }
+
+        if (pacienteRepository.existsByCpf(dto.cpf())) {
+            throw new IllegalArgumentException("CPF já cadastrado.");
+        }
+
+
         Paciente obj = PacienteMapper.toEntity(dto);
 
         String senhaCriptografada = passwordEncoder.encode(dto.password());

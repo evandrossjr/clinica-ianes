@@ -26,6 +26,19 @@
 <body>
 <div class="register-container">
     <h2 class="mb-4 text-center">Registrar Novo Paciente</h2>
+    <div th:if="${mensagem}" class="alert alert-success d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" fill="green" viewBox="0 0 16 16" role="img" aria-label="Success:">
+            <path d="M16 8a8 8 0 1 1-16 0 8 8 0 0 1 16 0zM6.93 10.588l-2.47-2.47 1.06-1.06L6.93 8.47l4.95-4.95 1.06 1.06-6.01 6.01z"/>
+        </svg>
+        <span th:text="${mensagem}"></span>
+    </div>
+
+    <div th:if="${erro}" class="alert alert-danger d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" fill="red" viewBox="0 0 16 16" role="img" aria-label="Danger:">
+            <path d="M16 8a8 8 0 1 1-16 0 8 8 0 0 1 16 0zM6.93 10.588l-2.47-2.47 1.06-1.06L6.93 8.47l4.95-4.95 1.06 1.06-6.01 6.01z"/>
+        </svg>
+        <span th:text="${erro}"></span>
+    </div>
 
     <form th:action="@{/registro}" th:object="${paciente}" method="post" >
         <div class="col-md-6 mb-3">

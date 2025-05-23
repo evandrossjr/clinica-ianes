@@ -52,14 +52,20 @@ public class PacienteController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos")
     })
     @PostMapping
-    public ResponseEntity<PacienteDTO> insert(@RequestBody PacienteDTO obj) {
-        obj = pacienteService.insert(obj);
-        URI uri = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(obj.nome())
-                .toUri();
-        return ResponseEntity.created(uri).body(obj);
+    public ResponseEntity<?> insert(@RequestBody PacienteDTO obj) {
+        try{
+            obj = pacienteService.insert(obj);
+            URI uri = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(obj.nome())
+                    .toUri();
+            return ResponseEntity.created(uri).body(obj);
+        }
+        catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
 
     }
 
