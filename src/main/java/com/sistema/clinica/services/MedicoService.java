@@ -1,9 +1,6 @@
 package com.sistema.clinica.services;
 
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import com.sistema.clinica.models.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +70,22 @@ public class MedicoService {
             Medico entity = medicoRepository
                     .findById(id).orElseThrow(() -> new EntityNotFoundException("Medico não encontrado com matrícula: " + id));
             updateData(entity, obj);
+            if (medicoRepository.existsByEmail(obj.getEmail()) && !obj.getEmail().equals(entity.getEmail())) {
+                throw new IllegalArgumentException("E-mail já cadastrado.");
+            }
+
+            if (medicoRepository.existsByEmail(obj.getEmail()) && !Objects.equals(obj.getEmail(), entity.getEmail())) {
+                throw new IllegalArgumentException("E-mail já cadastrado.");
+            }
+
+
+            if (medicoRepository.existsByUsername(obj.getUsername()) && !obj.getUsername().equals(entity.getUsername())) {
+                throw new IllegalArgumentException("Médico já cadastrado.");
+            }
+
+            if (medicoRepository.existsByCpf(obj.getCpf()) && !obj.getCpf().equals(entity.getCpf())) {
+                throw new IllegalArgumentException("CPF já cadastrado.");
+            }
             return medicoRepository.save(entity);
         } catch (Exception e) {
             throw new RuntimeException("Erro ao atualizar a medico: " + e.getMessage(), e);

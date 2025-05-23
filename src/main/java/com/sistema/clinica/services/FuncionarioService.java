@@ -39,8 +39,20 @@ public class FuncionarioService {
     }
 
     public FuncionarioDTO insert(FuncionarioDTO dto) {
-        Funcionario obj = FuncionarioMapper.toEntity(dto);
+        if (funcionarioRepository.existsByEmail(dto.email())) {
+            throw new IllegalArgumentException("E-mail já cadastrado.");
+        }
+        if (funcionarioRepository.existsByMatricula(dto.matricula())) {
+            throw new IllegalArgumentException("Matrícula já cadastrada.");
+        }
+        if (funcionarioRepository.existsByUsername(dto.username())) {
+            throw new IllegalArgumentException("Funcionário já cadastrado.");
+        }
+        if (funcionarioRepository.existsByCpf(dto.cpf())) {
+            throw new IllegalArgumentException("CPF já cadastrado.");
+        }
 
+        Funcionario obj = FuncionarioMapper.toEntity(dto);
 
         String senhaCriptografada = passwordEncoder.encode(dto.password());
         obj.setPassword(senhaCriptografada);

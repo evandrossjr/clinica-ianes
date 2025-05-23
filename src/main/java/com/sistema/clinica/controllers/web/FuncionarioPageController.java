@@ -260,7 +260,7 @@ public class FuncionarioPageController {
         if (pessoa != null) {
             Medico medicoExistente = medicoService.findById(((Medico) pessoa).getId());
             ((Medico) pessoa).setPassword(medicoExistente.getPassword());
-            medicoService.insert((Medico) pessoa);
+            medicoService.update(pessoa.getId(), pessoa);
             redirectAttributes.addFlashAttribute("mensagem", "Perfil de Dr(a) " + medicoExistente.getNome() +" atualizado com sucesso!");
         }
         assert pessoa != null;
