@@ -115,7 +115,7 @@ public class DataLoader implements CommandLineRunner {
         Funcionario f2 = new Funcionario();
         f2.setNome("Carlos André");
         f2.setCpf("95785485100");
-        f2.setEmail("Joana.silva@email.com");
+        f2.setEmail("carlos.silva@email.com");
         f2.setTelefone("71991213094");
         f2.setMatricula(1006);
         f2.setSetor("Administrativo");
