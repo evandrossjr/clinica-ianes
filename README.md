@@ -21,8 +21,8 @@ Sistema web completo para agendamento de consultas em uma clínica, com controle
 ✅ Histórico de consultas por paciente e médico  
 ✅ Registro de pagamento vinculado à modalidade (SUS, Plano, Particular)  
 ✅ Página inicial com próximas consultas  
-[ ] Informação de Reconsulta (EM BREVE)  
-[ ] Informação de Consulta realizada (EM BREVE)  
+[ ] Informação de Validação de Consulta (EM BREVE)  
+[ ] Informação de Reconsulta - 15 dias da Validação da Consulta (EM BREVE)  
 [ ] Informação de Pagamento - Particular (EM BREVE)  
 [ ] Informação de Liberação - SUS e Plano (EM BREVE)  
 [ ] Cadastro de Plano de Saúde (EM BREVE)  
