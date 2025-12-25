@@ -26,7 +26,6 @@ Sistema web completo para agendamento de consultas em uma clínica, com controle
 [ ] Informação de Pagamento - Particular (EM BREVE)  
 [ ] Informação de Liberação - SUS e Plano (EM BREVE)  
 [ ] Cadastro de Plano de Saúde (EM BREVE)  
-[ ] Cadastro de Valor da Consulta (EM BREVE)  
 
 ---
 
