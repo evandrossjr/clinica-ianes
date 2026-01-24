@@ -23,7 +23,6 @@ Sistema web completo para agendamento de consultas em uma clínica, com controle
 ✅ Página inicial com próximas consultas  
 [ ] Informação de Validação de Consulta (EM BREVE)  
 [ ] Informação de Reconsulta - 15 dias da Validação da Consulta (EM BREVE)  
-[ ] Informação de Pagamento - Particular (EM BREVE)  
 
 
 ---
